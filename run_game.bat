@@ -1,0 +1,2 @@
+python menu.py
+pause
