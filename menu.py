@@ -3,6 +3,7 @@
 from bearlibterminal import terminal as blt
 from bearlibterminal import bltutils
 from common import utils
+from scenes import game
 
 
 def reset():
@@ -22,6 +23,7 @@ def main():
     blt.open()
 
     menu_entries = (
+        ("СТАРТ", game.scene),
         ("ВЫХОД", quit)
     )
     
