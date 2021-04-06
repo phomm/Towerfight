@@ -6,6 +6,7 @@ from bearlibterminal import bltutils
 from collections import namedtuple
 from random import randint
 from models.world import World, get_cell
+from scenes import final
 
 
 def scene():
@@ -62,3 +63,5 @@ def scene():
             if result is not None:
                 break
 
+    if result is not None:
+        final.scene(result, world.avatar.level)
