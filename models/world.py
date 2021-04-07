@@ -36,6 +36,16 @@ class World:
             if type(self.army[cell]) is Enemy:
                 self.army[cell].reveal()
 
+    def fight(self, cell):
+        if self.army.keys().__contains__(cell):
+            if self.avatar.fight(self.army[cell]):
+                self.army.pop(cell, None)
+            else:
+                self._avatar_cell = None
+
+    def is_avatar_coords(self, x, y):
+        return (x, y) == self._avatar_cell
+
     @property
     def towers(self):
         return self._towers
