@@ -9,8 +9,8 @@ class Avatar(Actor):
     def fight(self, defender):
         if defender is None:
             return False
-        if self.level > defender.level:
-            self._level += defender.level
+        if self._level > defender.real_level:
+            self._level += defender.real_level
             return True
         return False
 

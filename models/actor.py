@@ -21,6 +21,10 @@ class Actor:
         return self._level
 
     @property
+    def real_level(self):
+        return self._level
+
+    @property
     def symbol(self):
         return self._symbol
 

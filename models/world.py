@@ -2,6 +2,7 @@
 
 from models.avatar import Avatar
 from models.actor import Actor
+from models.enemy import Enemy
 from random import randint
 
 
@@ -29,11 +30,11 @@ class World:
         return self._avatar
 
     def put_avatar(self, cell):
-
-        if self.army.keys().__contains__(cell) and self.avatar.fight(self.army[cell]):
-            self.army.pop(self._avatar_cell, None)
-            self.army[cell] = self.avatar
+        if self.towers.keys().__contains__(cell):
             self._avatar_cell = cell
+        if self.army.keys().__contains__(cell):
+            if type(self.army[cell]) is Enemy:
+                self.army[cell].reveal()
 
     @property
     def towers(self):
@@ -54,29 +55,21 @@ class World:
             for y in range(self._height):
                 if build_pattern(x, y):
                     if (x == 1) and (y == 5):
-                        self.army[(x, y)] = self.avatar
                         self._avatar_cell = (x, y)
                     elif (x == 11) and (y == 0):
                         self.army[(x, y)] = Actor("dragon", 999, 0xE005, "purple")
                     elif randint(0, 5) != 0:
                         if randint(0, 2) == 1:
-                            self.army[(x, y)] = Actor("darkknight", x * x // 7 * randint(1, 9) + x * x, 0xE003, "orange")
+                            self.army[(x, y)] = Enemy("darkknight", x * x // 7 * randint(1, 9) + x * x, 0xE003, "orange")
                         else:
-                            self.army[(x, y)] = Actor("knight", x * x // 7 * randint(1, 9), 0xE004, "orange")
+                            self.army[(x, y)] = Enemy("knight", x * x // 7 * randint(1, 9), 0xE004, "orange")
 
     def game_finish(self):
-        enemies_exist = False
-        avatar_exists = False
         results = {
             (True, False): "victory",
             (False, True): "defeat",
             (True, True): None,
         }
-        for _, cell in enumerate(self.army.keys()):
-            if self.army[cell] == self.avatar:
-                avatar_exists = True
-            else:
-                enemies_exist = True
-            if avatar_exists and enemies_exist:
-                break
+        avatar_exists = self._avatar_cell is not None
+        enemies_exist = len(self.army.keys()) != 0
         return results[(avatar_exists, enemies_exist)]
