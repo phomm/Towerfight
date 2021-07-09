@@ -26,6 +26,8 @@ def scene():
     blt.set("U+E003: resources/bad.bmp")
     blt.set("U+E004: resources/neutral.bmp")
     blt.set("U+E005: resources/dragon.png")
+    blt.set("U+E006: resources/sword.bmp")
+    blt.set("U+E007: resources/shield.bmp")
 
     world = World(field_w, field_h)
     mlx = mly = 0

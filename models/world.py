@@ -7,7 +7,7 @@ from random import randint
 
 
 def build_pattern(x: int, y: int):
-    return (x + y > 4 + x % 2) & (x % 2 != 0)
+    return (x + y > 3 + x % 2) & (x % 2 != 0)
 
 
 def get_cell(x: int, y: int):
@@ -68,7 +68,12 @@ class World:
                         self._avatar_cell = (x, y)
                     elif (x == 11) and (y == 0):
                         self.army[(x, y)] = Actor("dragon", 999, 0xE005, "purple")
-                    elif randint(0, 5) != 0:
+                    elif randint(0, 1) == 0 and x == 1:
+                        if randint(0, 1) == 0:
+                            self.army[(x, y)] = Actor("sword", 2, 0xE006, "blue")
+                        else:
+                            self.army[(x, y)] = Actor("shield", 1, 0xE007, "blue")
+                    elif randint(0, 5) != 0 and x != 1:
                         if randint(0, 2) == 1:
                             self.army[(x, y)] = Enemy("darkknight", x * x // 7 * randint(1, 9) + x * x, 0xE003, "orange")
                         else:
