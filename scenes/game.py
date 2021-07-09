@@ -15,7 +15,7 @@ def scene():
 
     field_w = 12
     field_h = 6
-    blt.set(f"window: size={field_w}x{field_h}, cellsize=128x128")
+    blt.set(f"window: size={field_w}x{field_h}, cellsize=96x96")
     cw = blt.state(blt.TK_CELL_WIDTH)
     ch = blt.state(blt.TK_CELL_HEIGHT)
     width = blt.state(blt.TK_WIDTH)

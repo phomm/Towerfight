@@ -19,6 +19,10 @@ def reset():
     blt.set(f"U+E001: resources/logo.png, resize={70 * cw}x{8 * ch}, resize-filter=bilinear")
 
 
+def close():
+    quit
+
+
 def main():
 
     blt.open()
@@ -26,7 +30,7 @@ def main():
     menu_entries = (
         ("СТАРТ", game.scene),
         ("ЛИДЕРЫ", leaders.scene),
-        ("ВЫХОД", quit)
+        ("ВЫХОД", close)
     )
     
     width = blt.state(blt.TK_WIDTH)
