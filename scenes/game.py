@@ -30,7 +30,6 @@ def scene():
     blt.set("U+E007: resources/shield.bmp")
 
     world = World(field_w, field_h)
-    mlx = mly = 0
 
     result = None
 

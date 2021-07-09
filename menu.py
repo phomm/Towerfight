@@ -31,7 +31,6 @@ def main():
     
     width = blt.state(blt.TK_WIDTH)
     height = blt.state(blt.TK_HEIGHT)
-    ch = blt.state(blt.TK_CELL_HEIGHT)
 
     reset()
     menu_index = 0
