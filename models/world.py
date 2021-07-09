@@ -4,6 +4,7 @@ from models.avatar import Avatar
 from models.actor import Actor
 from models.enemy import Enemy
 from random import randint
+import random
 
 
 def build_pattern(x: int, y: int):
@@ -16,6 +17,7 @@ def get_cell(x: int, y: int):
 
 class World:
     def __init__(self, width: int, height: int):
+        random.seed()
         self._avatar = Avatar("hero", randint(4, 7), 0xE002, "blue")
         self._avatar_cell = None
         self._width = width
