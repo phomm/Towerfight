@@ -25,6 +25,141 @@
       },
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/Background.jpg"
+      },
+      "FullSize" : true,
+      "Name" : "ImageBackground"
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/logo.png"
+      },
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "ImageControl1",
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleVerticalGroup",
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "VerticalGroup1",
+      "Spacing" : 1.0000000000000000E+001,
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "Y" : 1.0000000000000000E+002
+      },
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleButton",
+          "AutoSize" : false,
+          "Caption" : "Start",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "FontSize" : 5.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/good.bmp"
+          },
+          "ImageScale" : 0.0000000000000000E+000,
+          "Name" : "ButtonStart",
+          "TextAlignment" : "hpRight",
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleButton",
+          "AutoSize" : false,
+          "Caption" : "Leaders",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "FontSize" : 5.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/good.bmp"
+          },
+          "ImageScale" : 0.0000000000000000E+000,
+          "Name" : "ButtonLeaders",
+          "TextAlignment" : "hpRight",
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -1.1000000000000000E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleButton",
+          "AutoSize" : false,
+          "Caption" : "Exit",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "FontSize" : 5.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/good.bmp"
+          },
+          "ImageScale" : 0.0000000000000000E+000,
+          "Name" : "ButtonExit",
+          "TextAlignment" : "hpRight",
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -2.2000000000000000E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 3.0000000000000000E+002
+        }
+      ]
     }
   ]
 }

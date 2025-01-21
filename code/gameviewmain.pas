@@ -5,6 +5,8 @@
   is covered by BSD or LGPL (see https://castle-engine.io/license). }
 unit GameViewMain;
 
+{$mode delphi}
+
 interface
 
 uses Classes,
@@ -18,11 +20,15 @@ type
     { Components designed using CGE editor.
       These fields will be automatically initialized at Start. }
     LabelFps: TCastleLabel;
+    ButtonStart, ButtonLeaders, ButtonExit: TCastleButton;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
+  private
+    SelectedButton: TCastleButton;
+    procedure ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
   end;
 
 var
@@ -43,6 +49,18 @@ end;
 procedure TViewMain.Start;
 begin
   inherited;
+  ButtonExit.OnMotion := ButtonMotion;
+  ButtonStart.OnMotion := ButtonMotion;
+  ButtonLeaders.OnMotion := ButtonMotion;
+end;
+
+procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
+begin
+  if SelectedButton = Sender then Exit;
+  if SelectedButton <> nil then
+    SelectedButton.ImageScale := 0;
+  SelectedButton := Sender as TCastleButton;
+  SelectedButton.ImageScale := 1;
 end;
 
 procedure TViewMain.Update(const SecondsPassed: Single; var HandleInput: Boolean);
