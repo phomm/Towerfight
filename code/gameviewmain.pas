@@ -20,7 +20,7 @@ type
     { Components designed using CGE editor.
       These fields will be automatically initialized at Start. }
     LabelFps: TCastleLabel;
-    ButtonStart, ButtonLeaders, ButtonExit: TCastleButton;
+    ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -29,6 +29,11 @@ type
   private
     SelectedButton: TCastleButton;
     procedure ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
+    procedure ButtonExitClick(Sender: TObject);
+    procedure ButtonStartClick(Sender: TObject);
+    procedure ButtonLeadersClick(Sender: TObject);
+    procedure ButtonOptionsClick(Sender: TObject);
+    procedure ButtonCreditsClick(Sender: TObject);
   end;
 
 var
@@ -36,7 +41,14 @@ var
 
 implementation
 
-uses SysUtils;
+uses 
+// System
+  SysUtils,
+// Castle  
+  castlewindow, castlemessages,
+// Own
+  gameviewgame, gameviewleaders, gameviewcredits
+  ;
 
 { TViewMain ----------------------------------------------------------------- }
 
@@ -52,6 +64,13 @@ begin
   ButtonExit.OnMotion := ButtonMotion;
   ButtonStart.OnMotion := ButtonMotion;
   ButtonLeaders.OnMotion := ButtonMotion;
+  ButtonOptions.OnMotion := ButtonMotion;
+  ButtonCredits.OnMotion := ButtonMotion;
+  ButtonExit.OnClick := ButtonExitClick;
+  ButtonStart.OnClick := ButtonStartClick;
+  ButtonLeaders.OnClick := ButtonLeadersClick;
+  ButtonOptions.OnClick := ButtonOptionsClick;
+  ButtonCredits.OnClick := ButtonCreditsClick;
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
@@ -61,6 +80,32 @@ begin
     SelectedButton.ImageScale := 0;
   SelectedButton := Sender as TCastleButton;
   SelectedButton.ImageScale := 1;
+end;
+
+procedure TViewMain.ButtonExitClick(Sender: TObject);
+begin
+  if MessageYesNo(Application.MainWindow, 'Do you really want to exit?') then
+    Application.MainWindow.Close();
+end;
+
+procedure TViewMain.ButtonStartClick(Sender: TObject);
+begin
+  Container.PushView(ViewGame);
+end;
+
+procedure TViewMain.ButtonLeadersClick(Sender: TObject);
+begin
+  Container.PushView(ViewLeaders);
+end;
+
+procedure TViewMain.ButtonOptionsClick(Sender: TObject);
+begin
+  // 
+end;
+
+procedure TViewMain.ButtonCreditsClick(Sender: TObject);
+begin
+  Container.PushView(ViewCredits);
 end;
 
 procedure TViewMain.Update(const SecondsPassed: Single; var HandleInput: Boolean);

@@ -1,0 +1,16 @@
+{
+  "$$ClassName" : "TCastleUserInterface",
+  "FullSize" : true,
+  "Name" : "RootGroup",
+  "$Children" : [
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/Background.jpg"
+      },
+      "FullSize" : true,
+      "Name" : "ImageBackground"
+    }
+  ]
+}
