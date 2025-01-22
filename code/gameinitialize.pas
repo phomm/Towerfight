@@ -40,6 +40,7 @@ begin
   {$endregion 'Castle View Creation'}
 
   Window.Container.View := ViewMain;
+  Window.OnCloseQuery := @ViewMain.WindowCloseQuery;
 end;
 
 initialization

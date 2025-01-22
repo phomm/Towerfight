@@ -49,19 +49,48 @@
     },
     {
       "$$ClassName" : "TCastleVerticalGroup",
+      "Alignment" : "hpMiddle",
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "VerticalGroup1",
-      "Spacing" : 6.0000000000000000E+000,
+      "Spacing" : 2.0000000000000000E+000,
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : 1.0000000000000000E+002
+        "Y" : 2.0000000000000000E+001
       },
       "$Children" : [
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
-          "Caption" : "Start",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/towertop.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Height" : 1.6000000000000000E+002,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Name" : "ImageTowerTop",
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 5.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleButton",
+          "AutoSize" : false,
+          "Caption" : "FIGHT!",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
@@ -78,6 +107,8 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/good.bmp"
@@ -85,6 +116,10 @@
           "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonStart",
           "TextAlignment" : "hpRight",
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -1.6200000000000000E+002
+          },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
           "Width" : 3.0000000000000000E+002
@@ -109,6 +144,8 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/good.bmp"
@@ -118,7 +155,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.0600000000000000E+002
+            "Y" : -2.6400000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -144,6 +181,8 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/good.bmp"
@@ -153,7 +192,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -2.1200000000000000E+002
+            "Y" : -3.6600000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -179,6 +218,8 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/good.bmp"
@@ -188,7 +229,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -3.1800000000000000E+002
+            "Y" : -4.6800000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -214,6 +255,8 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/good.bmp"
@@ -223,7 +266,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -4.2400000000000000E+002
+            "Y" : -5.7000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",

@@ -26,6 +26,7 @@ type
     procedure Start; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
+    procedure WindowCloseQuery(Container: TCastleContainer);
   private
     SelectedButton: TCastleButton;
     procedure ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
@@ -58,6 +59,12 @@ begin
   DesignUrl := 'castle-data:/gameviewmain.castle-user-interface';
 end;
 
+procedure TViewMain.WindowCloseQuery(Container: TCastleContainer);
+begin
+  if MessageYesNo(Application.MainWindow, 'Do you really want to exit?') then
+    Application.MainWindow.Close();
+end;
+
 procedure TViewMain.Start;
 begin
   inherited;
@@ -84,8 +91,7 @@ end;
 
 procedure TViewMain.ButtonExitClick(Sender: TObject);
 begin
-  if MessageYesNo(Application.MainWindow, 'Do you really want to exit?') then
-    Application.MainWindow.Close();
+  WindowCloseQuery(Container);
 end;
 
 procedure TViewMain.ButtonStartClick(Sender: TObject);
