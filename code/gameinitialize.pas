@@ -19,6 +19,7 @@ uses SysUtils,
   , GameViewGame
   , GameViewLeaders
   , GameViewCredits
+  , GameViewDefeat
   {$endregion 'Castle Initialization Uses'};
 
 var
@@ -37,6 +38,7 @@ begin
   ViewGame := TViewGame.Create(Application);
   ViewLeaders := TViewLeaders.Create(Application);
   ViewCredits := TViewCredits.Create(Application);
+  ViewDefeat := TViewDefeat.Create(Application);
   {$endregion 'Castle View Creation'}
 
   Window.Container.View := ViewMain;
