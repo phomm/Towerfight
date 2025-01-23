@@ -1,0 +1,40 @@
+{
+  "$$ClassName" : "TCastleButton",
+  "AutoSize" : false,
+  "Caption" : "difficulty",
+  "CustomBackground" : true,
+  "CustomBackgroundDisabled" : {
+    "$$ClassName" : "TCastleImagePersistent"
+  },
+  "CustomBackgroundFocused" : {
+    "$$ClassName" : "TCastleImagePersistent"
+  },
+  "CustomBackgroundNormal" : {
+    "$$ClassName" : "TCastleImagePersistent",
+    "Url" : "castle-data:/resources/buttonNormal.png"
+  },
+  "CustomBackgroundPressed" : {
+    "$$ClassName" : "TCastleImagePersistent",
+    "Url" : "castle-data:/resources/buttonChecked.png"
+  },
+  "CustomTextColorPersistent" : {
+    "$$ClassName" : "TCastleColorPersistent",
+    "Blue" : 1.0000000000000000E+000,
+    "Green" : 1.0000000000000000E+000,
+    "Red" : 1.0000000000000000E+000
+  },
+  "CustomTextColorUse" : true,
+  "Height" : 7.0000000000000000E+001,
+  "Image" : {
+    "$$ClassName" : "TCastleImagePersistent"
+  },
+  "Name" : "ButtonDifficultyTemplate",
+  "Toggle" : true,
+  "TranslationPersistent" : {
+    "$$ClassName" : "TCastleVector2Persistent",
+    "Y" : -1.5800000000000000E+002
+  },
+  "VerticalAnchorParent" : "vpTop",
+  "VerticalAnchorSelf" : "vpTop",
+  "Width" : 3.0000000000000000E+002
+}

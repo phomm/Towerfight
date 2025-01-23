@@ -21,6 +21,8 @@ type
       These fields will be automatically initialized at Start. }
     LabelFps: TCastleLabel;
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
+    GroupOptions: TCastleUserInterface;
+    SliderMusic: TCastleIntegerSlider;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -35,20 +37,27 @@ type
     procedure ButtonLeadersClick(Sender: TObject);
     procedure ButtonOptionsClick(Sender: TObject);
     procedure ButtonCreditsClick(Sender: TObject);
+    procedure ButtonDifficultyClick(Sender: TObject);
+    procedure SliderMusicChange(Sender: TObject);
+
   end;
 
 var
   ViewMain: TViewMain;
 
+const 
+  MusicKey = 'Music';
+  DifficultyKey = 'Difficulty';
+
 implementation
 
 uses 
 // System
-  SysUtils,
+  SysUtils, typinfo,
 // Castle  
-  castlewindow, castlemessages,
+  castlewindow, castlemessages, castleconfig, castlesoundengine,
 // Own
-  gameviewgame, gameviewleaders, gameviewcredits
+  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities
   ;
 
 { TViewMain ----------------------------------------------------------------- }
@@ -65,7 +74,13 @@ begin
     Application.MainWindow.Close();
 end;
 
-procedure TViewMain.Start;
+procedure TViewMain.Start();
+var
+  LButtonFactory: TCastleComponentFactory;
+  LDifficulty: NDifficulty;
+  LButton: TCastleButton;
+  LSoundLevel: Integer;
+  LCurrentDifficulty, LDifficultyNone: string;
 begin
   inherited;
   ButtonExit.OnMotion := ButtonMotion;
@@ -78,6 +93,61 @@ begin
   ButtonLeaders.OnClick := ButtonLeadersClick;
   ButtonOptions.OnClick := ButtonOptionsClick;
   ButtonCredits.OnClick := ButtonCreditsClick;
+
+  UserConfig.Load();
+  LSoundLevel := UserConfig.GetValue(MusicKey, 5);
+  if not Assigned(SoundEngine.LoopingChannel[0].Sound) then 
+  begin
+    SoundEngine.LoopingChannel[0].Sound := TCastleSound.Create(FreeAtStop);
+    SoundEngine.LoopingChannel[0].Sound.Url := 'castle-data:/mainmenu.ogg';
+  end;  
+  SoundEngine.LoopingChannel[0].Sound.Volume := LSoundLevel / 10;
+  SliderMusic.Value := LSoundLevel;
+  SliderMusic.OnChange := SliderMusicChange;
+
+  LButtonFactory := TCastleComponentFactory.Create(Self);
+  try
+    LButtonFactory.Url := 'castle-data:/buttonDifficulty.castle-user-interface';
+    LDifficultyNone := EnumName(TypeInfo(NDifficulty), Ord(gdNone));
+    LCurrentDifficulty := UserConfig.GetValue(DifficultyKey, LDifficultyNone);
+    if LCurrentDifficulty = LDifficultyNone then
+    begin
+      LCurrentDifficulty := EnumName(TypeInfo(NDifficulty), Ord(gdEasy));
+      UserConfig.SetValue(DifficultyKey, LCurrentDifficulty);
+    end;
+    for LDifficulty := Succ(Low(NDifficulty)) to High(NDifficulty) do
+    begin
+      LButton := LButtonFactory.ComponentLoad(GroupOptions) as TCastleButton;
+      LButton.Caption := EnumName(TypeInfo(NDifficulty), Ord(LDifficulty));
+      LButton.Pressed := LButton.Caption = LCurrentDifficulty;
+      LButton.OnClick := ButtonDifficultyClick;
+      GroupOptions.InsertFront(LButton);
+    end;
+  finally
+    FreeAndNil(LButtonFactory);
+  end;
+end;
+
+procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
+var
+  LButton: TCastleUserInterface;
+begin
+  for LButton in GroupOptions do
+    if LButton is TCastleButton then
+    begin
+      TCastleButton(LButton).Pressed := LButton = Sender;
+      if TCastleButton(LButton).Pressed then
+        UserConfig.SetValue(DifficultyKey, TCastleButton(LButton).Caption);
+    end;
+end;
+
+procedure TViewMain.SliderMusicChange(Sender: TObject);
+var
+  LSoundLevel: Integer;
+begin
+  LSoundLevel := (Sender as TCastleIntegerSlider).Value;
+  SoundEngine.LoopingChannel[0].Sound.Volume := LSoundLevel / 10;
+  UserConfig.SetValue(MusicKey, LSoundLevel);
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
@@ -87,6 +157,8 @@ begin
     SelectedButton.ImageScale := 0;
   SelectedButton := Sender as TCastleButton;
   SelectedButton.ImageScale := 1;
+  if SelectedButton <> ButtonOptions then
+    GroupOptions.Exists := False;
 end;
 
 procedure TViewMain.ButtonExitClick(Sender: TObject);
@@ -106,7 +178,7 @@ end;
 
 procedure TViewMain.ButtonOptionsClick(Sender: TObject);
 begin
-  // 
+  GroupOptions.Exists := not GroupOptions.Exists;
 end;
 
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
