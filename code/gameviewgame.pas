@@ -4,8 +4,13 @@ unit GameViewGame;
 
 interface
 
-uses Classes,
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
+uses 
+// System
+Classes,
+// Castle
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse,
+// Own
+  gameentities;
 
 type
   TViewGame = class(TCastleView)
@@ -16,9 +21,12 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
+    procedure Stop; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure ButtonDefeatClick(Sender: TObject);
+  private
+    FMap: TMap;
   end;
 
 var
@@ -28,12 +36,11 @@ implementation
 
 uses 
 // System
-  SysUtils,
+  SysUtils, typinfo,
 // Castle  
-  castlewindow,
+  castlewindow, castleconfig, castlemessages,
 // Own
-  GameViewDefeat;
-
+  Common, GameViewDefeat, gameviewmain;
 
 constructor TViewGame.Create(AOwner: TComponent);
 begin
@@ -41,15 +48,30 @@ begin
   DesignUrl := 'castle-data:/gameviewgame.castle-user-interface';
 end;
 
-procedure TViewGame.Start;
+procedure TViewGame.Start();
+var
+  LDifficultyString: string;
+  LDifficulty: NDifficulty;
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
+  LDifficultyString := UserConfig.GetValue(DifficultyKey, '');
+  LDifficulty := NDifficulty(EnumValue(TypeInfo(NDifficulty), LDifficultyString));
+  if LDifficulty = gdNone then
+    LDifficulty := gdEasy;
+  FMap := TMap.Create(Self, LDifficulty);
+  // test
+  ButtonDefeat.Caption := LDifficultyString;
+end;
+
+procedure TViewGame.Stop();
+begin
+  FreeAndNil(FMap);
 end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
 begin
-  Container.View := ViewDefeat;
+  Container.PushView(ViewDefeat);
 end;
 
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
@@ -64,7 +86,7 @@ begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
 
-  if Event.IsKey(keyEscape) then
+  if Event.IsKey(keyEscape) and MessageYesNo(Application.MainWindow, 'Game would be lost. Exit to menu?') then
   begin
     Container.PopView();
     Exit(true); // key was handled
