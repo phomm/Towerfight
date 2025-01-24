@@ -26,6 +26,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
+    procedure Resume; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure WindowCloseQuery(Container: TCastleContainer);
@@ -126,6 +127,12 @@ begin
   finally
     FreeAndNil(LButtonFactory);
   end;
+end;
+
+procedure TViewMain.Resume();
+begin
+  inherited;
+  SelectedButton := nil;
 end;
 
 procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
