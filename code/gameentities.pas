@@ -4,11 +4,15 @@ unit GameEntities;
 
 interface
 
-uses Classes, generics.collections;  
+uses 
+// System
+  Classes, generics.collections,
+// Own
+  gameoptions;
 
 type
   
-  TActor = class(TComponent)  
+  TActor = class(TComponent)
   private
     FLevel: Integer;
     FAssetId: string;
@@ -21,21 +25,21 @@ type
     property AssetId: string read FAssetId write FAssetId;
   end;
 
-  THero = class(TActor)  
+  THero = class(TActor)
   private
 
   public
   
   end;
 
-  TEnemy = class(TActor)  
+  TEnemy = class(TActor)
   private
 
   public
   
   end;
 
-  TRoom = class(TComponent)  
+  TRoom = class(TComponent)
   private
     FActors: TList<TActor>;
     FActorsReadOnly: TCustomList<TActor>;
@@ -45,7 +49,7 @@ type
     property Actors: TCustomList<TActor> read FActorsReadOnly;    
   end;
 
-  TTower = class(TComponent)  
+  TTower = class(TComponent)
   private
     FRooms: TList<TRoom>;
     FRoomsReadOnly: TCustomList<TRoom>;
@@ -55,15 +59,13 @@ type
     property Rooms: TCustomList<TRoom> read FRoomsReadOnly;
   end;
   
-  NDifficulty = (gdNone, gdEasy, gdNormal, gdHard, gdInsane);
-
-  TMap = class(TComponent)  
+  TMap = class(TComponent)
   private
     FTowers: TList<TTower>;
     FTowersReadOnly: TCustomList<TTower>;
     FDifficulty: NDifficulty;
   public
-    constructor Create(AOwner: TComponent; ADifficulty: NDifficulty); overload;
+    constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
     property Towers: TCustomList<TTower> read FTowersReadOnly;
   end;
@@ -72,7 +74,7 @@ implementation
 
 uses 
 // System
-  SysUtils,
+  SysUtils, typinfo,
 // Own  
   Common;
 
@@ -114,12 +116,12 @@ begin
   inherited Destroy();
 end;
 
-constructor TMap.Create(AOwner: TComponent; ADifficulty: NDifficulty);
+constructor TMap.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FTowers := TList<TTower>.Create();
   FTowersReadOnly := FTowers;
-  FDifficulty := ADifficulty;
+  FDifficulty := Difficulty();
 end;
 
 destructor TMap.Destroy();

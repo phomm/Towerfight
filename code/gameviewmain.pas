@@ -25,8 +25,9 @@ type
     SliderMusic: TCastleIntegerSlider;
   public
     constructor Create(AOwner: TComponent); override;
-    procedure Start; override;
-    procedure Resume; override;
+    procedure Start(); override;
+    procedure Stop(); override;
+    procedure Resume(); override;
     procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure WindowCloseQuery(Container: TCastleContainer);
@@ -46,19 +47,15 @@ type
 var
   ViewMain: TViewMain;
 
-const 
-  MusicKey = 'Music';
-  DifficultyKey = 'Difficulty';
-
 implementation
 
 uses 
 // System
-  SysUtils, typinfo,
+  SysUtils, 
 // Castle  
-  castlewindow, castlemessages, castleconfig, castlesoundengine,
+  castlewindow, castlemessages, castlesoundengine,
 // Own
-  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities
+  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions
   ;
 
 { TViewMain ----------------------------------------------------------------- }
@@ -80,8 +77,8 @@ var
   LButtonFactory: TCastleComponentFactory;
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
-  LSoundLevel: Integer;
-  LCurrentDifficulty, LDifficultyNone: string;
+  LMusicLevel: Integer;
+  LCurrentDifficultyName: string;
 begin
   inherited;
   ButtonExit.OnMotion := ButtonMotion;
@@ -95,32 +92,27 @@ begin
   ButtonOptions.OnClick := ButtonOptionsClick;
   ButtonCredits.OnClick := ButtonCreditsClick;
 
-  UserConfig.Load();
-  LSoundLevel := UserConfig.GetValue(MusicKey, 5);
+  LMusicLevel := MusicLevel();
   if not Assigned(SoundEngine.LoopingChannel[0].Sound) then 
   begin
-    SoundEngine.LoopingChannel[0].Sound := TCastleSound.Create(FreeAtStop);
+    SoundEngine.LoopingChannel[0].Sound := TCastleSound.Create(Self);
+    SoundEngine.LoopingChannel[0].Sound.Stream := True;
     SoundEngine.LoopingChannel[0].Sound.Url := 'castle-data:/mainmenu.ogg';
   end;  
-  SoundEngine.LoopingChannel[0].Sound.Volume := LSoundLevel / 10;
-  SliderMusic.Value := LSoundLevel;
+  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 10;
+  SliderMusic.Value := LMusicLevel;
   SliderMusic.OnChange := SliderMusicChange;
 
   LButtonFactory := TCastleComponentFactory.Create(Self);
   try
     LButtonFactory.Url := 'castle-data:/buttonDifficulty.castle-user-interface';
-    LDifficultyNone := EnumName(TypeInfo(NDifficulty), Ord(gdNone));
-    LCurrentDifficulty := UserConfig.GetValue(DifficultyKey, LDifficultyNone);
-    if LCurrentDifficulty = LDifficultyNone then
-    begin
-      LCurrentDifficulty := EnumName(TypeInfo(NDifficulty), Ord(gdEasy));
-      UserConfig.SetValue(DifficultyKey, LCurrentDifficulty);
-    end;
-    for LDifficulty := Succ(Low(NDifficulty)) to High(NDifficulty) do
+    LCurrentDifficultyName := DifficultyName(Difficulty());
+    for LDifficulty in NDifficulty do
     begin
       LButton := LButtonFactory.ComponentLoad(GroupOptions) as TCastleButton;
-      LButton.Caption := EnumName(TypeInfo(NDifficulty), Ord(LDifficulty));
-      LButton.Pressed := LButton.Caption = LCurrentDifficulty;
+      LButton.Caption := DifficultyName(LDifficulty);
+      LButton.Pressed := LButton.Caption = LCurrentDifficultyName;
+      LButton.Tag := Ord(LDifficulty);
       LButton.OnClick := ButtonDifficultyClick;
       GroupOptions.InsertFront(LButton);
     end;
@@ -129,10 +121,17 @@ begin
   end;
 end;
 
-procedure TViewMain.Resume();
+procedure TViewMain.Stop();
 begin
   inherited;
   SelectedButton := nil;
+end;
+
+procedure TViewMain.Resume();
+begin
+  inherited;
+  if Assigned(SelectedButton) then 
+    SelectedButton.ImageScale := 0;
 end;
 
 procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
@@ -144,17 +143,17 @@ begin
     begin
       TCastleButton(LButton).Pressed := LButton = Sender;
       if TCastleButton(LButton).Pressed then
-        UserConfig.SetValue(DifficultyKey, TCastleButton(LButton).Caption);
+        SetDifficulty(NDifficulty(TCastleButton(LButton).Tag));
     end;
 end;
 
 procedure TViewMain.SliderMusicChange(Sender: TObject);
 var
-  LSoundLevel: Integer;
+  LMusicLevel: Integer;
 begin
-  LSoundLevel := (Sender as TCastleIntegerSlider).Value;
-  SoundEngine.LoopingChannel[0].Sound.Volume := LSoundLevel / 10;
-  UserConfig.SetValue(MusicKey, LSoundLevel);
+  LMusicLevel := (Sender as TCastleIntegerSlider).Value;
+  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 10;
+  SetMusicLevel(LMusicLevel);
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);

@@ -12,7 +12,7 @@ interface
 implementation
 
 uses SysUtils,
-  CastleWindow, CastleLog, CastleUIControls
+  CastleWindow, CastleLog, CastleUIControls, CastleConfig
   {$region 'Castle Initialization Uses'}
   // The content here may be automatically updated by CGE editor.
   , GameViewMain
@@ -29,7 +29,9 @@ var
 procedure ApplicationInitialize;
 begin
   { Adjust container settings for a scalable UI (adjusts to any window size in a smart way). }
+  InitializeLog();
   Window.Container.LoadSettings('castle-data:/CastleSettings.xml');
+  UserConfig.Load();
 
   { Create views (see https://castle-engine.io/views ). }
   {$region 'Castle View Creation'}

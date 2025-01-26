@@ -36,11 +36,11 @@ implementation
 
 uses 
 // System
-  SysUtils, typinfo,
+  SysUtils, 
 // Castle  
-  castlewindow, castleconfig, castlemessages,
+  castlewindow, castlemessages,
 // Own
-  Common, GameViewDefeat, gameviewmain;
+  Common, GameViewDefeat, gameviewmain, gameoptions;
 
 constructor TViewGame.Create(AOwner: TComponent);
 begin
@@ -49,19 +49,12 @@ begin
 end;
 
 procedure TViewGame.Start();
-var
-  LDifficultyString: string;
-  LDifficulty: NDifficulty;
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
-  LDifficultyString := UserConfig.GetValue(DifficultyKey, '');
-  LDifficulty := NDifficulty(EnumValue(TypeInfo(NDifficulty), LDifficultyString));
-  if LDifficulty = gdNone then
-    LDifficulty := gdEasy;
-  FMap := TMap.Create(Self, LDifficulty);
+  FMap := TMap.Create(Self);
   // test
-  ButtonDefeat.Caption := LDifficultyString;
+  ButtonDefeat.Caption := DifficultyName(Difficulty());
 end;
 
 procedure TViewGame.Stop();
@@ -71,7 +64,7 @@ end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
 begin
-  Container.PushView(ViewDefeat);
+  Container.View := (ViewDefeat);
 end;
 
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
