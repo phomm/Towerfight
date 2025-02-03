@@ -9,9 +9,11 @@ unit GameViewMain;
 
 interface
 
-uses Classes,
-  CastleVectors, CastleComponentSerialize,
-  CastleUIControls, CastleControls, CastleKeysMouse;
+uses 
+// System
+  Classes,
+// Castle  
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
 
 type
   { Main view, where most of the application logic takes place. }
@@ -53,7 +55,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, castlesoundengine,
+  castlewindow, castlemessages, castlesoundengine, CastleComponentSerialize,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions
   ;

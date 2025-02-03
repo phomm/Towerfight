@@ -11,7 +11,6 @@ uses
   gameoptions;
 
 type
-  
   TActor = class(TComponent)
   private
     FLevel: Integer;
@@ -41,17 +40,17 @@ type
 
   TRoom = class(TComponent)
   private
-    FActors: TList<TActor>;
+    FActors: TObjectList<TActor>;
     FActorsReadOnly: TCustomList<TActor>;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    property Actors: TCustomList<TActor> read FActorsReadOnly;    
+    property Actors: TCustomList<TActor> read FActorsReadOnly;
   end;
 
   TTower = class(TComponent)
   private
-    FRooms: TList<TRoom>;
+    FRooms: TObjectList<TRoom>;
     FRoomsReadOnly: TCustomList<TRoom>;
   public
     constructor Create(AOwner: TComponent); override;
@@ -61,7 +60,7 @@ type
   
   TMap = class(TComponent)
   private
-    FTowers: TList<TTower>;
+    FTowers: TObjectList<TTower>;
     FTowersReadOnly: TCustomList<TTower>;
     FDifficulty: NDifficulty;
   public
@@ -74,7 +73,7 @@ implementation
 
 uses 
 // System
-  SysUtils, typinfo,
+  SysUtils, typinfo, Math,
 // Own  
   Common;
 
@@ -91,7 +90,7 @@ end;
 constructor TRoom.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FActors := TList<TActor>.Create();
+  FActors := TObjectList<TActor>.Create(True);
   FActorsReadOnly := FActors;
 end;
 
@@ -105,7 +104,7 @@ end;
 constructor TTower.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FRooms := TList<TRoom>.Create();
+  FRooms := TObjectList<TRoom>.Create(True);
   FRoomsReadOnly := FRooms;
 end;
 
@@ -117,11 +116,21 @@ begin
 end;
 
 constructor TMap.Create(AOwner: TComponent);
+var
+  T, R: Integer;
+  LTower: TTower;
 begin
   inherited Create(AOwner);
-  FTowers := TList<TTower>.Create();
+  FTowers := TObjectList<TTower>.Create(True);
   FTowersReadOnly := FTowers;
   FDifficulty := Difficulty();
+  for T := 1 to 3 + Ord(FDifficulty) do
+  begin
+    LTower := TTower.Create(nil);
+    for R := 1 to Min(T + 3, 8) do
+      LTower.FRooms.Add(TRoom.Create(nil));
+    FTowers.Add(LTower);
+  end;
 end;
 
 destructor TMap.Destroy();
