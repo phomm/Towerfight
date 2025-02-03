@@ -1,0 +1,15 @@
+{
+  "$$ClassName" : "TCastleUserInterface",
+  "AutoSizeToChildren" : true,
+  "Name" : "Group1",
+  "$Children" : [
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/cell.png"
+      },
+      "Name" : "ImageRoom"
+    }
+  ]
+}

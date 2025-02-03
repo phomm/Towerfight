@@ -1,0 +1,26 @@
+{
+  "$$ClassName" : "TCastleUserInterface",
+  "Name" : "Group1",
+  "$Children" : [
+    {
+      "$$ClassName" : "TCastleVerticalGroup",
+      "Alignment" : "hpMiddle",
+      "Name" : "GroupTower",
+      "Spacing" : 2.0000000000000000E+000,
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleImageControl",
+          "Content" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/towertop.png"
+          },
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "ImageRoof",
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop"
+        }
+      ]
+    }
+  ]
+}

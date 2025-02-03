@@ -18,6 +18,7 @@ type
     { Components designed using CGE editor.
       These fields will be automatically initialized at Start. }
     ButtonDefeat: TCastleButton;
+    GroupTowers: TCastleHorizontalGroup;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -38,7 +39,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages,
+  castlewindow, castlemessages, CastleComponentSerialize, 
 // Own
   Common, GameViewDefeat, gameviewmain, gameoptions;
 
@@ -49,12 +50,43 @@ begin
 end;
 
 procedure TViewGame.Start();
+var 
+  LTower: TTower;
+  LDesignTower: TCastleDesign;
+  LGroupTower, 
+  LVisualTower,
+  LVisualRoom: TCastleUserInterface;
+  LRoomIndex, LTowerIndex: Integer;
+  LTowerFactory, LRoomFactory: TCastleComponentFactory;
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
   FMap := TMap.Create(Self);
   // test
   ButtonDefeat.Caption := DifficultyName(Difficulty());
+  LTowerFactory := TCastleComponentFactory.Create(Self); 
+  LRoomFactory := TCastleComponentFactory.Create(Self);
+  try
+    LTowerFactory.Url := 'castle-data:/tower.castle-user-interface';
+    LRoomFactory.Url := 'castle-data:/room.castle-user-interface';
+    LTowerIndex := 0;
+    for LTower in FMap.Towers do
+    begin
+      LVisualTower := LTowerFactory.ComponentLoad(GroupTowers) as TCastleUserInterface;
+      LGroupTower := GroupTowers.FindComponent('GroupTower') as TCastleUserInterface;
+      LGroupTower.Name := 'Tower' + IntToStr(PostInc(LTowerIndex));
+      LVisualTower.Name := 'Group' + LGroupTower.Name;
+      for LRoomIndex := 0 to LTower.Rooms.Count - 1 do
+      begin
+        LVisualRoom := LRoomFactory.ComponentLoad(LVisualTower) as TCastleUserInterface;
+        LVisualRoom.Name := 'Room' + IntToStr(LRoomIndex);
+        LGroupTower.InsertFront(LVisualRoom);
+      end;
+      GroupTowers.InsertFront(LVisualTower);
+    end;
+  finally
+    FreeAndNil(LRoomFactory);
+  end;
 end;
 
 procedure TViewGame.Stop();

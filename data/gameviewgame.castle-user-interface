@@ -35,6 +35,11 @@
       "Name" : "ButtonDefeat",
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleHorizontalGroup",
+      "Name" : "GroupTowers",
+      "Spacing" : 1.8000000000000000E+002
     }
   ]
 }
