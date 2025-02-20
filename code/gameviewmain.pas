@@ -57,7 +57,7 @@ uses
 // Castle  
   castlewindow, castlemessages, castlesoundengine, CastleComponentSerialize,
 // Own
-  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions
+  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, audiocomponent
   ;
 
 { TViewMain ----------------------------------------------------------------- }
@@ -97,9 +97,7 @@ begin
   LMusicLevel := MusicLevel();
   if not Assigned(SoundEngine.LoopingChannel[0].Sound) then 
   begin
-    SoundEngine.LoopingChannel[0].Sound := TCastleSound.Create(Self);
-    SoundEngine.LoopingChannel[0].Sound.Stream := True;
-    SoundEngine.LoopingChannel[0].Sound.Url := 'castle-data:/mainmenu.ogg';
+    SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
   end;  
   SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 10;
   SliderMusic.Value := LMusicLevel;

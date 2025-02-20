@@ -1,0 +1,13 @@
+{
+  "$$ClassName" : "TCastleComponent",
+  "Name" : "Component1",
+  "$NonVisualComponents" : [
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "MenuTheme0",
+      "Stream" : true,
+      "Url" : "castle-data:/music/Japanese%20Music%20Pack/Shamisen%20Samurai%20Rock_Loop.ogg",
+      "Volume" : 1.0000000149011612E-001
+    }
+  ]
+}
