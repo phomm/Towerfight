@@ -1,11 +1,13 @@
 {
   "$$ClassName" : "TCastleUserInterface",
-  "Name" : "Group1",
+  "AutoSizeToChildren" : true,
+  "Name" : "Tower0",
   "$Children" : [
     {
       "$$ClassName" : "TCastleVerticalGroup",
       "Alignment" : "hpMiddle",
-      "Name" : "GroupTower",
+      "AutoSizeToChildren" : true,
+      "Name" : "GroupTower0",
       "Spacing" : 2.0000000000000000E+000,
       "$Children" : [
         {
@@ -16,7 +18,7 @@
           },
           "HorizontalAnchorParent" : "hpMiddle",
           "HorizontalAnchorSelf" : "hpMiddle",
-          "Name" : "ImageRoof",
+          "Name" : "ImageRoof0",
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"
         }

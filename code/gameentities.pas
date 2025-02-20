@@ -41,32 +41,29 @@ type
   TRoom = class(TComponent)
   private
     FActors: TObjectList<TActor>;
-    FActorsReadOnly: TCustomList<TActor>;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    property Actors: TCustomList<TActor> read FActorsReadOnly;
+    property Actors: TObjectList<TActor> read FActors;
   end;
 
   TTower = class(TComponent)
   private
     FRooms: TObjectList<TRoom>;
-    FRoomsReadOnly: TCustomList<TRoom>;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    property Rooms: TCustomList<TRoom> read FRoomsReadOnly;
+    property Rooms: TObjectList<TRoom> read FRooms;
   end;
   
   TMap = class(TComponent)
   private
     FTowers: TObjectList<TTower>;
-    FTowersReadOnly: TCustomList<TTower>;
     FDifficulty: NDifficulty;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    property Towers: TCustomList<TTower> read FTowersReadOnly;
+    property Towers: TObjectList<TTower> read FTowers;
   end;
 
 implementation
@@ -91,13 +88,11 @@ constructor TRoom.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FActors := TObjectList<TActor>.Create(True);
-  FActorsReadOnly := FActors;
 end;
 
 destructor TRoom.Destroy();
 begin
   FreeAndNil(FActors);
-  FActorsReadOnly := nil;
   inherited Destroy();
 end;
 
@@ -105,13 +100,11 @@ constructor TTower.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
   FRooms := TObjectList<TRoom>.Create(True);
-  FRoomsReadOnly := FRooms;
 end;
 
 destructor TTower.Destroy();
 begin
   FreeAndNil(FRooms);
-  FRoomsReadOnly := nil;
   inherited Destroy();
 end;
 
@@ -122,7 +115,6 @@ var
 begin
   inherited Create(AOwner);
   FTowers := TObjectList<TTower>.Create(True);
-  FTowersReadOnly := FTowers;
   FDifficulty := Difficulty();
   for T := 1 to 3 + Ord(FDifficulty) do
   begin
@@ -136,7 +128,6 @@ end;
 destructor TMap.Destroy();
 begin
   FreeAndNil(FTowers);
-  FTowersReadOnly := nil;
   inherited Destroy();
 end;
 

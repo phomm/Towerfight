@@ -1,15 +1,67 @@
 {
   "$$ClassName" : "TCastleUserInterface",
   "AutoSizeToChildren" : true,
-  "Name" : "Group1",
+  "Name" : "Room0",
   "$Children" : [
     {
-      "$$ClassName" : "TCastleImageControl",
-      "Content" : {
+      "$$ClassName" : "TCastleButton",
+      "AutoSize" : false,
+      "CustomBackground" : true,
+      "CustomBackgroundDisabled" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundFocused" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundNormal" : {
         "$$ClassName" : "TCastleImagePersistent",
         "Url" : "castle-data:/resources/cell.png"
       },
-      "Name" : "ImageRoom"
+      "CustomBackgroundPressed" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "Image" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "Name" : "ControlRoom0",
+      "Width" : 2.4000000000000000E+002,
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleHorizontalGroup",
+          "FullSize" : true,
+          "Name" : "HorizontalGroup0",
+          "Padding" : 8.0000000000000000E+000,
+          "Spacing" : 5.0000000000000000E+001,
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleImageControl",
+              "Content" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ImageLeft0",
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 8.0000000000000000E+000
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            },
+            {
+              "$$ClassName" : "TCastleImageControl",
+              "Content" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ImageRight0",
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 5.8000000000000000E+001
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            }
+          ]
+        }
+      ]
     }
   ]
 }
