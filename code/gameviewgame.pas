@@ -113,7 +113,7 @@ begin
 
   if Event.IsKey(keyEscape) and MessageYesNo(Application.MainWindow, 'Game would be lost. Exit to menu?') then
   begin
-    Container.PopView();
+    Container.View := (ViewMain);
     Exit(true); // key was handled
   end; 
 end;

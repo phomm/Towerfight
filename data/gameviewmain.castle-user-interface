@@ -111,7 +111,7 @@
           "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/good.bmp"
+            "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonStart",
@@ -148,7 +148,7 @@
           "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/good.bmp"
+            "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonOptions",
@@ -185,7 +185,7 @@
           "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/good.bmp"
+            "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonLeaders",
@@ -222,7 +222,7 @@
           "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/good.bmp"
+            "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonCredits",
@@ -259,7 +259,7 @@
           "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/good.bmp"
+            "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonExit",

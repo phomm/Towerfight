@@ -11,7 +11,7 @@ interface
 
 uses 
 // System
-  Classes,
+  Classes, generics.collections,
 // Castle  
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
 
@@ -28,13 +28,11 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
-    procedure Stop(); override;
-    procedure Resume(); override;
     procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure WindowCloseQuery(Container: TCastleContainer);
   private
-    SelectedButton: TCastleButton;
+    Buttons: TArray<TCastleButton>;
     procedure ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
     procedure ButtonExitClick(Sender: TObject);
     procedure ButtonStartClick(Sender: TObject);
@@ -83,11 +81,15 @@ var
   LCurrentDifficultyName: string;
 begin
   inherited;
-  ButtonExit.OnMotion := ButtonMotion;
-  ButtonStart.OnMotion := ButtonMotion;
-  ButtonLeaders.OnMotion := ButtonMotion;
-  ButtonOptions.OnMotion := ButtonMotion;
-  ButtonCredits.OnMotion := ButtonMotion;
+  SetLength(Buttons, 5);
+  Buttons[0] := ButtonStart;
+  Buttons[1] := ButtonLeaders;
+  Buttons[2] := ButtonOptions;
+  Buttons[3] := ButtonCredits;
+  Buttons[4] := ButtonExit;
+  for LButton in Buttons do
+    LButton.OnMotion := ButtonMotion;
+  
   ButtonExit.OnClick := ButtonExitClick;
   ButtonStart.OnClick := ButtonStartClick;
   ButtonLeaders.OnClick := ButtonLeadersClick;
@@ -121,18 +123,6 @@ begin
   end;
 end;
 
-procedure TViewMain.Stop();
-begin
-  inherited;
-  SelectedButton := nil;
-end;
-
-procedure TViewMain.Resume();
-begin
-  inherited;
-  if Assigned(SelectedButton) then 
-    SelectedButton.ImageScale := 0;
-end;
 
 procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
 var
@@ -157,13 +147,13 @@ begin
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
+var
+  LButton: TCastleButton;
 begin
-  if SelectedButton = Sender then Exit;
-  if SelectedButton <> nil then
-    SelectedButton.ImageScale := 0;
-  SelectedButton := Sender as TCastleButton;
-  SelectedButton.ImageScale := 1;
-  if SelectedButton <> ButtonOptions then
+  for LButton in Buttons do 
+    LButton.ImageScale := 0;
+  (Sender as TCastleButton).ImageScale := 0.08;
+  if Sender <> ButtonOptions then
     GroupOptions.Exists := False;
 end;
 
@@ -174,7 +164,7 @@ end;
 
 procedure TViewMain.ButtonStartClick(Sender: TObject);
 begin
-  Container.PushView(ViewGame);
+  Container.View := (ViewGame);
 end;
 
 procedure TViewMain.ButtonLeadersClick(Sender: TObject);
