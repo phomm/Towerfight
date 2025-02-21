@@ -27,6 +27,7 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     FMap: TMap;
+    FPreviouslyActiveButton: TCastleButton;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
   end;
@@ -124,12 +125,24 @@ end;
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LButton: TCastleButton;
-  LImageLeft: TCastleImageControl;
+  LImage: TCastleImageControl;
 begin
+  // Hide image on previously active button
+  if Assigned(FPreviouslyActiveButton) and (FPreviouslyActiveButton <> Sender) then
+  begin
+    FPreviouslyActiveButton.Caption := '';
+    LImage := FPreviouslyActiveButton.Controls[0].Controls[0] as TCastleImageControl;
+    LImage.Url := '';
+  end;
+
+  // Show image on currently clicked button
   LButton := Sender as TCastleButton;
-  LButton.Caption := LButton.Tag.ToString;
-  LImageLeft := LButton.Controls[0].Controls[0] as TCastleImageControl;
-  LImageLeft.Url := 'castle-data:/resources/good.bmp';
+  LButton.Caption := IntToStr(LButton.Tag);
+  LImage := LButton.Controls[0].Controls[0] as TCastleImageControl;
+  LImage.Url := 'castle-data:/resources/good.bmp';
+  
+  // Update the reference
+  FPreviouslyActiveButton := LButton;
 end;
 
 end.
