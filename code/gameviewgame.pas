@@ -78,6 +78,12 @@ begin
       LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + PostInc(LRoomIndex).ToString) as TCastleButton;
       LRoomButton.OnClick := ButtonRoomClick;
       LRoomButton.Tag := LTowerIndex * 10 + LRoomIndex;
+      if LRoom.Actors.Count > 0 then
+      begin
+        (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := LRoom.Actors[0].Visual;
+        (LRoomButton.Controls[0].Controls[0] as TCastleImageControl).Url := LRoom.Actors[0].AssetId;
+      end;
+
     end;
   end;
 end;
@@ -120,15 +126,14 @@ begin
   if Assigned(FPreviouslyActiveButton) and (FPreviouslyActiveButton <> Sender) then
   begin
     FPreviouslyActiveButton.Caption := '';
-    LImage := FPreviouslyActiveButton.Controls[0].Controls[0] as TCastleImageControl;
-    LImage.Url := '';
+    (FPreviouslyActiveButton.Controls[0].Controls[3] as TCastleImageControl).Url := '';
+    (FPreviouslyActiveButton.Controls[0].Controls[2] as TCastleLabel).Caption := '';
   end;
 
   // Show image on currently clicked button
   LButton := Sender as TCastleButton;
-  LButton.Caption := IntToStr(LButton.Tag);
-  LImage := LButton.Controls[0].Controls[0] as TCastleImageControl;
-  LImage.Url := 'castle-data:/resources/good.bmp';
+  (LButton.Controls[0].Controls[3] as TCastleImageControl).Url := FMap.Hero.AssetId;
+  (LButton.Controls[0].Controls[2] as TCastleLabel).Caption := FMap.Hero.Visual;
   
   // Update the reference
   FPreviouslyActiveButton := LButton;

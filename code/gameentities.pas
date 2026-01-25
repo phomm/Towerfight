@@ -28,14 +28,14 @@ type
   private
 
   public
-  
+    constructor Create(AOwner: TComponent); override;
   end;
 
   TEnemy = class(TActor)
   private
 
   public
-  
+    constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
 
   TRoom = class(TComponent)
@@ -60,10 +60,12 @@ type
   private
     FTowers: TObjectList<TTower>;
     FDifficulty: NDifficulty;
+    FHero: THero;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
     property Towers: TObjectList<TTower> read FTowers;
+    property Hero: THero read FHero;
   end;
 
 implementation
@@ -112,23 +114,46 @@ constructor TMap.Create(AOwner: TComponent);
 var
   T, R: Integer;
   LTower: TTower;
+  LRoom: TRoom;
+  LEnemy: TActor;
 begin
   inherited Create(AOwner);
+  FHero := THero.Create(nil);
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
   for T := 1 to 3 + Ord(FDifficulty) do
   begin
     LTower := TTower.Create(nil);
     for R := 1 to Min(T + 3, 8) do
-      LTower.FRooms.Add(TRoom.Create(nil));
+    begin
+      LRoom := TRoom.Create(nil);
+      LEnemy := TEnemy.Create(nil, T, R);
+      LRoom.Actors.Add(LEnemy);
+      LTower.FRooms.Add(LRoom);
+    end;
     FTowers.Add(LTower);
   end;
 end;
 
 destructor TMap.Destroy();
 begin
+  FreeAndNil(FHero);
   FreeAndNil(FTowers);
   inherited Destroy();
+end;
+
+constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
+begin
+  inherited Create(AOwner);
+  FLevel := ATower;
+  FAssetId := 'castle-data:/resources/bad.bmp';
+end;
+
+constructor THero.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FLevel := Random(4) + 3;
+  FAssetId := 'castle-data:/resources/good.bmp';
 end;
 
 end.

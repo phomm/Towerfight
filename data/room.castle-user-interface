@@ -29,19 +29,56 @@
         {
           "$$ClassName" : "TCastleHorizontalGroup",
           "FullSize" : true,
+          "HorizontalAnchorParent" : "hpRight",
+          "HorizontalAnchorSelf" : "hpRight",
+          "LeftToRight" : false,
           "Name" : "HorizontalGroup0",
           "Padding" : 8.0000000000000000E+000,
-          "Spacing" : 5.0000000000000000E+001,
+          "Spacing" : 1.0000000000000000E+001,
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
           "$Children" : [
             {
               "$$ClassName" : "TCastleImageControl",
               "Content" : {
                 "$$ClassName" : "TCastleImagePersistent"
               },
-              "Name" : "ImageLeft0",
+              "HorizontalAnchorParent" : "hpRight",
+              "HorizontalAnchorSelf" : "hpRight",
+              "Name" : "ImageRight0",
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 8.0000000000000000E+000
+                "X" : -8.0000000000000000E+000
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            },
+            {
+              "$$ClassName" : "TCastleLabel",
+              "HorizontalAnchorParent" : "hpRight",
+              "HorizontalAnchorSelf" : "hpRight",
+              "Name" : "LabelRight0",
+              "Text" : [
+                "R"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : -1.8000000000000000E+001
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            },
+            {
+              "$$ClassName" : "TCastleLabel",
+              "HorizontalAnchorParent" : "hpRight",
+              "HorizontalAnchorSelf" : "hpRight",
+              "Name" : "LabelLeft0",
+              "Text" : [
+                "L"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : -4.3360000610351562E+001
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle"
@@ -51,10 +88,12 @@
               "Content" : {
                 "$$ClassName" : "TCastleImagePersistent"
               },
-              "Name" : "ImageRight0",
+              "HorizontalAnchorParent" : "hpRight",
+              "HorizontalAnchorSelf" : "hpRight",
+              "Name" : "ImageLeft0",
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 5.8000000000000000E+001
+                "X" : -6.8559997558593750E+001
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle"

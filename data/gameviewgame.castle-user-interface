@@ -39,8 +39,6 @@
       "CustomBackgroundPressed" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
-      "HorizontalAnchorParent" : "hpRight",
-      "HorizontalAnchorSelf" : "hpRight",
       "Image" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
@@ -52,7 +50,7 @@
       "$$ClassName" : "TCastleHorizontalGroup",
       "Alignment" : "vpBottom",
       "Name" : "GroupTowers",
-      "Spacing" : 5.0000000000000000E+000
+      "Spacing" : 4.0000000000000000E+000
     }
   ]
 }
