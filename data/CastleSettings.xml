@@ -11,4 +11,10 @@ See https://castle-engine.io/manual_castle_settings.php for documentation of thi
     reference_width="1600"
     reference_height="900"
   />
+  <default_font
+      url="castle-data:/resources/Keshiki.otf"
+      size_at_load="200"
+      size="32"
+    />
+
 </castle_settings>

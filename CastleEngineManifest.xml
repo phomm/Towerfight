@@ -15,5 +15,18 @@ See https://castle-engine.io/project_manifest for documentation of this file.
     <search_paths>
       <path value="code/" />
     </search_paths>
+	<defines>
+      <define>CASTLE_GEO_SUPPORT_DISABLE</define>
+      <define>CASTLE_OBJ_SUPPORT_DISABLE</define>
+      <define>CASTLE_COLLADA_SUPPORT_DISABLE</define>
+      <define>CASTLE_SPINE_SUPPORT_DISABLE</define>
+      <define>CASTLE_STL_SUPPORT_DISABLE</define>
+      <define>CASTLE_MD3_SUPPORT_DISABLE</define>
+      <define>CASTLE_IMAGE_SUPPORT_DISABLE</define>
+      <define>CASTLE_COCOS2D_SUPPORT_DISABLE</define>
+      <define>CASTLE_TILED_MAP_SUPPORT_DISABLE</define>
+      <define>CASTLE_IFC_SUPPORT_DISABLE</define>
+      <define>CASTLE_3DS_SUPPORT_DISABLE</define> 
+    </defines>
   </compiler_options>
 </project>
