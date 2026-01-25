@@ -2,6 +2,13 @@
   "$$ClassName" : "TCastleUserInterface",
   "FullSize" : true,
   "Name" : "RootGroup",
+  "$NonVisualComponents" : [
+    {
+      "$$ClassName" : "TCastleComponentFactory",
+      "Name" : "FactoryButton",
+      "Url" : "castle-data:/buttonDifficulty.castle-user-interface"
+    }
+  ],
   "$Children" : [
     {
       "$$ClassName" : "TCastleImageControl",
@@ -340,6 +347,32 @@
           "Width" : 3.0000000000000000E+002
         }
       ]
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/samurai.png"
+      },
+      "HeightFraction" : 8.0000001192092896E-001,
+      "Name" : "ImageSamuraiLeft",
+      "Stretch" : true,
+      "WidthFraction" : 3.0000001192092896E-001
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "FlipHorizontal" : true,
+        "Url" : "castle-data:/resources/samurai.png"
+      },
+      "Exists" : false,
+      "HeightFraction" : 8.0000001192092896E-001,
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
+      "Name" : "ImageSamuraiRight",
+      "Stretch" : true,
+      "WidthFraction" : 3.0000001192092896E-001
     }
   ]
 }

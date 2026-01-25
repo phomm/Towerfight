@@ -13,7 +13,7 @@ uses
 // System
   Classes, generics.collections,
 // Castle  
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize;
 
 type
   { Main view, where most of the application logic takes place. }
@@ -25,6 +25,7 @@ type
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions: TCastleUserInterface;
     SliderMusic: TCastleIntegerSlider;
+    FactoryButton: TCastleComponentFactory;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -53,7 +54,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, castlesoundengine, CastleComponentSerialize,
+  castlewindow, castlemessages, castlesoundengine, 
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, audiocomponent
   ;
@@ -74,7 +75,7 @@ end;
 
 procedure TViewMain.Start();
 var
-  LButtonFactory: TCastleComponentFactory;
+  
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
   LMusicLevel: Integer;
@@ -105,21 +106,15 @@ begin
   SliderMusic.Value := LMusicLevel;
   SliderMusic.OnChange := SliderMusicChange;
 
-  LButtonFactory := TCastleComponentFactory.Create(Self);
-  try
-    LButtonFactory.Url := 'castle-data:/buttonDifficulty.castle-user-interface';
-    LCurrentDifficultyName := DifficultyName(Difficulty());
-    for LDifficulty in NDifficulty do
-    begin
-      LButton := LButtonFactory.ComponentLoad(GroupOptions) as TCastleButton;
-      LButton.Caption := DifficultyName(LDifficulty);
-      LButton.Pressed := LButton.Caption = LCurrentDifficultyName;
-      LButton.Tag := Ord(LDifficulty);
-      LButton.OnClick := ButtonDifficultyClick;
-      GroupOptions.InsertFront(LButton);
-    end;
-  finally
-    FreeAndNil(LButtonFactory);
+  LCurrentDifficultyName := DifficultyName(Difficulty());
+  for LDifficulty in NDifficulty do
+  begin
+    LButton := FactoryButton.ComponentLoad(GroupOptions) as TCastleButton;
+    LButton.Caption := DifficultyName(LDifficulty);
+    LButton.Pressed := LButton.Caption = LCurrentDifficultyName;
+    LButton.Tag := Ord(LDifficulty);
+    LButton.OnClick := ButtonDifficultyClick;
+    GroupOptions.InsertFront(LButton);
   end;
 end;
 
@@ -195,24 +190,12 @@ begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
 
-  { This virtual method is executed when user presses
-    a key, a mouse button, or touches a touch-screen.
-
-    Note that each UI control has also events like OnPress and OnClick.
-    These events can be used to handle the "press", if it should do something
-    specific when used in that UI control.
-    The TViewMain.Press method should be used to handle keys
-    not handled in children controls.
-  }
-
-  // Use this to handle keys:
-  {
-  if Event.IsKey(keyXxx) then
+  if Event.IsKey(keyEscape) then
   begin
-    // DoSomething;
+    ButtonExit.DoClick();
     Exit(true); // key was handled
   end;
-  }
+  
 end;
 
 end.
