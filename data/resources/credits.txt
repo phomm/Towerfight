@@ -1,3 +1,5 @@
 scene titles https://cooltext.com/Logos-Popular
 gui https://opengameart.org/content/rpg-gui-construction-kit-v10
 samurai-mask https://www.vecteezy.com/vector-art/42361570-isolated-samurai-warrior-mask-traditional-of-japanese-warriors
+weapons https://opengameart.org/content/2d-ninja-sub-weapons-pack
+samurai https://www.vecteezy.com/vector-art/5131249-japanese-samurai-warrior-vector-illustration
