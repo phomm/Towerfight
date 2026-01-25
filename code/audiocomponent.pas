@@ -89,7 +89,7 @@ begin
   LSound := FindComponent(AName) as TCastleSound;
   if not Assigned(LSound) then
   begin
-    WriteLog('Audio', Format('Sound "%s" not found', [AName]));
+    WriteLnLog('Audio', Format('Sound "%s" not found', [AName]));
     Exit;
   end;
   LPlayingSound := TCastlePlayingSound.Create(nil);

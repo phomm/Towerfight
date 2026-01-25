@@ -2,6 +2,18 @@
   "$$ClassName" : "TCastleUserInterface",
   "FullSize" : true,
   "Name" : "RootGroup",
+  "$NonVisualComponents" : [
+    {
+      "$$ClassName" : "TCastleComponentFactory",
+      "Name" : "FactoryTower",
+      "Url" : "castle-data:/tower.castle-user-interface"
+    },
+    {
+      "$$ClassName" : "TCastleComponentFactory",
+      "Name" : "FactoryRoom",
+      "Url" : "castle-data:/room.castle-user-interface"
+    }
+  ],
   "$Children" : [
     {
       "$$ClassName" : "TCastleImageControl",

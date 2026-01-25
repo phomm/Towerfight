@@ -8,7 +8,7 @@ uses
 // System
 Classes,
 // Castle
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse,
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, 
 // Own
   gameentities;
 
@@ -19,6 +19,7 @@ type
       These fields will be automatically initialized at Start. }
     ButtonDefeat: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
+    FactoryTower, FactoryRoom: TCastleComponentFactory;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -41,7 +42,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, CastleComponentSerialize, 
+  castlewindow, castlemessages, 
 // Own
   Common, GameViewDefeat, gameviewmain, gameoptions;
 
@@ -54,11 +55,9 @@ end;
 procedure TViewGame.Start();
 var 
   LRoom: TRoom;
-  LGroupTower, LVisualTower,
-  LVisualRoom: TCastleUserInterface;
+  LGroupTower, LVisualTower, LVisualRoom: TCastleUserInterface;
   LRoomButton: TCastleButton;
   LRoomIndex, LTowerIndex: Integer;
-  LTowerFactory, LRoomFactory: TCastleComponentFactory;
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
@@ -66,30 +65,20 @@ begin
   GroupTowers.ClearControls();
   // test
   ButtonDefeat.Caption := DifficultyName(Difficulty());
-  LTowerFactory := TCastleComponentFactory.Create(nil); 
-  LRoomFactory := TCastleComponentFactory.Create(nil);
-  try
-    LTowerFactory.Url := 'castle-data:/tower.castle-user-interface';
-    LRoomFactory.Url := 'castle-data:/room.castle-user-interface';
-    
-    for LTowerIndex := 0 to Pred(FMap.Towers.Count) do
+  for LTowerIndex := 0 to Pred(FMap.Towers.Count) do
+  begin
+    LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
+    LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+    GroupTowers.InsertFront(LVisualTower);
+    LRoomIndex := 0;
+    for LRoom in FMap.Towers[LTowerIndex].Rooms do 
     begin
-      LVisualTower := LTowerFactory.ComponentLoad(GroupTowers) as TCastleUserInterface;
-      LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
-      GroupTowers.InsertFront(LVisualTower);
-      LRoomIndex := 0;
-      for LRoom in FMap.Towers[LTowerIndex].Rooms do 
-      begin
-        LVisualRoom := LRoomFactory.ComponentLoad(LGroupTower) as TCastleUserInterface;
-        LGroupTower.InsertFront(LVisualRoom);
-        LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + PostInc(LRoomIndex).ToString) as TCastleButton;
-        LRoomButton.OnClick := ButtonRoomClick;
-        LRoomButton.Tag := LTowerIndex * 10 + LRoomIndex;
-      end;
+      LVisualRoom := FactoryRoom.ComponentLoad(LGroupTower) as TCastleUserInterface;
+      LGroupTower.InsertFront(LVisualRoom);
+      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + PostInc(LRoomIndex).ToString) as TCastleButton;
+      LRoomButton.OnClick := ButtonRoomClick;
+      LRoomButton.Tag := LTowerIndex * 10 + LRoomIndex;
     end;
-  finally
-    FreeAndNil(LRoomFactory);
-    FreeAndNil(LTowerFactory);
   end;
 end;
 
