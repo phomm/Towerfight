@@ -9,6 +9,7 @@
       "AutoSizeToChildren" : true,
       "Name" : "GroupTower0",
       "Spacing" : 2.0000000000000000E+000,
+      "TopToBottom" : false,
       "$Children" : [
         {
           "$$ClassName" : "TCastleImageControl",
@@ -18,9 +19,7 @@
           },
           "HorizontalAnchorParent" : "hpMiddle",
           "HorizontalAnchorSelf" : "hpMiddle",
-          "Name" : "ImageRoof0",
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
+          "Name" : "ImageRoof0"
         }
       ]
     }

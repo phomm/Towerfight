@@ -20,6 +20,8 @@ type
     ButtonDefeat: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
+    function GetMap(): TMap;
+    property Map: TMap read GetMap;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -27,7 +29,6 @@ type
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
-    FMap: TMap;
     FPreviouslyActiveButton: TCastleButton;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
@@ -55,23 +56,23 @@ end;
 procedure TViewGame.Start();
 var 
   LRoom: TRoom;
-  LGroupTower, LVisualTower, LVisualRoom: TCastleUserInterface;
+  LGroupTower, LVisualTower, LVisualRoom, LRoof: TCastleUserInterface;
   LRoomButton: TCastleButton;
   LRoomIndex, LTowerIndex: Integer;
+
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
-  FMap := TMap.Create(Self);
   GroupTowers.ClearControls();
   // test
   ButtonDefeat.Caption := DifficultyName(Difficulty());
-  for LTowerIndex := 0 to Pred(FMap.Towers.Count) do
+  for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
     LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
     GroupTowers.InsertFront(LVisualTower);
     LRoomIndex := 0;
-    for LRoom in FMap.Towers[LTowerIndex].Rooms do 
+    for LRoom in Map.Towers[LTowerIndex].Rooms do 
     begin
       LVisualRoom := FactoryRoom.ComponentLoad(LGroupTower) as TCastleUserInterface;
       LGroupTower.InsertFront(LVisualRoom);
@@ -83,14 +84,22 @@ begin
         (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := LRoom.Actors[0].Visual;
         (LRoomButton.Controls[0].Controls[0] as TCastleImageControl).Url := LRoom.Actors[0].AssetId;
       end;
-
     end;
+    LRoof := LGroupTower.Controls[0];
+    LGroupTower.RemoveControl(LRoof);
+    LGroupTower.InsertFront(LRoof);
   end;
+end;
+
+function TViewGame.GetMap(): TMap;
+begin
+  Result := TMap.Map;
 end;
 
 procedure TViewGame.Stop();
 begin
-  FreeAndNil(FMap);
+  inherited;
+  TMap.Die();
 end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
@@ -132,8 +141,8 @@ begin
 
   // Show image on currently clicked button
   LButton := Sender as TCastleButton;
-  (LButton.Controls[0].Controls[3] as TCastleImageControl).Url := FMap.Hero.AssetId;
-  (LButton.Controls[0].Controls[2] as TCastleLabel).Caption := FMap.Hero.Visual;
+  (LButton.Controls[0].Controls[3] as TCastleImageControl).Url := Map.Hero.AssetId;
+  (LButton.Controls[0].Controls[2] as TCastleLabel).Caption := Map.Hero.Visual;
   
   // Update the reference
   FPreviouslyActiveButton := LButton;

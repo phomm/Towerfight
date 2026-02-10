@@ -49,8 +49,7 @@
     {
       "$$ClassName" : "TCastleHorizontalGroup",
       "Alignment" : "vpBottom",
-      "Name" : "GroupTowers",
-      "Spacing" : 4.0000000000000000E+000
+      "Name" : "GroupTowers"
     }
   ]
 }

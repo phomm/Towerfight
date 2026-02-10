@@ -60,12 +60,21 @@ type
   private
     FTowers: TObjectList<TTower>;
     FDifficulty: NDifficulty;
+FLastTower, FLastStock: Integer;
     FHero: THero;
+class var FMap: TMap;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
     property Towers: TObjectList<TTower> read FTowers;
     property Hero: THero read FHero;
+property LastTower: Integer read FLastTower;
+    property LastStock: Integer read FLastStock;
+    function IsLastTower(ATowerIndex: Integer): Boolean;
+    function IsLastStock(AStockIndex: Integer): Boolean;
+    function IsFinalRoom(ATowerIndex, AStockIndex: Integer): Boolean;
+  class function Map(): TMap;
+  class procedure Die();
   end;
 
 implementation
@@ -74,7 +83,7 @@ uses
 // System
   SysUtils, typinfo, Math,
 // Own  
-  Common;
+  Common, gameviewgame;
 
 procedure TActor.SetLevel(AValue: Integer);
 begin
@@ -118,13 +127,16 @@ var
   LEnemy: TActor;
 begin
   inherited Create(AOwner);
+FMap := Self;
   FHero := THero.Create(nil);
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
-  for T := 1 to 3 + Ord(FDifficulty) do
+  FLastTower := 3 + Ord(FDifficulty);
+  for T := 1 to FLastTower do
   begin
     LTower := TTower.Create(nil);
-    for R := 1 to Min(T + 3, 8) do
+FLastStock := Min(T + 3, 8);
+    for R := 1 to FLastStock do
     begin
       LRoom := TRoom.Create(nil);
       LEnemy := TEnemy.Create(nil, T, R);
@@ -140,6 +152,33 @@ begin
   FreeAndNil(FHero);
   FreeAndNil(FTowers);
   inherited Destroy();
+end;
+
+class function TMap.Map(): TMap;
+begin
+  if FMap = nil then
+    FMap := TMap.Create(ViewGame);
+  Result := FMap;
+end;
+
+class procedure TMap.Die();
+begin
+  FreeAndNil(FMap);
+end;
+
+function TMap.IsLastTower(ATowerIndex: Integer): Boolean;
+begin
+  Result := ATowerIndex = FLastTower;
+end;
+
+function TMap.IsLastStock(AStockIndex: Integer): Boolean;
+begin
+  Result := AStockIndex = FLastStock;
+end;
+
+function TMap.IsFinalRoom(ATowerIndex, AStockIndex: Integer): Boolean;
+begin
+  Result := IsLastTower(ATowerIndex) and IsLastStock(AStockIndex);
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
