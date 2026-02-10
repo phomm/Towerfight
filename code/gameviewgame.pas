@@ -64,7 +64,6 @@ begin
   ButtonDefeat.OnClick := ButtonDefeatClick;
   GroupTowers.ClearControls();
   // test
-  ButtonDefeat.Caption := DifficultyName(Difficulty());
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
@@ -112,7 +111,8 @@ end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
 begin
-  Container.View := (ViewDefeat);
+  if MessageYesNo(Application.MainWindow, 'Game will be lost. Give up?') then
+    Container.View := (ViewDefeat);
 end;
 
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
@@ -142,9 +142,9 @@ begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
 
-  if Event.IsKey(keyEscape) and MessageYesNo(Application.MainWindow, 'Game would be lost. Exit to menu?') then
+  if Event.IsKey(keyEscape) then
   begin
-    Container.View := (ViewMain);
+    ButtonDefeat.DoClick();
     Exit(True); // key was handled
   end;
   for key := 0 to High(DirKeys) do

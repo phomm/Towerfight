@@ -26,7 +26,7 @@
     },
     {
       "$$ClassName" : "TCastleButton",
-      "Caption" : "Defeat",
+      "Caption" : "SEPUKKU",
       "CustomBackgroundDisabled" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
@@ -39,6 +39,11 @@
       "CustomBackgroundPressed" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
+      "CustomTextColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Red" : 1.0000000000000000E+000
+      },
+      "CustomTextColorUse" : true,
       "Image" : {
         "$$ClassName" : "TCastleImagePersistent"
       },

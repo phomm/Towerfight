@@ -8,14 +8,14 @@ uses Classes,
 type
   TViewDefeat = class(TCastleView)
   published
-    { Components designed using CGE editor.
-      These fields will be automatically initialized at Start. }
-    // ButtonXxx: TCastleButton;
+    ButtonMenu: TCastleButton;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
+  private
+    procedure ButtonMenuClick(Sender: TObject);
   end;
 
 var
@@ -36,7 +36,12 @@ end;
 procedure TViewDefeat.Start;
 begin
   inherited;
-  { Executed once when view starts. }
+  ButtonMenu.OnClick := @ButtonMenuClick;
+end;
+
+procedure TViewDefeat.ButtonMenuClick(Sender: TObject);
+begin
+  Container.View := ViewMain;
 end;
 
 procedure TViewDefeat.Update(const SecondsPassed: Single; var HandleInput: boolean);
