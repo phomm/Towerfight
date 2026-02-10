@@ -33,7 +33,9 @@ type
 
   TEnemy = class(TActor)
   private
-
+    
+  protected
+    function CalcLevel(ATower, AStock: Integer): Integer;
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
@@ -44,6 +46,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
+    procedure Fight();
     property Actors: TObjectList<TActor> read FActors;
   end;
 
@@ -60,15 +63,15 @@ type
   private
     FTowers: TObjectList<TTower>;
     FDifficulty: NDifficulty;
-FLastTower, FLastStock: Integer;
-    FHero: THero;
-class var FMap: TMap;
+    FLastTower, FLastStock: Integer;
+    FHero: THero;  
+  class var FMap: TMap;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
     property Towers: TObjectList<TTower> read FTowers;
     property Hero: THero read FHero;
-property LastTower: Integer read FLastTower;
+    property LastTower: Integer read FLastTower;
     property LastStock: Integer read FLastStock;
     function IsLastTower(ATowerIndex: Integer): Boolean;
     function IsLastStock(AStockIndex: Integer): Boolean;
@@ -107,6 +110,13 @@ begin
   inherited Destroy();
 end;
 
+procedure TRoom.Fight();
+var
+  LActor: TActor;
+begin
+  //for LActor in FActors do
+end;
+
 constructor TTower.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -127,7 +137,7 @@ var
   LEnemy: TActor;
 begin
   inherited Create(AOwner);
-FMap := Self;
+  FMap := Self;
   FHero := THero.Create(nil);
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
@@ -135,7 +145,7 @@ FMap := Self;
   for T := 1 to FLastTower do
   begin
     LTower := TTower.Create(nil);
-FLastStock := Min(T + 3, 8);
+    FLastStock := Min(T + 3, 8);
     for R := 1 to FLastStock do
     begin
       LRoom := TRoom.Create(nil);
@@ -182,10 +192,30 @@ begin
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
+var
+  LLevel: Integer;
 begin
   inherited Create(AOwner);
-  FLevel := ATower;
-  FAssetId := 'castle-data:/resources/bad.bmp';
+  FLevel := CalcLevel(ATower, AStock);
+  if TMap.Map.IsFinalRoom(ATower, AStock) then
+    FAssetId := 'castle-data:/resources/dragon.png'
+  else
+    FAssetId := 'castle-data:/resources/' + IIF(Random(2) = 0, 'neutral', 'bad') + '.bmp';  
+end;
+
+function TEnemy.CalcLevel(ATower, AStock: Integer): Integer;
+function DragonHP(): Integer;
+begin
+  case Difficulty of
+    gdEasy: Result := 444;
+    gdNormal: Result := 1000 + ValueOrZero(400) + 40 + ValueOrZero(4); 
+    gdHard: Result := 2400 + ValueOrZero(40) + ValueOrZero(4); 
+    gdInsane: Result := 4000 + ValueOrZero(400) + ValueOrZero(40) + ValueOrZero(4);  
+  end;
+end;
+begin
+  Result := IIF(TMap.Map.IsFinalRoom(ATower, AStock), DragonHP(),
+    ATower * ATower * (AStock div 3 + 1) * (Max(3, ATower + AStock + Random(10) - 4)));
 end;
 
 constructor THero.Create(AOwner: TComponent);

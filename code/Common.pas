@@ -21,6 +21,7 @@ function PostInc(var AInt: Integer; const Modifier: Integer = 1): Integer;
 function PreInc(var AInt: Integer; const Modifier: Integer = 1): Integer;
 function SplitString(const AStr: string; ADelim: Char): TArray<string>;
 function SortStringArray(const AArray: TArray<string>): TArray<string>;
+function ValueOrZero(AValue: Integer): Integer; {$IFDEF PASCAL_INLINE}inline;{$ENDIF}
 
 {$IFNDEF FPC}
 function ConcatPaths(const Paths: array of string): string;
@@ -159,6 +160,11 @@ begin
   finally
     sl.Free();
   end;
+end;
+
+function ValueOrZero(AValue: Integer): Integer;
+begin
+  Result := Random(2) * AValue;
 end;
 
 {$IFNDEF FPC}
