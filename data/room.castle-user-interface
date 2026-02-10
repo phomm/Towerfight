@@ -28,6 +28,7 @@
       "$Children" : [
         {
           "$$ClassName" : "TCastleHorizontalGroup",
+          "FullSize" : true,
           "HorizontalAnchorParent" : "hpRight",
           "HorizontalAnchorSelf" : "hpRight",
           "LeftToRight" : false,
@@ -57,6 +58,8 @@
               "HorizontalAnchorParent" : "hpRight",
               "HorizontalAnchorSelf" : "hpRight",
               "Name" : "LabelRight0",
+              "PaddingHorizontal" : -1.2000000000000000E+002,
+              "PaddingVertical" : -4.5000000000000000E+001,
               "Text" : [
                 "R"
               ],
@@ -71,6 +74,7 @@
         },
         {
           "$$ClassName" : "TCastleHorizontalGroup",
+          "FullSize" : true,
           "Name" : "GroupHero",
           "Padding" : 8.0000000000000000E+000,
           "Spacing" : 1.0000000000000000E+001,
@@ -92,7 +96,9 @@
             },
             {
               "$$ClassName" : "TCastleLabel",
+              "AutoSize" : false,
               "Name" : "LabelLeft1",
+              "PaddingVertical" : 6.0000000000000000E+001,
               "Text" : [
                 "L"
               ],

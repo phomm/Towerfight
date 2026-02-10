@@ -20,6 +20,7 @@ uses SysUtils,
   , GameViewLeaders
   , GameViewCredits
   , GameViewDefeat
+  , GameViewWin  
   {$endregion 'Castle Initialization Uses'}
   , GameOptions;
 
@@ -33,6 +34,7 @@ begin
   InitializeLog();
   Window.Container.LoadSettings('castle-data:/CastleSettings.xml');
   UserConfig.Load();
+  Window.FullScreen := Fullscreen();
 
   { Create views (see https://castle-engine.io/views ). }
   {$region 'Castle View Creation'}
@@ -42,6 +44,7 @@ begin
   ViewLeaders := TViewLeaders.Create(Application);
   ViewCredits := TViewCredits.Create(Application);
   ViewDefeat := TViewDefeat.Create(Application);
+  ViewWin := TViewWin.Create(Application);
   {$endregion 'Castle View Creation'}
 
   Window.Container.View := ViewMain;
@@ -64,7 +67,6 @@ initialization
   Application.MainWindow := Window;
 
   { Apply fullscreen setting from user config }
-  Window.FullScreen := Fullscreen();
 
   { Optionally, adjust window fullscreen state and size at this point.
     Examples:

@@ -34,8 +34,7 @@ type
   end;
 
   TEnemy = class(TActor)
-  private
-    
+  private    
   protected
     function CalcLevel(ATower, AStock: Integer): Integer; virtual;
   public
@@ -49,7 +48,6 @@ type
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
-
 
   TRoom = class(TComponent)
   private
@@ -138,7 +136,7 @@ begin
     Exit(True);
   if TMap.Map.Hero.Level >= FActors[0].Level then
   begin
-    TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex);
+    TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
     FActors.Delete(0);
     Exit(True);
   end;
@@ -277,7 +275,7 @@ end;
 
 function TEnemy.CalcLevel(ATower, AStock: Integer): Integer;
 begin
-  Result := ATower * ATower * (AStock div 3 + 1) * (Max(3, ATower + AStock + Random(10) - 4));
+  Result := ATower * ATower * (ATower + Random(AStock)) * (Max(ATower + 3, AStock + Random(8) - ATower));
 end;
 
 function TDragon.CalcLevel(ATower, AStock: Integer): Integer;

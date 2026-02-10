@@ -37,3 +37,4 @@ castle-auto-generated-resources.res
 
 # May contain secret data (your Android keystore username and password)
 AndroidSigningProperties.txt
+data/music/

@@ -1,4 +1,4 @@
-unit GameViewDefeat;
+unit GameViewWin;
 
 interface
 
@@ -6,7 +6,7 @@ uses Classes,
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
 
 type
-  TViewDefeat = class(TCastleView)
+  TViewWin = class(TCastleView)
   published
     ButtonMenu: TCastleButton;
   public
@@ -19,7 +19,7 @@ type
   end;
 
 var
-  ViewDefeat: TViewDefeat;
+  ViewWin: TViewWin;
 
 implementation
 
@@ -27,30 +27,30 @@ uses
 // Own
   gameviewmain;
 
-constructor TViewDefeat.Create(AOwner: TComponent);
+constructor TViewWin.Create(AOwner: TComponent);
 begin
   inherited;
-  DesignUrl := 'castle-data:/gameviewdefeat.castle-user-interface';
+  DesignUrl := 'castle-data:/gameviewwin.castle-user-interface';
 end;
 
-procedure TViewDefeat.Start;
+procedure TViewWin.Start;
 begin
   inherited;
   ButtonMenu.OnClick := @ButtonMenuClick;
 end;
 
-procedure TViewDefeat.ButtonMenuClick(Sender: TObject);
+procedure TViewWin.ButtonMenuClick(Sender: TObject);
 begin
   Container.View := ViewMain;
 end;
 
-procedure TViewDefeat.Update(const SecondsPassed: Single; var HandleInput: boolean);
+procedure TViewWin.Update(const SecondsPassed: Single; var HandleInput: boolean);
 begin
   inherited;
   { Executed every frame. }
 end;
 
-function TViewDefeat.Press(const Event: TInputPressRelease): Boolean;
+function TViewWin.Press(const Event: TInputPressRelease): Boolean;
 begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys

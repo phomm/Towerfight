@@ -46,7 +46,7 @@ uses
 // Castle  
   castlewindow, castlemessages, CastleLog,
 // Own
-  Common, GameViewDefeat, gameviewmain, gameoptions;
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions;
 
 procedure CastleSleep(AMilliseconds: Integer);
 var
@@ -216,12 +216,21 @@ begin
   FSkip := True;
   CastleSleep(300);
   if Map.Hero.Dead then
+  begin
+    CastleSleep(300);
     Container.View := ViewDefeat
+  end
   else
   begin
     (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := '';
     (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
     (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+    //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
+    if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
+    begin
+      CastleSleep(300);
+      Container.View := ViewWin;
+    end;
   end;
   FSkip := False;
 end;
