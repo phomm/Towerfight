@@ -20,6 +20,11 @@ function MusicLevel(): Byte;
 procedure SetMusicLevel(AValue: Byte);
 procedure SetDifficulty(AValue: NDifficulty);
 function DifficultyName(AValue: NDifficulty): string;
+/// <summary>
+/// Current Fullscreen state, default is False
+/// </summary>
+function Fullscreen(): Boolean;
+procedure SetFullscreen(AValue: Boolean);
 
 implementation
 
@@ -27,7 +32,7 @@ uses
 // System
   SysUtils, typinfo,
 // Castle
-  CastleConfig, castlelog,
+  CastleConfig, castlelog, CastleWindow,
 // Own  
   Common;
 
@@ -39,6 +44,8 @@ const
   DifficultyKey = 'Difficulty';
   MusicKey = 'Music';
   MusicLevelDefault = 5;
+  FullscreenKey = 'Fullscreen';
+  FullscreenDefault = False;
 
 function Difficulty(): NDifficulty;
 begin
@@ -67,6 +74,17 @@ end;
 function DifficultyName(AValue: NDifficulty): string;
 begin
   Result := EnumName(ETPDifficulty, Ord(AValue));
+end;
+
+function Fullscreen(): Boolean;
+begin
+  Result := UserConfig.GetValue(FullscreenKey, FullscreenDefault);
+end;
+
+procedure SetFullscreen(AValue: Boolean);
+begin
+  UserConfig.SetValue(FullscreenKey, AValue);
+  Application.MainWindow.FullScreen := AValue;
 end;
 
 initialization

@@ -24,7 +24,7 @@ type
     LabelFps: TCastleLabel;
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions: TCastleUserInterface;
-    SliderMusic: TCastleIntegerSlider;
+    SliderMusic, SliderFullscreen: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
   public
     constructor Create(AOwner: TComponent); override;
@@ -42,7 +42,7 @@ type
     procedure ButtonCreditsClick(Sender: TObject);
     procedure ButtonDifficultyClick(Sender: TObject);
     procedure SliderMusicChange(Sender: TObject);
-
+    procedure SliderFullscreenChange(Sender: TObject);
   end;
 
 var
@@ -59,8 +59,6 @@ uses
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, audiocomponent
   ;
 
-{ TViewMain ----------------------------------------------------------------- }
-
 constructor TViewMain.Create(AOwner: TComponent);
 begin
   inherited;
@@ -74,8 +72,7 @@ begin
 end;
 
 procedure TViewMain.Start();
-var
-  
+var  
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
   LMusicLevel: Integer;
@@ -106,6 +103,9 @@ begin
   SliderMusic.Value := LMusicLevel;
   SliderMusic.OnChange := SliderMusicChange;
 
+  SliderFullscreen.Value := Ord(Fullscreen());
+  SliderFullscreen.OnChange := SliderFullscreenChange;
+
   LCurrentDifficultyName := DifficultyName(Difficulty());
   for LDifficulty in NDifficulty do
   begin
@@ -117,7 +117,6 @@ begin
     GroupOptions.InsertFront(LButton);
   end;
 end;
-
 
 procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
 var
@@ -139,6 +138,14 @@ begin
   LMusicLevel := (Sender as TCastleIntegerSlider).Value;
   SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 10;
   SetMusicLevel(LMusicLevel);
+end;
+
+procedure TViewMain.SliderFullscreenChange(Sender: TObject);
+var
+  LFullscreenValue: Integer;
+begin
+  LFullscreenValue := (Sender as TCastleIntegerSlider).Value;
+  SetFullscreen(LFullscreenValue = 1);
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
@@ -195,7 +202,6 @@ begin
     ButtonExit.DoClick();
     Exit(true); // key was handled
   end;
-  
 end;
 
 end.

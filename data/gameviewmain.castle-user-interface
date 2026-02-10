@@ -301,11 +301,31 @@
           "Background" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
+          "Caption" : "FullScreen",
+          "Height" : 5.0000000000000000E+001,
+          "Max" : 1,
+          "Name" : "SliderFullScreen",
+          "Thumb" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleIntegerSlider",
+          "Background" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
           "Caption" : "Music",
           "Height" : 5.0000000000000000E+001,
           "Name" : "SliderMusic",
           "Thumb" : {
             "$$ClassName" : "TCastleImagePersistent"
+          },
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -5.4000000000000000E+001
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -340,7 +360,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -5.4000000000000000E+001
+            "Y" : -1.0800000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",

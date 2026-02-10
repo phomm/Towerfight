@@ -20,7 +20,8 @@ uses SysUtils,
   , GameViewLeaders
   , GameViewCredits
   , GameViewDefeat
-  {$endregion 'Castle Initialization Uses'};
+  {$endregion 'Castle Initialization Uses'}
+  , GameOptions;
 
 var
   Window: TCastleWindow;
@@ -61,6 +62,9 @@ initialization
 
   Window := TCastleWindow.Create(Application);
   Application.MainWindow := Window;
+
+  { Apply fullscreen setting from user config }
+  Window.FullScreen := Fullscreen();
 
   { Optionally, adjust window fullscreen state and size at this point.
     Examples:
