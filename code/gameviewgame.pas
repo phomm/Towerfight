@@ -43,7 +43,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, 
+  castlewindow, castlemessages, CastleLog,
 // Own
   Common, GameViewDefeat, gameviewmain, gameoptions;
 
@@ -58,8 +58,7 @@ var
   LRoom: TRoom;
   LGroupTower, LVisualTower, LVisualRoom, LRoof: TCastleUserInterface;
   LRoomButton: TCastleButton;
-  LRoomIndex, LTowerIndex: Integer;
-
+  LStockIndex, LTowerIndex: Integer;
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
@@ -71,14 +70,14 @@ begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
     LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
     GroupTowers.InsertFront(LVisualTower);
-    LRoomIndex := 0;
+    LStockIndex := 0;
     for LRoom in Map.Towers[LTowerIndex].Rooms do 
     begin
       LVisualRoom := FactoryRoom.ComponentLoad(LGroupTower) as TCastleUserInterface;
       LGroupTower.InsertFront(LVisualRoom);
-      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + LRoomIndex.ToString) as TCastleButton;
+      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + LStockIndex.ToString) as TCastleButton;
       LRoomButton.OnClick := ButtonRoomClick;
-      LRoomButton.Tag := Map.GetRoomIndex(LTowerIndex, LRoomIndex);
+      LRoomButton.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
       if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
       begin
         (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := LRoom.Actors[0].Visual;
@@ -92,7 +91,7 @@ begin
         (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
         FPreviouslyActiveButton := LRoomButton;
       end;
-      Inc(LRoomIndex);
+      Inc(LStockIndex);
     end;
     LRoof := LGroupTower.Controls[0];
     LGroupTower.RemoveControl(LRoof);
@@ -122,6 +121,23 @@ begin
 end;
 
 function TViewGame.Press(const Event: TInputPressRelease): Boolean;
+const 
+  DirKeys: array[0..7] of TKey = (keyW, keyArrowUp, keyA, keyArrowLeft, keyS, keyArrowDown, keyD, keyArrowRight);
+  KeyToDelta: array[0..7] of TPoint = (
+    (X: 0; Y: 1), // W, Up
+    (X: 0; Y: 1),
+    (X: -1; Y: 0), // A, Left
+    (X: -1; Y: 0),
+    (X: 0; Y: -1), // S, Down
+    (X: 0; Y: -1),
+    (X: 1; Y: 0), // D, Right
+    (X: 1; Y: 0)
+  );
+var
+  key: Integer;
+  LGroupTower: TCastleUserInterface;
+  LRoomButton: TCastleButton; 
+  LTowerIndex, LStockIndex: Integer;
 begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
@@ -130,13 +146,31 @@ begin
   begin
     Container.View := (ViewMain);
     Exit(True); // key was handled
-  end; 
+  end;
+  for key := 0 to High(DirKeys) do
+  begin
+    if Event.IsKey(DirKeys[key]) then
+    begin
+      LTowerIndex := Map.HeroTowerIndex + KeyToDelta[key].X;
+      LStockIndex := Map.HeroStockIndex + KeyToDelta[key].Y;
+      if Map.GetRoomIndex(LTowerIndex, LStockIndex) = -1 then
+        Exit(True); // key was handled, even if hero didn't move
+      LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + LStockIndex.ToString) as TCastleButton;      
+      LRoomButton.DoClick();
+      Exit(True); // key was handled
+    end;
+  end;
 end;
 
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LButton: TCastleButton;
 begin
+  LButton := Sender as TCastleButton;
+  if not Map.SetHeroRoom(LButton.Tag) then
+    Exit;
+  
   // Hide image on previously active button
   if Assigned(FPreviouslyActiveButton) and (FPreviouslyActiveButton <> Sender) then
   begin
@@ -144,13 +178,11 @@ begin
     (FPreviouslyActiveButton.Controls[1].Controls[0] as TCastleImageControl).Url := '';
     (FPreviouslyActiveButton.Controls[1].Controls[1] as TCastleLabel).Caption := '';
   end;
-
+  
   // Show image on currently clicked button
-  LButton := Sender as TCastleButton;
-  Map.SetHeroRoom(LButton.Tag);
   (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
   (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
-  
+
   FPreviouslyActiveButton := LButton;
 end;
 

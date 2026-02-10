@@ -57,6 +57,7 @@ type
     destructor Destroy(); override;
     procedure Fight();
     property Actors: TObjectList<TActor> read FActors;
+    function HasEnemy(): Boolean;
   end;
 
   TTower = class(TComponent)
@@ -74,7 +75,8 @@ type
     FDifficulty: NDifficulty;
     FLastTower, FLastStock: Integer;
     FHero: THero;
-    FHeroRoom: TRoom; 
+    FHeroRoom: TRoom;
+    FHeroTowerIndex, FHeroStockIndex: Integer; 
   class var FMap: TMap;
   public
     constructor Create(AOwner: TComponent); override;
@@ -83,10 +85,12 @@ type
     property Hero: THero read FHero;
     property LastTower: Integer read FLastTower;
     property LastStock: Integer read FLastStock;
+    property HeroStockIndex: Integer read FHeroStockIndex;
+    property HeroTowerIndex: Integer read FHeroTowerIndex;
     function IsLastTower(ATowerIndex: Integer): Boolean;
     function IsLastStock(AStockIndex: Integer): Boolean;
     function IsFinalRoom(ATowerIndex, AStockIndex: Integer): Boolean;
-    procedure SetHeroRoom(ARoomIndex: Integer);
+    function SetHeroRoom(ARoomIndex: Integer): Boolean;
     function IsHeroRoom(ARoomIndex: Integer): Boolean;
     function GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
   class function Map(): TMap;
@@ -130,6 +134,11 @@ begin
   //for LActor in FActors do
 end;
 
+function TRoom.HasEnemy(): Boolean;
+begin
+  Result := (FActors.Count > 0) and Assigned(FActors[0]);
+end;
+
 constructor TTower.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
@@ -167,7 +176,11 @@ begin
       else if (T <> 1) or (R <> 1) then
         LRoom.Actors.Add(TEnemy.Create(nil, T, R))
       else
+      begin
         FHeroRoom := LRoom;
+        FHeroTowerIndex := 0;
+        FHeroStockIndex := 0;
+      end;  
       LTower.FRooms.Add(LRoom);
     end;
     FTowers.Add(LTower);
@@ -208,9 +221,21 @@ begin
   Result := IsLastTower(ATowerIndex) and IsLastStock(AStockIndex);
 end;
 
-procedure TMap.SetHeroRoom(ARoomIndex: Integer);
+function TMap.SetHeroRoom(ARoomIndex: Integer): Boolean;
+var
+  LTowerIndex, LStockIndex, LTowerDelta, LStockDelta: Integer;
 begin
-  FHeroRoom := FTowers[ARoomIndex div 10].Rooms[ARoomIndex mod 10];
+  LTowerIndex := ARoomIndex div 10;
+  LStockIndex := ARoomIndex mod 10;
+  LTowerDelta := Abs(LTowerIndex - FHeroTowerIndex);
+  LStockDelta := Abs(LStockIndex - FHeroStockIndex);
+  if FTowers[LTowerIndex].Rooms[LStockIndex].HasEnemy() and 
+    ((LTowerDelta > 1) or (LStockDelta > 1) or (LTowerDelta = LStockDelta)) then
+    Exit(False);
+  FHeroRoom := FTowers[LTowerIndex].Rooms[LStockIndex];
+  FHeroTowerIndex := LTowerIndex;
+  FHeroStockIndex := LStockIndex;
+  Result := True;
 end;
 
 function TMap.IsHeroRoom(ARoomIndex: Integer): Boolean;
@@ -221,6 +246,9 @@ end;
 function TMap.GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
 begin
   Result := ATowerIndex * 10 + AStockIndex;
+  if (ATowerIndex < 0) or (ATowerIndex >= FTowers.Count) or 
+    (AStockIndex < 0) or (AStockIndex >= FTowers[ATowerIndex].Rooms.Count) then
+    Result := -1;
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
