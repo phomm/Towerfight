@@ -43,7 +43,7 @@ const
   DifficultyDefault = gdEasy;
   DifficultyKey = 'Difficulty';
   MusicKey = 'Music';
-  MusicLevelDefault = 5;
+  MusicLevelDefault = 20;
   FullscreenKey = 'Fullscreen';
   FullscreenDefault = False;
 

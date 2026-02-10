@@ -291,7 +291,7 @@
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
         "X" : 3.1000000000000000E+002,
-        "Y" : -2.0000000000000000E+002
+        "Y" : -1.8000000000000000E+002
       },
       "VerticalAnchorParent" : "vpMiddle",
       "VerticalAnchorSelf" : "vpMiddle",
@@ -319,6 +319,7 @@
           },
           "Caption" : "Music",
           "Height" : 5.0000000000000000E+001,
+          "Max" : 100,
           "Name" : "SliderMusic",
           "Thumb" : {
             "$$ClassName" : "TCastleImagePersistent"

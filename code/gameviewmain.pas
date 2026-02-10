@@ -99,7 +99,7 @@ begin
   begin
     SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
   end;  
-  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 10;
+  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 100;
   SliderMusic.Value := LMusicLevel;
   SliderMusic.OnChange := SliderMusicChange;
 
@@ -136,7 +136,7 @@ var
   LMusicLevel: Integer;
 begin
   LMusicLevel := (Sender as TCastleIntegerSlider).Value;
-  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 10;
+  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 100;
   SetMusicLevel(LMusicLevel);
 end;
 
