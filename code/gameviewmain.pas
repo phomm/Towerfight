@@ -202,6 +202,11 @@ begin
     ButtonExit.DoClick();
     Exit(true); // key was handled
   end;
+  if Event.IsKey(keyEnter) then
+  begin
+    ButtonStart.DoClick();
+    Exit(true); // key was handled
+  end;
 end;
 
 end.

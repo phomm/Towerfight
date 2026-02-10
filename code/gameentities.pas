@@ -26,9 +26,11 @@ type
 
   THero = class(TActor)
   private
-
+    FDead: Boolean;
+    procedure Die();
   public
     constructor Create(AOwner: TComponent); override;
+    property Dead: Boolean read FDead;
   end;
 
   TEnemy = class(TActor)
@@ -55,7 +57,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    procedure Fight();
+    function Fight(): Boolean;
     property Actors: TObjectList<TActor> read FActors;
     function HasEnemy(): Boolean;
   end;
@@ -87,14 +89,17 @@ type
     property LastStock: Integer read FLastStock;
     property HeroStockIndex: Integer read FHeroStockIndex;
     property HeroTowerIndex: Integer read FHeroTowerIndex;
+    property HeroRoom: TRoom read FHeroRoom;
     function IsLastTower(ATowerIndex: Integer): Boolean;
     function IsLastStock(AStockIndex: Integer): Boolean;
     function IsFinalRoom(ATowerIndex, AStockIndex: Integer): Boolean;
     function SetHeroRoom(ARoomIndex: Integer): Boolean;
     function IsHeroRoom(ARoomIndex: Integer): Boolean;
     function GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
+    function GetRoomByIndex(ARoomIndex: Integer): TRoom;
   class function Map(): TMap;
   class procedure Die();
+  const BloodAsset = 'castle-data:/resources/blood_splat.png';
   end;
 
 implementation
@@ -127,11 +132,18 @@ begin
   inherited Destroy();
 end;
 
-procedure TRoom.Fight();
-var
-  LActor: TActor;
+function TRoom.Fight(): Boolean;
 begin
-  //for LActor in FActors do
+  if not HasEnemy() then
+    Exit(True);
+  if TMap.Map.Hero.Level >= FActors[0].Level then
+  begin
+    TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex);
+    FActors.Delete(0);
+    Exit(True);
+  end;
+  TMap.Map.Hero.Die();
+  Result := False;
 end;
 
 function TRoom.HasEnemy(): Boolean;
@@ -240,7 +252,7 @@ end;
 
 function TMap.IsHeroRoom(ARoomIndex: Integer): Boolean;
 begin
-  Result := FHeroRoom = FTowers[ARoomIndex div 10].Rooms[ARoomIndex mod 10];
+  Result := FHeroRoom = GetRoomByIndex(ARoomIndex);
 end;
 
 function TMap.GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
@@ -249,6 +261,11 @@ begin
   if (ATowerIndex < 0) or (ATowerIndex >= FTowers.Count) or 
     (AStockIndex < 0) or (AStockIndex >= FTowers[ATowerIndex].Rooms.Count) then
     Result := -1;
+end;
+
+function TMap.GetRoomByIndex(ARoomIndex: Integer): TRoom;
+begin
+  Result := FTowers[ARoomIndex div 10].Rooms[ARoomIndex mod 10];
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
@@ -267,15 +284,18 @@ function TDragon.CalcLevel(ATower, AStock: Integer): Integer;
 begin
   case Difficulty of
     gdEasy: Result := 444;
-    gdNormal: Result := 1000 + ValueOrZero(400) + 40 + ValueOrZero(4); 
-    gdHard: Result := 2400 + ValueOrZero(40) + ValueOrZero(4); 
-    gdInsane: Result := 4000 + ValueOrZero(400) + ValueOrZero(40) + ValueOrZero(4);  
+    gdNormal: Result := 1000 + Random(5) * 100 + 40 + ValueOrZero(4); 
+    gdHard: Result := 2400 + Random(5) * 10 + ValueOrZero(4); 
+    gdInsane: Result := 4000 + Random(5) * 100 + ValueOrZero(40) + ValueOrZero(4);  
   end;
 end;
 
 function TDragon.GetVisual(): string;
 begin
-  Result := IIF(FLevel < 1000, '???', '????');
+  Result := IIF(Level div 1000 = 0, '', IIF(Level div 1000 = 4, '4', '?'));
+  Result := Result + IIF(Level mod 1000 div 100 = 4, '4', '?');
+  Result := Result + IIF(Level mod 1000 mod 100 div 10 = 4, '4', '?');
+  Result := Result + IIF(Level mod 10 = 4, '4', '?');
 end;
 
 constructor TDragon.Create(AOwner: TComponent; ATower, AStock: Integer);
@@ -287,8 +307,15 @@ end;
 constructor THero.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FLevel := 3 + Random(3) + Random(3) + Random(3 + Ord(High(NDifficulty)) - Ord(Difficulty()));
+  FLevel := 4 + Random(4) + Random(4) + Random(4 + Ord(High(NDifficulty)) - Ord(Difficulty()));
   FAssetId := 'castle-data:/resources/good.bmp';
+end;
+
+procedure THero.Die();
+begin
+  FDead := True;
+  AssetId := TMap.BloodAsset;
+  Level := 0;
 end;
 
 end.

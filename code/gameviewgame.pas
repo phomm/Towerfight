@@ -30,6 +30,7 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     FPreviouslyActiveButton: TCastleButton;
+    FSkip: Boolean;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
   end;
@@ -46,6 +47,17 @@ uses
   castlewindow, castlemessages, CastleLog,
 // Own
   Common, GameViewDefeat, gameviewmain, gameoptions;
+
+procedure CastleSleep(AMilliseconds: Integer);
+var
+  I: Integer;
+begin
+  for I := 0 to AMilliseconds div 50 do
+  begin
+    Sleep(50); // milliseconds);
+    Application.ProcessAllMessages();
+  end;
+end;  
 
 constructor TViewGame.Create(AOwner: TComponent);
 begin
@@ -167,6 +179,8 @@ procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LButton: TCastleButton;
 begin
+  if FSkip then Exit;
+  
   LButton := Sender as TCastleButton;
   if not Map.SetHeroRoom(LButton.Tag) then
     Exit;
@@ -182,8 +196,34 @@ begin
   // Show image on currently clicked button
   (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
   (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
-
+  
   FPreviouslyActiveButton := LButton;
+  
+  (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
+  (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+  if not Map.HeroRoom.HasEnemy() then
+    Exit;
+
+  // if not WeaponSelected then
+  (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := Map.GetRoomByIndex(LButton.Tag).Actors[0].Level.ToString;
+  // else open formula mini-game
+
+  if Map.HeroRoom.Fight() then
+    (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := TMap.BloodAsset
+  else
+    (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
+  
+  FSkip := True;
+  CastleSleep(300);
+  if Map.Hero.Dead then
+    Container.View := ViewDefeat
+  else
+  begin
+    (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := '';
+    (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
+    (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+  end;
+  FSkip := False;
 end;
 
 end.
