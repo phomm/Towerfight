@@ -28,11 +28,10 @@
       "$Children" : [
         {
           "$$ClassName" : "TCastleHorizontalGroup",
-          "FullSize" : true,
           "HorizontalAnchorParent" : "hpRight",
           "HorizontalAnchorSelf" : "hpRight",
           "LeftToRight" : false,
-          "Name" : "HorizontalGroup0",
+          "Name" : "GroupEnemies",
           "Padding" : 8.0000000000000000E+000,
           "Spacing" : 1.0000000000000000E+001,
           "VerticalAnchorParent" : "vpMiddle",
@@ -67,33 +66,39 @@
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle"
-            },
-            {
-              "$$ClassName" : "TCastleLabel",
-              "HorizontalAnchorParent" : "hpRight",
-              "HorizontalAnchorSelf" : "hpRight",
-              "Name" : "LabelLeft0",
-              "Text" : [
-                "L"
-              ],
-              "TranslationPersistent" : {
-                "$$ClassName" : "TCastleVector2Persistent",
-                "X" : -4.3360000610351562E+001
-              },
-              "VerticalAnchorParent" : "vpMiddle",
-              "VerticalAnchorSelf" : "vpMiddle"
-            },
+            }
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleHorizontalGroup",
+          "Name" : "GroupHero",
+          "Padding" : 8.0000000000000000E+000,
+          "Spacing" : 1.0000000000000000E+001,
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
             {
               "$$ClassName" : "TCastleImageControl",
               "Content" : {
                 "$$ClassName" : "TCastleImagePersistent"
               },
-              "HorizontalAnchorParent" : "hpRight",
-              "HorizontalAnchorSelf" : "hpRight",
-              "Name" : "ImageLeft0",
+              "Name" : "ImageLeft1",
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : -6.8559997558593750E+001
+                "X" : 8.0000000000000000E+000
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            },
+            {
+              "$$ClassName" : "TCastleLabel",
+              "Name" : "LabelLeft1",
+              "Text" : [
+                "L"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.8000000000000000E+001
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle"

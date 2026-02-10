@@ -35,10 +35,19 @@ type
   private
     
   protected
-    function CalcLevel(ATower, AStock: Integer): Integer;
+    function CalcLevel(ATower, AStock: Integer): Integer; virtual;
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
+
+  TDragon = class(TEnemy)
+  protected
+    function CalcLevel(ATower, AStock: Integer): Integer; override;
+    function GetVisual(): string; override;  
+  public
+    constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
+  end;
+
 
   TRoom = class(TComponent)
   private
@@ -64,7 +73,8 @@ type
     FTowers: TObjectList<TTower>;
     FDifficulty: NDifficulty;
     FLastTower, FLastStock: Integer;
-    FHero: THero;  
+    FHero: THero;
+    FHeroRoom: TRoom; 
   class var FMap: TMap;
   public
     constructor Create(AOwner: TComponent); override;
@@ -76,6 +86,9 @@ type
     function IsLastTower(ATowerIndex: Integer): Boolean;
     function IsLastStock(AStockIndex: Integer): Boolean;
     function IsFinalRoom(ATowerIndex, AStockIndex: Integer): Boolean;
+    procedure SetHeroRoom(ARoomIndex: Integer);
+    function IsHeroRoom(ARoomIndex: Integer): Boolean;
+    function GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
   class function Map(): TMap;
   class procedure Die();
   end;
@@ -134,11 +147,11 @@ var
   T, R: Integer;
   LTower: TTower;
   LRoom: TRoom;
-  LEnemy: TActor;
 begin
   inherited Create(AOwner);
   FMap := Self;
   FHero := THero.Create(nil);
+  
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
   FLastTower := 3 + Ord(FDifficulty);
@@ -149,8 +162,12 @@ begin
     for R := 1 to FLastStock do
     begin
       LRoom := TRoom.Create(nil);
-      LEnemy := TEnemy.Create(nil, T, R);
-      LRoom.Actors.Add(LEnemy);
+      if IsFinalRoom(T, R) then
+        LRoom.Actors.Add(TDragon.Create(nil, T, R))
+      else if (T <> 1) or (R <> 1) then
+        LRoom.Actors.Add(TEnemy.Create(nil, T, R))
+      else
+        FHeroRoom := LRoom;
       LTower.FRooms.Add(LRoom);
     end;
     FTowers.Add(LTower);
@@ -191,20 +208,34 @@ begin
   Result := IsLastTower(ATowerIndex) and IsLastStock(AStockIndex);
 end;
 
+procedure TMap.SetHeroRoom(ARoomIndex: Integer);
+begin
+  FHeroRoom := FTowers[ARoomIndex div 10].Rooms[ARoomIndex mod 10];
+end;
+
+function TMap.IsHeroRoom(ARoomIndex: Integer): Boolean;
+begin
+  Result := FHeroRoom = FTowers[ARoomIndex div 10].Rooms[ARoomIndex mod 10];
+end;
+
+function TMap.GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
+begin
+  Result := ATowerIndex * 10 + AStockIndex;
+end;
+
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
-var
-  LLevel: Integer;
 begin
   inherited Create(AOwner);
   FLevel := CalcLevel(ATower, AStock);
-  if TMap.Map.IsFinalRoom(ATower, AStock) then
-    FAssetId := 'castle-data:/resources/dragon.png'
-  else
-    FAssetId := 'castle-data:/resources/' + IIF(Random(2) = 0, 'neutral', 'bad') + '.bmp';  
+  FAssetId := 'castle-data:/resources/' + IIF(Random(2) = 0, 'neutral', 'bad') + '.bmp';  
 end;
 
 function TEnemy.CalcLevel(ATower, AStock: Integer): Integer;
-function DragonHP(): Integer;
+begin
+  Result := ATower * ATower * (AStock div 3 + 1) * (Max(3, ATower + AStock + Random(10) - 4));
+end;
+
+function TDragon.CalcLevel(ATower, AStock: Integer): Integer;
 begin
   case Difficulty of
     gdEasy: Result := 444;
@@ -213,15 +244,22 @@ begin
     gdInsane: Result := 4000 + ValueOrZero(400) + ValueOrZero(40) + ValueOrZero(4);  
   end;
 end;
+
+function TDragon.GetVisual(): string;
 begin
-  Result := IIF(TMap.Map.IsFinalRoom(ATower, AStock), DragonHP(),
-    ATower * ATower * (AStock div 3 + 1) * (Max(3, ATower + AStock + Random(10) - 4)));
+  Result := IIF(FLevel < 1000, '???', '????');
+end;
+
+constructor TDragon.Create(AOwner: TComponent; ATower, AStock: Integer);
+begin
+  inherited Create(AOwner, ATower, AStock);
+  FAssetId := 'castle-data:/resources/dragon.png';
 end;
 
 constructor THero.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
-  FLevel := Random(4) + 3;
+  FLevel := 3 + Random(3) + Random(3) + Random(3 + Ord(High(NDifficulty)) - Ord(Difficulty()));
   FAssetId := 'castle-data:/resources/good.bmp';
 end;
 

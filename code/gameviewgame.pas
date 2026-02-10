@@ -76,14 +76,23 @@ begin
     begin
       LVisualRoom := FactoryRoom.ComponentLoad(LGroupTower) as TCastleUserInterface;
       LGroupTower.InsertFront(LVisualRoom);
-      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + PostInc(LRoomIndex).ToString) as TCastleButton;
+      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + LRoomIndex.ToString) as TCastleButton;
       LRoomButton.OnClick := ButtonRoomClick;
-      LRoomButton.Tag := LTowerIndex * 10 + LRoomIndex;
-      if LRoom.Actors.Count > 0 then
+      LRoomButton.Tag := Map.GetRoomIndex(LTowerIndex, LRoomIndex);
+      if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
       begin
         (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := LRoom.Actors[0].Visual;
         (LRoomButton.Controls[0].Controls[0] as TCastleImageControl).Url := LRoom.Actors[0].AssetId;
       end;
+      (LRoomButton.Controls[1].Controls[1] as TCastleLabel).Caption := '';
+      if Map.IsHeroRoom(LRoomButton.Tag) then
+      begin
+        (LRoomButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+        (LRoomButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
+        (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
+        FPreviouslyActiveButton := LRoomButton;
+      end;
+      Inc(LRoomIndex);
     end;
     LRoof := LGroupTower.Controls[0];
     LGroupTower.RemoveControl(LRoof);
@@ -110,8 +119,6 @@ end;
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
 begin
   inherited;
-  { Executed every frame. }
-
 end;
 
 function TViewGame.Press(const Event: TInputPressRelease): Boolean;
@@ -129,22 +136,21 @@ end;
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LButton: TCastleButton;
-  LImage: TCastleImageControl;
 begin
   // Hide image on previously active button
   if Assigned(FPreviouslyActiveButton) and (FPreviouslyActiveButton <> Sender) then
   begin
     FPreviouslyActiveButton.Caption := '';
-    (FPreviouslyActiveButton.Controls[0].Controls[3] as TCastleImageControl).Url := '';
-    (FPreviouslyActiveButton.Controls[0].Controls[2] as TCastleLabel).Caption := '';
+    (FPreviouslyActiveButton.Controls[1].Controls[0] as TCastleImageControl).Url := '';
+    (FPreviouslyActiveButton.Controls[1].Controls[1] as TCastleLabel).Caption := '';
   end;
 
   // Show image on currently clicked button
   LButton := Sender as TCastleButton;
-  (LButton.Controls[0].Controls[3] as TCastleImageControl).Url := Map.Hero.AssetId;
-  (LButton.Controls[0].Controls[2] as TCastleLabel).Caption := Map.Hero.Visual;
+  Map.SetHeroRoom(LButton.Tag);
+  (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
+  (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
   
-  // Update the reference
   FPreviouslyActiveButton := LButton;
 end;
 
