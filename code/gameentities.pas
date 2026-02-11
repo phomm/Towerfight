@@ -16,12 +16,14 @@ type
     FLevel: Integer;
     FAssetId: string;
   protected
+    FRevealed: Boolean;
     procedure SetLevel(AValue: Integer); virtual;
     function GetVisual(): string; virtual;
   public
     property Level: Integer read FLevel write SetLevel;
     property Visual: string read GetVisual;
     property AssetId: string read FAssetId write FAssetId;
+    procedure Reveal();
   end;
 
   THero = class(TActor)
@@ -34,9 +36,12 @@ type
   end;
 
   TEnemy = class(TActor)
-  private    
+  private
+    FFormula: string;
   protected
     function CalcLevel(ATower, AStock: Integer): Integer; virtual;
+    function GetVisual(): string; override; 
+    procedure CreateFormula(ATower, AStock: Integer);
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
@@ -116,6 +121,11 @@ end;
 function TActor.GetVisual(): string;
 begin
   Result := IntToStr(FLevel);
+end;
+
+procedure TActor.Reveal();
+begin
+  FRevealed := True;
 end;
 
 constructor TRoom.Create(AOwner: TComponent);
@@ -270,12 +280,70 @@ constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
 begin
   inherited Create(AOwner);
   FLevel := CalcLevel(ATower, AStock);
-  FAssetId := 'castle-data:/resources/' + IIF(Random(2) = 0, 'neutral', 'bad') + '.bmp';  
+  FAssetId := 'castle-data:/resources/' + IIF(Random(2) = 0, 'neutral', 'bad') + '.bmp';
+  CreateFormula(ATower, AStock);
 end;
 
 function TEnemy.CalcLevel(ATower, AStock: Integer): Integer;
 begin
-  Result := ATower * ATower * (ATower + Random(AStock)) * (Max(ATower + 3, AStock + Random(8) - ATower));
+  Result := (ATower + Random(AStock)) * (Max(ATower + 3, AStock + Random(8) - ATower))
+   * ATower * ATower + Ord(ATower > 1) * (Random(ATower + AStock) - 5);
+end;
+
+procedure TEnemy.CreateFormula(ATower, AStock: Integer);
+var
+  LOp: Integer;
+  a1, a2: Integer;
+begin
+  LOp := 0;
+  
+  if FLevel < 40 then
+    LOp := Random(2)
+  else if FLevel mod 70 = 0 then
+    LOp := 7  
+  else if FLevel mod 50 = 0 then
+    LOp := 5
+  else if FLevel mod 30 = 0 then
+    LOp := 3
+  else if FLevel mod 20 = 0 then
+    LOp := 2;
+  
+  if FLevel > 20 then
+  begin
+    if FLevel mod 7 = 0 then
+      LOp := 7
+    else if FLevel mod 5 = 0 then
+      LOp := 5
+    else if FLevel mod 3 = 0 then
+      LOp := 3
+    else if FLevel mod 2 = 0 then
+      LOp := 2
+    else
+      LOp := Random(2);
+  end;
+  
+  if LOp = 0 then
+  begin
+    a1 := Random(FLevel + 1);
+    a2 := FLevel - a1;
+    FFormula := Format('%d+%d', [a1, a2]);
+  end
+  else if LOp = 1 then
+  begin
+    a1 := Random(Round(Sqrt(FLevel))) + ATower * Round(Log2(FLevel));
+    a2 := FLevel + a1;
+    FFormula := Format('%d-%d', [a2, a1]);
+  end
+  else
+  begin
+    a2 := FLevel div LOp;
+    FFormula := Format('%d*%d', [a2, LOp]);
+  end;
+end;
+
+function TEnemy.GetVisual(): string;
+begin
+  Result := IIF(FRevealed, FLevel.ToString, FFormula);
 end;
 
 function TDragon.CalcLevel(ATower, AStock: Integer): Integer;
@@ -290,6 +358,8 @@ end;
 
 function TDragon.GetVisual(): string;
 begin
+  if FRevealed then
+    Exit(FLevel.ToString);
   Result := IIF(Level div 1000 = 0, '', IIF(Level div 1000 = 4, '4', '?'));
   Result := Result + IIF(Level mod 1000 div 100 = 4, '4', '?');
   Result := Result + IIF(Level mod 1000 mod 100 div 10 = 4, '4', '?');

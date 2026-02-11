@@ -178,6 +178,7 @@ end;
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LButton: TCastleButton;
+  LActor: TActor;
 begin
   if FSkip then Exit;
   
@@ -205,7 +206,10 @@ begin
     Exit;
 
   // if not WeaponSelected then
-  (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := Map.GetRoomByIndex(LButton.Tag).Actors[0].Level.ToString;
+  LActor := Map.GetRoomByIndex(LButton.Tag).Actors[0];
+  LActor.Reveal();
+  (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := LActor.Visual;
+  (LButton.Controls[0].Controls[1] as TCastleLabel).PaddingHorizontal := -70;
   // else open formula mini-game
 
   if Map.HeroRoom.Fight() then
@@ -214,10 +218,10 @@ begin
     (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
   
   FSkip := True;
-  CastleSleep(300);
+  CastleSleep(500);
   if Map.Hero.Dead then
   begin
-    CastleSleep(300);
+    CastleSleep(500);
     Container.View := ViewDefeat
   end
   else
@@ -228,7 +232,7 @@ begin
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
-      CastleSleep(300);
+      CastleSleep(500);
       Container.View := ViewWin;
     end;
   end;
