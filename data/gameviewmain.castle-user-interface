@@ -208,7 +208,7 @@
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
-          "Caption" : "Credits",
+          "Caption" : "About",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"

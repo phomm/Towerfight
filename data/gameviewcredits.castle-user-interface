@@ -23,6 +23,64 @@
       "Name" : "ImageTitle",
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleLabel",
+      "Alignment" : "hpMiddle",
+      "FontSize" : 6.0000000000000000E+001,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "LabelRules",
+      "Outline" : 2,
+      "OutlineColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Green" : 7.0588237047195435E-001,
+        "Red" : 1.0000000000000000E+000
+      },
+      "Text" : [
+        "RULES",
+        "Brave Nameless Samurai fights ",
+        "in the Towers, captured by Ninjas",
+        "He can go Up, Down, Left and Right",
+        "for Fight or go to any empty room",
+        "WASD or Arrows or Mouse to move",
+        "Esc and Enter to close or start Fight",
+        "",
+        "Calculate enemy Level before Fight",
+        "If your Level >= Enemy Level, you Win",
+        "and gain more Levels, otherwise Lose",
+        "In First tower Fight gives you +Level ",
+        "of the same amount as Enemy Level,",
+        "Each next gives you halved of previous"
+      ]
+    },
+    {
+      "$$ClassName" : "TCastleLabel",
+      "Alignment" : "hpMiddle",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Blue" : 7.0196080207824707E-001
+      },
+      "FontSize" : 1.0000000000000000E+002,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "LabelRules1",
+      "Outline" : 2,
+      "OutlineColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Blue" : 6.2745100259780884E-001,
+        "Red" : 1.0000000000000000E+000
+      },
+      "Text" : [
+        "author : phomm",
+        "made with Castle Engine"
+      ],
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "Y" : -1.5000000000000000E+002
+      },
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop"
     }
   ]
 }
