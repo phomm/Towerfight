@@ -28,6 +28,7 @@ type
     procedure Stop; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
+    procedure RoomFight(ARoomButton: TCastleButton);
   private
     FPreviouslyActiveButton: TCastleButton;
     FWeapons: array[0..2] of TCastleButton;
@@ -48,7 +49,7 @@ uses
 // Castle  
   castlewindow, castlemessages, CastleLog,
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions;
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions, gameviewformula;
 
 procedure CastleSleep(AMilliseconds: Integer);
 var
@@ -247,12 +248,28 @@ begin
   if not Map.HeroRoom.HasEnemy() then
     Exit;
 
-  // if not WeaponSelected then
+  LActor := Map.GetRoomByIndex(LButton.Tag).Actors[0];
+  if WeaponNo.Pressed then
+    RoomFight(LButton)
+  else 
+  begin
+    ViewFormula.Formula := LActor.Visual;
+    ViewFormula.Weapon := Map.Hero.Weapon;
+    ViewFormula.RoomButton := LButton;
+    Container.PushView(ViewFormula);
+  end;
+end;
+
+procedure TViewGame.RoomFight(ARoomButton: TCastleButton);
+var
+  LButton: TCastleButton;
+  LActor: TActor;
+begin
+  LButton := ARoomButton;
   LActor := Map.GetRoomByIndex(LButton.Tag).Actors[0];
   LActor.Reveal();
   (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := LActor.Visual;
   (LButton.Controls[0].Controls[1] as TCastleLabel).PaddingHorizontal := -70;
-  // else open formula mini-game
 
   if Map.HeroRoom.Fight() then
     (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := TMap.BloodAsset
@@ -279,7 +296,7 @@ begin
       Container.View := ViewWin;
     end;
   end;
-  FSkip := False;
+  FSkip := False;  
 end;
 
 end.
