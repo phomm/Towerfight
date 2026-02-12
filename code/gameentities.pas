@@ -26,13 +26,19 @@ type
     procedure Reveal();
   end;
 
+  NHeroWeapon = (hwNo, hwPlus, hwMinus);
   THero = class(TActor)
   private
     FDead: Boolean;
+    FWeapons: array[NHeroWeapon] of Byte;
+    FWeapon: NHeroWeapon;
     procedure Die();
+    function GetWeapon(AIndex: NHeroWeapon): Byte;
   public
     constructor Create(AOwner: TComponent); override;
     property Dead: Boolean read FDead;
+    property Weapon: NHeroWeapon read FWeapon write FWeapon;
+    property Weapons[AIndex: NHeroWeapon]: Byte read GetWeapon;
   end;
 
   TEnemy = class(TActor)
@@ -373,10 +379,16 @@ begin
 end;
 
 constructor THero.Create(AOwner: TComponent);
+var
+  LAntiDifficulty: Integer;
 begin
   inherited Create(AOwner);
-  FLevel := 4 + Random(4) + Random(4) + Random(4 + Ord(High(NDifficulty)) - Ord(Difficulty()));
+  LAntiDifficulty := Ord(High(NDifficulty)) - Ord(Difficulty());
+  FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
   FAssetId := 'castle-data:/resources/good.bmp';
+  Fweapons[hwNo] := 0;
+  Fweapons[hwPlus] := 1 + Random(2 + LAntiDifficulty div 2);
+  Fweapons[hwMinus] := 1 + Random(2 + LAntiDifficulty div 2);
 end;
 
 procedure THero.Die();
@@ -384,6 +396,11 @@ begin
   FDead := True;
   AssetId := TMap.BloodAsset;
   Level := 0;
+end;
+
+function THero.GetWeapon(AIndex: NHeroWeapon): Byte;
+begin
+  Result := FWeapons[AIndex];
 end;
 
 end.

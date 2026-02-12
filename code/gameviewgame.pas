@@ -17,7 +17,7 @@ type
   published
     { Components designed using CGE editor.
       These fields will be automatically initialized at Start. }
-    ButtonDefeat: TCastleButton;
+    ButtonDefeat, WeaponPlus, WeaponMinus, WeaponNo: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     function GetMap(): TMap;
@@ -30,9 +30,11 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     FPreviouslyActiveButton: TCastleButton;
+    FWeapons: array[0..2] of TCastleButton;
     FSkip: Boolean;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
+    procedure ButtonWeaponClick(Sender: TObject);
   end;
 
 var
@@ -74,6 +76,13 @@ var
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
+  WeaponPlus.OnClick := ButtonWeaponClick;
+  WeaponMinus.OnClick := ButtonWeaponClick;
+  WeaponNo.OnClick := ButtonWeaponClick;
+  FWeapons[0] := WeaponNo;
+  FWeapons[1] := WeaponPlus;
+  FWeapons[2] := WeaponMinus;
+  WeaponNo.DoClick();
   GroupTowers.ClearControls();
   // test
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
@@ -107,6 +116,27 @@ begin
     LRoof := LGroupTower.Controls[0];
     LGroupTower.RemoveControl(LRoof);
     LGroupTower.InsertFront(LRoof);
+  end;
+end;
+
+procedure TViewGame.ButtonWeaponClick(Sender: TObject);
+var
+  i: Integer; 
+  LIsWeapon: Boolean;
+  LWeaponButton: TCastleButton;
+begin
+  LWeaponButton := Sender as TCastleButton;
+  for i := 0 to High(FWeapons) do
+  begin
+    LIsWeapon := FWeapons[i] = LWeaponButton;    
+    if LIsWeapon then
+      Map.Hero.Weapon := NHeroWeapon(i);    
+    FWeapons[i].Pressed := LIsWeapon;
+    FWeapons[i].Border.AllSides := IIF(LIsWeapon, 5, 0);
+    if i = Ord(hwNo) then
+      Continue;
+    FWeapons[i].Enabled := Map.Hero.Weapons[NHeroWeapon(i)] > 0;
+    FWeapons[i].Caption := Map.Hero.Weapons[NHeroWeapon(i)].ToString;
   end;
 end;
 
@@ -157,6 +187,18 @@ begin
   if Event.IsKey(keyEscape) then
   begin
     ButtonDefeat.DoClick();
+    Exit(True); // key was handled
+  end;
+  if Event.IsKey(keyTab) then
+  begin
+    for key := 0 to High(FWeapons) do
+    begin
+      if FWeapons[key].Pressed then
+      begin
+        FWeapons[(key + 1) mod Length(FWeapons)].DoClick();
+        Break;
+      end;
+    end;
     Exit(True); // key was handled
   end;
   for key := 0 to High(DirKeys) do
@@ -229,6 +271,7 @@ begin
     (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := '';
     (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
     (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+    WeaponNo.DoClick();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
