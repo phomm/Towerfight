@@ -177,7 +177,7 @@ const
     (X: 1; Y: 0)
   );
 var
-  key: Integer;
+  key, W: Integer;
   LGroupTower: TCastleUserInterface;
   LRoomButton: TCastleButton; 
   LTowerIndex, LStockIndex: Integer;
@@ -194,9 +194,12 @@ begin
   begin
     for key := 0 to High(FWeapons) do
     begin
-      if FWeapons[key].Pressed then
+      W := Key;
+      if FWeapons[W].Pressed then
       begin
-        FWeapons[(key + 1) mod Length(FWeapons)].DoClick();
+        while not FWeapons[(W + 1) mod Length(FWeapons)].Enabled do
+          W := (W + 1) mod Length(FWeapons);
+        FWeapons[(W + 1) mod Length(FWeapons)].DoClick();
         Break;
       end;
     end;

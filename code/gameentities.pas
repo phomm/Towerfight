@@ -26,7 +26,7 @@ type
     procedure Reveal();
   end;
 
-  NHeroWeapon = (hwNo, hwPlus, hwMinus);
+  NHeroWeapon = (hwNo, hwPlus, hwMinus, hwMultiply);
   THero = class(TActor)
   private
     FDead: Boolean;
@@ -39,6 +39,7 @@ type
     property Dead: Boolean read FDead;
     property Weapon: NHeroWeapon read FWeapon write FWeapon;
     property Weapons[AIndex: NHeroWeapon]: Byte read GetWeapon;
+    procedure UseWeapon();
   end;
 
   TEnemy = class(TActor)
@@ -50,6 +51,7 @@ type
     procedure CreateFormula(ATower, AStock: Integer);
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
+    property Formula: string read FFormula write FFormula;
   end;
 
   TDragon = class(TEnemy)
@@ -387,8 +389,8 @@ begin
   FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
   FAssetId := 'castle-data:/resources/good.bmp';
   Fweapons[hwNo] := 0;
-  Fweapons[hwPlus] := 1 + Random(2 + LAntiDifficulty div 2);
-  Fweapons[hwMinus] := 1 + Random(2 + LAntiDifficulty div 2);
+  Fweapons[hwPlus] := 5 + Random(2 + LAntiDifficulty div 2);
+  Fweapons[hwMinus] := 5 + Random(2 + LAntiDifficulty div 2);
 end;
 
 procedure THero.Die();
@@ -401,6 +403,11 @@ end;
 function THero.GetWeapon(AIndex: NHeroWeapon): Byte;
 begin
   Result := FWeapons[AIndex];
+end;
+
+procedure THero.UseWeapon();
+begin
+  FWeapons[FWeapon] := Max(0, FWeapons[FWeapon] - 1);
 end;
 
 end.
