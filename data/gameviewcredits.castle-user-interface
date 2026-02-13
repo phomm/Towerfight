@@ -18,6 +18,7 @@
         "$$ClassName" : "TCastleImagePersistent",
         "Url" : "castle-data:/resources/credits.png"
       },
+      "Exists" : false,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "ImageTitle",
@@ -27,7 +28,7 @@
     {
       "$$ClassName" : "TCastleLabel",
       "Alignment" : "hpMiddle",
-      "FontSize" : 6.0000000000000000E+001,
+      "FontSize" : 5.5000000000000000E+001,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "LabelRules",
@@ -51,7 +52,11 @@
         "and gain more Levels, otherwise Lose",
         "In First tower Fight gives you +Level ",
         "of the same amount as Enemy Level,",
-        "Each next gives you halved of previous"
+        "Each next gives you halved of previous",
+        "",
+        "Tab/Mouse to use weapon before Fight",
+        "Shuriken is +, Kunai is -, Press tab in ",
+        "Formula dialog to change enemy formula"
       ]
     },
     {
@@ -64,7 +69,7 @@
       "FontSize" : 1.0000000000000000E+002,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
-      "Name" : "LabelRules1",
+      "Name" : "LabelCredits",
       "Outline" : 2,
       "OutlineColorPersistent" : {
         "$$ClassName" : "TCastleColorPersistent",
@@ -75,10 +80,6 @@
         "author : phomm",
         "made with Castle Engine"
       ],
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : -1.5000000000000000E+002
-      },
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
     }
