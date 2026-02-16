@@ -17,7 +17,7 @@ type
   published
     { Components designed using CGE editor.
       These fields will be automatically initialized at Start. }
-    ButtonDefeat, WeaponPlus, WeaponMinus, WeaponNo: TCastleButton;
+    ButtonDefeat, WeaponPlus, WeaponMinus, WeaponNo, WeaponMultiply: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     function GetMap(): TMap;
@@ -31,7 +31,7 @@ type
     procedure RoomFight(ARoomButton: TCastleButton);
   private
     FPreviouslyActiveButton: TCastleButton;
-    FWeapons: array[0..2] of TCastleButton;
+    FWeapons: array[0..3] of TCastleButton;
     FSkip: Boolean;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
@@ -80,12 +80,14 @@ begin
   WeaponPlus.OnClick := ButtonWeaponClick;
   WeaponMinus.OnClick := ButtonWeaponClick;
   WeaponNo.OnClick := ButtonWeaponClick;
+  WeaponMultiply.OnClick := ButtonWeaponClick;
   FWeapons[0] := WeaponNo;
   FWeapons[1] := WeaponPlus;
   FWeapons[2] := WeaponMinus;
-  WeaponNo.DoClick();
+  FWeapons[3] := WeaponMultiply;
+  WeaponNo.Doclick(); 
   GroupTowers.ClearControls();
-  // test
+  
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
@@ -131,13 +133,14 @@ begin
   begin
     LIsWeapon := FWeapons[i] = LWeaponButton;    
     if LIsWeapon then
-      Map.Hero.Weapon := NHeroWeapon(i);    
-    FWeapons[i].Pressed := LIsWeapon;
-    FWeapons[i].Border.AllSides := IIF(LIsWeapon, 5, 0);
-    if i = Ord(hwNo) then
-      Continue;
-    FWeapons[i].Enabled := Map.Hero.Weapons[NHeroWeapon(i)] > 0;
-    FWeapons[i].Caption := Map.Hero.Weapons[NHeroWeapon(i)].ToString;
+      Map.Hero.Weapon := NHeroWeapon(i);
+    FWeapons[i].Pressed := LIsWeapon or (i = Ord(hwNo));
+    FWeapons[i].Border.AllSides := IIF(LIsWeapon or (i = Ord(hwNo)), 5, 0);
+    if i <> Ord(hwNo) then
+    begin
+      FWeapons[i].Enabled := Map.Hero.Weapons[NHeroWeapon(i)] > 0;
+      FWeapons[i].Caption := Map.Hero.Weapons[NHeroWeapon(i)].ToString;
+    end;
   end;
 end;
 
@@ -177,7 +180,7 @@ const
     (X: 1; Y: 0)
   );
 var
-  key, W: Integer;
+  LKey, W: Integer;
   LGroupTower: TCastleUserInterface;
   LRoomButton: TCastleButton; 
   LTowerIndex, LStockIndex: Integer;
@@ -190,27 +193,23 @@ begin
     ButtonDefeat.DoClick();
     Exit(True); // key was handled
   end;
+
   if Event.IsKey(keyTab) then
   begin
-    for key := 0 to High(FWeapons) do
-    begin
-      W := Key;
-      if FWeapons[W].Pressed then
-      begin
-        while not FWeapons[(W + 1) mod Length(FWeapons)].Enabled do
-          W := (W + 1) mod Length(FWeapons);
-        FWeapons[(W + 1) mod Length(FWeapons)].DoClick();
-        Break;
-      end;
-    end;
+    W := Ord(Map.Hero.Weapon);
+    repeat
+      W := (W + 1) mod Length(FWeapons);
+    until FWeapons[W].Enabled;        
+    FWeapons[W].DoClick();    
     Exit(True); // key was handled
   end;
-  for key := 0 to High(DirKeys) do
+
+  for LKey := 0 to High(DirKeys) do
   begin
-    if Event.IsKey(DirKeys[key]) then
+    if Event.IsKey(DirKeys[LKey]) then
     begin
-      LTowerIndex := Map.HeroTowerIndex + KeyToDelta[key].X;
-      LStockIndex := Map.HeroStockIndex + KeyToDelta[key].Y;
+      LTowerIndex := Map.HeroTowerIndex + KeyToDelta[LKey].X;
+      LStockIndex := Map.HeroStockIndex + KeyToDelta[LKey].Y;
       if Map.GetRoomIndex(LTowerIndex, LStockIndex) = -1 then
         Exit(True); // key was handled, even if hero didn't move
       LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
@@ -224,7 +223,6 @@ end;
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LButton: TCastleButton;
-  LActor: TActor;
 begin
   if FSkip then Exit;
   
@@ -251,12 +249,11 @@ begin
   if not Map.HeroRoom.HasEnemy() then
     Exit;
 
-  LActor := Map.GetRoomByIndex(LButton.Tag).Actors[0];
-  if WeaponNo.Pressed then
+  if Map.Hero.Weapon = hwNo then
     RoomFight(LButton)
   else 
   begin
-    ViewFormula.Formula := LActor.Visual;
+    ViewFormula.Formula := Map.GetRoomByIndex(LButton.Tag).Actors[0].Visual;
     ViewFormula.Weapon := Map.Hero.Weapon;
     ViewFormula.RoomButton := LButton;
     Container.PushView(ViewFormula);

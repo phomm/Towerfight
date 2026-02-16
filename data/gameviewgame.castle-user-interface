@@ -44,6 +44,8 @@
         "Red" : 1.0000000000000000E+000
       },
       "CustomTextColorUse" : true,
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
       "Image" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
@@ -155,10 +157,6 @@
     {
       "$$ClassName" : "TCastleVerticalGroup",
       "Name" : "GroupWeapons",
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : -1.0000000000000000E+002
-      },
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop",
       "$Children" : [
@@ -182,8 +180,10 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "Image" : {
-            "$$ClassName" : "TCastleImagePersistent"
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/katana-vectored.png"
           },
+          "ImageScale" : 1.0000000149011612E-001,
           "Name" : "WeaponNo",
           "Toggle" : true,
           "VerticalAnchorParent" : "vpTop",
@@ -220,12 +220,12 @@
             },
             "Url" : "castle-data:/resources/weapons.png"
           },
-          "ImageScale" : 2.0000000298023224E-001,
+          "ImageScale" : 2.0999999344348907E-001,
           "Name" : "WeaponPlus",
           "Toggle" : true,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -4.3840000152587891E+001
+            "Y" : -7.1200004577636719E+001
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"
@@ -261,12 +261,12 @@
             },
             "Url" : "castle-data:/resources/weapons.png"
           },
-          "ImageScale" : 1.1999999731779099E-001,
+          "ImageScale" : 1.2200000137090683E-001,
           "Name" : "WeaponMinus",
           "Toggle" : true,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.4383999633789062E+002
+            "Y" : -1.7519999694824219E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"
@@ -278,6 +278,7 @@
             "Alpha" : 1.0000000000000000E+000,
             "Blue" : 1.0000000000000000E+000
           },
+          "Caption" : "X",
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
@@ -290,15 +291,16 @@
           "CustomBackgroundPressed" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
-          "Exists" : false,
           "Image" : {
-            "$$ClassName" : "TCastleImagePersistent"
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/star.png"
           },
+          "ImageScale" : 4.4999998807907104E-001,
           "Name" : "WeaponMultiply",
           "Toggle" : true,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.3152000427246094E+002
+            "Y" : -2.2887200927734375E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"
