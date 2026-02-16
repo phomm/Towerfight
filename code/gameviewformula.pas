@@ -45,7 +45,7 @@ uses
 // System
   SysUtils, TypInfo,
 // Castle  
-  castlewindow, castlelog,
+  castlewindow, castlelog, castleglimages,
   // Own
   gameviewgame, Common;
 
@@ -72,14 +72,26 @@ end;
 procedure TViewFormula.Resume;
 var
   I: Integer;
-  LButton: TCastleButton;
+  LButton, LWeapon: TCastleButton;
   procedure Insert(const AValue: String; AMarked: Boolean = True);
   begin
     LButton := TCastleButton.Create(Self);
-    LButton.Caption := AValue;
+    LButton.FontSize := 70;
+    LButton.CustomBackground := true;
     if AMarked then
-      LButton.Pressed := True;
-    GroupElements.InsertFront(LButton);    
+    begin
+      if (AValue = '+')  then
+        LWeapon := ViewGame.WeaponPlus
+      else if (AValue = '-') then
+        LWeapon := ViewGame.WeaponMinus;
+      LButton.ImageScale := LWeapon.ImageScale;
+      LButton.Image.Region := LWeapon.Image.Region;
+      LButton.Image.Url := LWeapon.Image.Url;
+      LButton.Tag := Ord(TMap.Map.Hero.Weapon);
+    end
+    else
+      LButton.Caption := AValue;
+    GroupElements.InsertFront(LButton);
   end;
 begin
   inherited;
@@ -141,7 +153,7 @@ begin
   begin
     LButton := GroupElements.Controls[I] as TCastleButton;
     if LButton.Exists then
-      Result := Result + LButton.Caption;
+      Result := Result + IIF(LButton.Tag > 0, WeaponToOperation[NHeroWeapon(LButton.Tag)], LButton.Caption);
   end;
 end;
 

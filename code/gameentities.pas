@@ -113,6 +113,9 @@ type
   const BloodAsset = 'castle-data:/resources/blood_splat.png';
   end;
 
+const
+  WeaponToOperation: array[NHeroWeapon] of string = ('', '+', '-', '*');
+
 implementation
 
 uses 

@@ -9,15 +9,20 @@
         "$$ClassName" : "TCastleImagePersistent",
         "Url" : "castle-data:/resources/formulaback.png"
       },
+      "HeightFraction" : 4.0000000596046448E-001,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "ImageBackground",
+      "Stretch" : true,
       "VerticalAnchorParent" : "vpMiddle",
       "VerticalAnchorSelf" : "vpMiddle",
+      "Width" : 5.0000000000000000E+002,
+      "WidthFraction" : 5.0000000000000000E-001,
       "$Children" : [
         {
           "$$ClassName" : "TCastleButton",
           "Caption" : "Go",
+          "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
@@ -25,24 +30,25 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent"
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell.png"
           },
           "CustomBackgroundPressed" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
-          "HorizontalAnchorParent" : "hpRight",
-          "HorizontalAnchorSelf" : "hpRight",
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
           "Image" : {
-            "$$ClassName" : "TCastleImagePersistent"
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/katana.png"
           },
+          "ImageLayout" : "ilBottom",
+          "ImageScale" : 2.0000000298023224E-001,
           "Name" : "ButtonGo",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "X" : -5.0000000000000000E+001,
-            "Y" : -5.0000000000000000E+001
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
+            "Y" : 6.0000000000000000E+001
+          }
         },
         {
           "$$ClassName" : "TCastleHorizontalGroup",
