@@ -86,10 +86,10 @@ type
   private
     FTowers: TObjectList<TTower>;
     FDifficulty: NDifficulty;
-    FLastTower, FLastStock: Integer;
+    FLastTower, FLastStock, FHeroTowerIndex, FHeroStockIndex, FTargetTower, FTargetStock: Integer;
     FHero: THero;
     FHeroRoom: TRoom;
-    FHeroTowerIndex, FHeroStockIndex: Integer; 
+    function PathFindCost(T, S, Direction: Smallint) : Smallint;
   class var FMap: TMap;
   public
     constructor Create(AOwner: TComponent); override;
@@ -121,6 +121,10 @@ implementation
 uses 
 // System
   SysUtils, typinfo, Math,
+// ThirdParty
+  PathFind,  
+// Castle  
+  castlelog,
 // Own  
   Common, gameviewgame;
 
@@ -254,14 +258,14 @@ end;
 
 function TMap.SetHeroRoom(ARoomIndex: Integer): Boolean;
 var
-  LTowerIndex, LStockIndex, LTowerDelta, LStockDelta: Integer;
+  LTowerIndex, LStockIndex: Integer;
 begin
   LTowerIndex := ARoomIndex div 10;
   LStockIndex := ARoomIndex mod 10;
-  LTowerDelta := Abs(LTowerIndex - FHeroTowerIndex);
-  LStockDelta := Abs(LStockIndex - FHeroStockIndex);
-  if FTowers[LTowerIndex].Rooms[LStockIndex].HasEnemy() and 
-    ((LTowerDelta > 1) or (LStockDelta > 1) or (LTowerDelta = LStockDelta)) then
+  FTargetTower := LTowerIndex;
+  FTargetStock := LStockIndex;
+  WriteLnLog(Format('SX%d SY%d TX%d TY%d', [FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex]));
+  if PathFind.FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex, PathFindCost) = nil then
     Exit(False);
   FHeroRoom := FTowers[LTowerIndex].Rooms[LStockIndex];
   FHeroTowerIndex := LTowerIndex;
@@ -285,6 +289,16 @@ end;
 function TMap.GetRoomByIndex(ARoomIndex: Integer): TRoom;
 begin
   Result := FTowers[ARoomIndex div 10].Rooms[ARoomIndex mod 10];
+end;
+
+function TMap.PathFindCost(T, S, Direction: Smallint) : Smallint;
+begin
+  // if T within towers count and S is within stock count of tower T and room hasnot enemy, except target room, then return 1, else -1, 
+  if (T >= 0) and (T < FTowers.Count) and (S >= 0) and (S < FTowers[T].Rooms.Count) and (Direction mod 2 = 0)
+    and (not FTowers[T].Rooms[S].HasEnemy() or ((T = FTargetTower) and (S = FTargetStock))) then
+    Result := 1
+  else
+    Result := -1;
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
