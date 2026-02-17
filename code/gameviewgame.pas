@@ -22,6 +22,8 @@ type
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
+  protected
+    function GetWeapon(AIndex: NHeroWeapon): TCastleButton;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -29,6 +31,7 @@ type
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure RoomFight(ARoomButton: TCastleButton);
+    property WeaponButton[AIndex: NHeroWeapon]: TCastleButton read GetWeapon;
   private
     FPreviouslyActiveButton: TCastleButton;
     FWeapons: array[0..3] of TCastleButton;
@@ -161,6 +164,11 @@ begin
     Container.View := (ViewDefeat);
 end;
 
+function TViewGame.GetWeapon(AIndex: NHeroWeapon): TCastleButton;
+begin
+  Result := FWeapons[Ord(AIndex)];
+end;
+
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
 begin
   inherited;
@@ -253,8 +261,6 @@ begin
     RoomFight(LButton)
   else 
   begin
-    ViewFormula.Formula := Map.GetRoomByIndex(LButton.Tag).Actors[0].Visual;
-    ViewFormula.Weapon := Map.Hero.Weapon;
     ViewFormula.RoomButton := LButton;
     Container.PushView(ViewFormula);
   end;

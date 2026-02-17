@@ -20,8 +20,6 @@ type
     ButtonGo: TCastleButton;
     GroupElements: TCastleHorizontalGroup;
   public
-    Formula: String;
-    Weapon: NHeroWeapon;
     RoomButton: TCastleButton;
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -30,9 +28,11 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure ButtonGoClick(Sender: TObject);
   private
+    Formula: string;
+    Weapon: NHeroWeapon;
     FPositions: specialize TArray<NElementReplacement>;
     FPosition: Integer;
-    function GetFormula(): String;
+    function GetFormula(): string;
     function CalcFormula(AFormula: string): Integer;
   end;
 
@@ -80,10 +80,7 @@ var
     LButton.CustomBackground := true;
     if AMarked then
     begin
-      if (AValue = '+')  then
-        LWeapon := ViewGame.WeaponPlus
-      else if (AValue = '-') then
-        LWeapon := ViewGame.WeaponMinus;
+      LWeapon := ViewGame.WeaponButton[Weapon];
       LButton.ImageScale := LWeapon.ImageScale;
       LButton.Image.Region := LWeapon.Image.Region;
       LButton.Image.Url := LWeapon.Image.Url;
@@ -95,15 +92,17 @@ var
   end;
 begin
   inherited;
+  Weapon := TMap.Map.Hero.Weapon;
+  Formula := TMap.Map.GetRoomByIndex(RoomButton.Tag).Actors[0].Visual;
   GroupElements.ClearControls();
   SetLength(FPositions, Length(Formula) + 1);
   for I := 1 to Length(Formula) do
   begin
-    if ((Formula[I] = '+') and (Weapon = hwPlus)) or ((Formula[I] = '-') and (Weapon = hwMinus)) then
+    if (Formula[I] in ['+', '-', '*']) and (Formula[I] = WeaponToOperation[Weapon]) then
       FPositions[I] := erNone
-    else if (Formula[I] = '*') or ((Formula[I] = '-') and (Weapon = hwPlus)) or ((Formula[I] = '+') and (Weapon = hwMinus)) then
+    else if (Formula[I] in ['+', '-', '*']) and (Formula[I] <> WeaponToOperation[Weapon]) then
       FPositions[I] := erInPlace
-    else if ((Formula[I] in ['0'..'9']) and (I < Length(Formula)) and (Formula[I+1] in ['0'..'9'])) then
+    else if ((Formula[I] in ['0'..'9']) and (I < Length(Formula)) and (Formula[I + 1] in ['0'..'9'])) then
       FPositions[I] := erRight
     else
       FPositions[I] := erNone;
@@ -114,13 +113,13 @@ begin
     Insert(Formula[I], False);
     if (FPosition = 0) and (FPositions[I] = erRight) then
     begin
-      Insert(IIF(Weapon = hwPlus, '+', '-'));
+      Insert(WeaponToOperation[Weapon]);
       FPosition := I;      
     end;
     if (FPosition = 0) and (FPositions[I] = erInPlace) then
     begin
       GroupElements.Controls[GroupElements.ControlsCount-1].Exists := False;
-      Insert(IIF(Weapon = hwPlus, '+', '-'));
+      Insert(WeaponToOperation[Weapon]);
       FPosition := I;
     end;    
   end;
@@ -178,7 +177,8 @@ begin
   LOp := hwNo;
   LValue := 0;
   WriteLnLog('Original formula: ' + AFormula);
-  for I := 1 to Length(AFormula) do
+  I := 1;
+  while I <= Length(AFormula) do
   begin
     if AFormula[I] in ['0'..'9'] then
       LValue := LValue * 10 + Ord(AFormula[I]) - Ord('0')
@@ -195,6 +195,7 @@ begin
       AFormula := (Arg1 * LValue).ToString + Copy(AFormula, MultLen + 1);
       LOp := hwNo; 
     end;
+    Inc(I);
   end;
   if LOp = hwMultiply then
     AFormula := Copy(AFormula, 1, Length(AFormula) - MultLen) + (Arg1 * LValue).ToString;

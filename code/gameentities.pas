@@ -391,9 +391,10 @@ begin
   LAntiDifficulty := Ord(High(NDifficulty)) - Ord(Difficulty());
   FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
   FAssetId := 'castle-data:/resources/good.bmp';
-  Fweapons[hwNo] := 0;
-  Fweapons[hwPlus] := 5 + Random(2 + LAntiDifficulty div 2);
-  Fweapons[hwMinus] := 5 + Random(2 + LAntiDifficulty div 2);
+  FWeapons[hwNo] := 0;
+  FWeapons[hwPlus] := 5 + Random(2 + LAntiDifficulty div 2);
+  FWeapons[hwMinus] := 5 + Random(2 + LAntiDifficulty div 2);
+  FWeapons[hwMultiply] := 5 + Random(2 + LAntiDifficulty div 2);
 end;
 
 procedure THero.Die();
