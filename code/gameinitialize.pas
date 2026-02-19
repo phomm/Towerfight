@@ -33,6 +33,7 @@ procedure ApplicationInitialize;
 begin
   { Adjust container settings for a scalable UI (adjusts to any window size in a smart way). }
   InitializeLog();
+  Randomize();
   Window.Container.LoadSettings('castle-data:/CastleSettings.xml');
   UserConfig.Load();
   Window.FullScreen := Fullscreen();

@@ -311,8 +311,9 @@ end;
 
 function TEnemy.CalcLevel(ATower, AStock: Integer): Integer;
 begin
-  Result := (ATower + Random(AStock)) * (Max(ATower + 3, AStock + Random(8) - ATower))
-   * ATower * ATower + Ord(ATower > 1) * (Random(ATower + AStock) - 5);
+  Result := (ATower + Random(AStock)) * Max(ATower + 2, AStock + Random(10) - ATower)
+    * (ATower + Random(Ord(ATower > 1) + 1)) * (ATower - Random(Ord(ATower > 1) + 1)) 
+    + Ord(ATower > 1) * (Random(Max(7, 2 * ATower + 2 * AStock - 11)) + 17);
 end;
 
 procedure TEnemy.CreateFormula(ATower, AStock: Integer);
@@ -321,31 +322,17 @@ var
   a1, a2: Integer;
 begin
   LOp := 0;
-  
-  if FLevel < 40 then
-    LOp := Random(2)
-  else if FLevel mod 70 = 0 then
-    LOp := 7  
-  else if FLevel mod 50 = 0 then
-    LOp := 5
-  else if FLevel mod 30 = 0 then
-    LOp := 3
-  else if FLevel mod 20 = 0 then
-    LOp := 2;
-  
-  if FLevel > 20 then
+  a1 := Min(16, (Ord(Difficulty()) + 1) * 4);
+  while a1 > 0 do
   begin
-    if FLevel mod 7 = 0 then
-      LOp := 7
-    else if FLevel mod 5 = 0 then
-      LOp := 5
-    else if FLevel mod 3 = 0 then
-      LOp := 3
-    else if FLevel mod 2 = 0 then
-      LOp := 2
-    else
-      LOp := Random(2);
+    if Level mod a1 = 0 then
+      Break;
+    a1 := a1 - 1;
   end;
+  if (a1 > 0) and (ATower > 1) and (Random(2) = 0) then
+    LOp := a1 + 1
+  else
+    LOp := Random(2);
   
   if LOp = 0 then
   begin
@@ -355,7 +342,7 @@ begin
   end
   else if LOp = 1 then
   begin
-    a1 := Random(Round(Sqrt(FLevel))) + ATower * Round(Log2(FLevel));
+    a1 := Random(FLevel div 2);
     a2 := FLevel + a1;
     FFormula := Format('%d-%d', [a2, a1]);
   end
@@ -385,7 +372,7 @@ function TDragon.GetVisual(): string;
 begin
   if FRevealed then
     Exit(FLevel.ToString);
-  Result := IIF(Level div 1000 = 0, '', IIF(Level div 1000 = 4, '4', '?'));
+  Result := IIF(Level div 1000 = 0, '', (Level div 1000).ToString);
   Result := Result + IIF(Level mod 1000 div 100 = 4, '4', '?');
   Result := Result + IIF(Level mod 1000 mod 100 div 10 = 4, '4', '?');
   Result := Result + IIF(Level mod 10 = 4, '4', '?');
