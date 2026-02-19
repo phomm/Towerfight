@@ -8,7 +8,6 @@
       "Alignment" : "hpMiddle",
       "AutoSizeToChildren" : true,
       "Name" : "GroupTower0",
-      "Spacing" : 2.0000000000000000E+000,
       "TopToBottom" : false,
       "$Children" : [
         {
@@ -17,9 +16,12 @@
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/towertop.png"
           },
+          "Height" : 1.5000000000000000E+002,
           "HorizontalAnchorParent" : "hpMiddle",
           "HorizontalAnchorSelf" : "hpMiddle",
-          "Name" : "ImageRoof0"
+          "Name" : "ImageRoof0",
+          "Stretch" : true,
+          "Width" : 3.0000000000000000E+002
         }
       ]
     }

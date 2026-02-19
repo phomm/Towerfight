@@ -60,39 +60,25 @@
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "GroupButtons",
-      "Spacing" : 2.0000000000000000E+000,
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
         "Y" : 2.0000000000000000E+001
       },
       "$Children" : [
         {
-          "$$ClassName" : "TCastleButton",
-          "AutoSize" : false,
-          "CustomBackground" : true,
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
+          "$$ClassName" : "TCastleImageControl",
+          "Content" : {
             "$$ClassName" : "TCastleImagePersistent",
             "Url" : "castle-data:/resources/towertop.png"
           },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Height" : 1.6000000000000000E+002,
+          "Height" : 1.5000000000000000E+002,
           "HorizontalAnchorParent" : "hpMiddle",
           "HorizontalAnchorSelf" : "hpMiddle",
-          "Image" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
           "Name" : "ImageTowerTop",
+          "Stretch" : true,
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
-          "Width" : 5.0000000000000000E+002
+          "Width" : 4.0000000000000000E+002
         },
         {
           "$$ClassName" : "TCastleButton",
@@ -125,11 +111,30 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.6200000000000000E+002
+            "Y" : -1.5000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
           "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleImageControl",
+          "Content" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/room-roof.png"
+          },
+          "Height" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "ImageRoomRoof",
+          "Stretch" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -2.5000000000000000E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 4.0000000000000000E+002
         },
         {
           "$$ClassName" : "TCastleButton",
@@ -162,11 +167,30 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -2.6400000000000000E+002
+            "Y" : -3.0000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
           "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleImageControl",
+          "Content" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/room-roof.png"
+          },
+          "Height" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "ImageRoomRoof1",
+          "Stretch" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -4.0000000000000000E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 4.0000000000000000E+002
         },
         {
           "$$ClassName" : "TCastleButton",
@@ -199,11 +223,30 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -3.6600000000000000E+002
+            "Y" : -4.5000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
           "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleImageControl",
+          "Content" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/room-roof.png"
+          },
+          "Height" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "ImageRoomRoof2",
+          "Stretch" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -5.5000000000000000E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 4.0000000000000000E+002
         },
         {
           "$$ClassName" : "TCastleButton",
@@ -236,11 +279,30 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -4.6800000000000000E+002
+            "Y" : -6.0000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
           "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleImageControl",
+          "Content" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/room-roof.png"
+          },
+          "Height" : 5.0000000000000000E+001,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "ImageRoomRoof3",
+          "Stretch" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -7.0000000000000000E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 4.0000000000000000E+002
         },
         {
           "$$ClassName" : "TCastleButton",
@@ -273,7 +335,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -5.7000000000000000E+002
+            "Y" : -7.5000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",

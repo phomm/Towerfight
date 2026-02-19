@@ -264,7 +264,7 @@ begin
   LStockIndex := ARoomIndex mod 10;
   FTargetTower := LTowerIndex;
   FTargetStock := LStockIndex;
-  WriteLnLog(Format('SX%d SY%d TX%d TY%d', [FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex]));
+  //WriteLnLog(Format('SX%d SY%d TX%d TY%d', [FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex]));
   if PathFind.FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex, PathFindCost) = nil then
     Exit(False);
   FHeroRoom := FTowers[LTowerIndex].Rooms[LStockIndex];
@@ -323,20 +323,20 @@ var
 begin
   LOp := 0;
   a1 := Min(16, (Ord(Difficulty()) + 1) * 4);
-  while a1 > 0 do
+  while a1 > 1 do
   begin
     if Level mod a1 = 0 then
       Break;
     a1 := a1 - 1;
   end;
-  if (a1 > 0) and (ATower > 1) and (Random(2) = 0) then
-    LOp := a1 + 1
+  if (a1 > 1) and (ATower > 1) and (Random(2) = 0) then
+    LOp := a1 
   else
     LOp := Random(2);
   
   if LOp = 0 then
   begin
-    a1 := Random(FLevel + 1);
+    a1 := Min(Random(FLevel * 2 div 3), FLevel div 2);
     a2 := FLevel - a1;
     FFormula := Format('%d+%d', [a1, a2]);
   end
