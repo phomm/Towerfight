@@ -14,7 +14,7 @@
       "$$ClassName" : "TCastleImageControl",
       "Content" : {
         "$$ClassName" : "TCastleImagePersistent",
-        "Url" : "castle-data:/resources/Background.jpg"
+        "Url" : "castle-data:/resources/Background.png"
       },
       "FullSize" : true,
       "Name" : "ImageBackground"

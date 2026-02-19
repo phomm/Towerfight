@@ -19,14 +19,14 @@
       "$$ClassName" : "TCastleImageControl",
       "Content" : {
         "$$ClassName" : "TCastleImagePersistent",
-        "Url" : "castle-data:/resources/Background.jpg"
+        "Url" : "castle-data:/resources/Background.png"
       },
       "FullSize" : true,
       "Name" : "ImageBackground"
     },
     {
       "$$ClassName" : "TCastleButton",
-      "Caption" : "SEPUKKU",
+      "Caption" : "SEPPUKU",
       "CustomBackgroundDisabled" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
@@ -225,7 +225,7 @@
           "Toggle" : true,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -7.1200004577636719E+001
+            "Y" : -7.1199996948242188E+001
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"
@@ -266,7 +266,7 @@
           "Toggle" : true,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.7519999694824219E+002
+            "Y" : -1.7520001220703125E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"

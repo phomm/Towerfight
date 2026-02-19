@@ -7,25 +7,12 @@
       "$$ClassName" : "TCastleImageControl",
       "Content" : {
         "$$ClassName" : "TCastleImagePersistent",
-        "Url" : "castle-data:/resources/DefeatBackground.jpg"
+        "Url" : "castle-data:/resources/DefeatBackground.png"
       },
       "FullSize" : true,
-      "Name" : "ImageBackground"
-    },
-    {
-      "$$ClassName" : "TCastleImageControl",
-      "Content" : {
-        "$$ClassName" : "TCastleImagePersistent",
-        "Url" : "castle-data:/resources/samurai-mask.png"
-      },
-      "Height" : 8.0000000000000000E+002,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Name" : "ImageHero",
-      "Stretch" : true,
-      "VerticalAnchorParent" : "vpTop",
-      "VerticalAnchorSelf" : "vpTop",
-      "Width" : 8.0000000000000000E+002
+      "Name" : "ImageBackground",
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle"
     },
     {
       "$$ClassName" : "TCastleImageControl",
@@ -59,6 +46,21 @@
       "Name" : "ButtonMenu",
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/samurai-mask-defeat.png"
+      },
+      "Height" : 8.0000000000000000E+002,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "ImageHero",
+      "Stretch" : true,
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop",
+      "Width" : 8.0000000000000000E+002
     }
   ]
 }
