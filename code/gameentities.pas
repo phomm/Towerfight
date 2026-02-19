@@ -115,6 +115,8 @@ type
 
 const
   WeaponToOperation: array[NHeroWeapon] of string = ('', '+', '-', '*');
+  WeaponFileNames: array[Succ(Low(NHeroWeapon))..High(NHeroWeapon)] of string = 
+    ('weapon-shuriken.png', 'weapon-kunai.png', 'weapon-star.png');
 
 implementation
 

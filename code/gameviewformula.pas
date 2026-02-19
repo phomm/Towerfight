@@ -72,19 +72,17 @@ end;
 procedure TViewFormula.Resume;
 var
   I: Integer;
-  LButton, LWeapon: TCastleButton;
+  LButton: TCastleButton;
   procedure Insert(const AValue: String; AMarked: Boolean = True);
   begin
     LButton := TCastleButton.Create(Self);
     LButton.FontSize := 70;
-    LButton.CustomBackground := true;
+    LButton.CustomBackground := True;
     if AMarked then
     begin
-      LWeapon := ViewGame.WeaponButton[Weapon];
-      LButton.ImageScale := LWeapon.ImageScale;
-      LButton.Image.Region := LWeapon.Image.Region;
-      LButton.Image.Url := LWeapon.Image.Url;
-      LButton.Tag := Ord(TMap.Map.Hero.Weapon);
+      LButton.ImageScale := 0.2;
+      LButton.Image.Url := 'castle-data:/resources/' + WeaponFileNames[Weapon];
+      LButton.Tag := Ord(Weapon);
     end
     else
       LButton.Caption := AValue;

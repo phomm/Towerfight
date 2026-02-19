@@ -31,7 +31,7 @@
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "Url" : "castle-data:/resources/cell-old.png"
           },
           "CustomBackgroundPressed" : {
             "$$ClassName" : "TCastleImagePersistent"

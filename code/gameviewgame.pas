@@ -138,7 +138,7 @@ begin
     if LIsWeapon then
       Map.Hero.Weapon := NHeroWeapon(i);
     FWeapons[i].Pressed := LIsWeapon or (i = Ord(hwNo));
-    FWeapons[i].Border.AllSides := IIF(LIsWeapon or (i = Ord(hwNo)), 5, 0);
+    FWeapons[i].Border.AllSides := IIF(LIsWeapon or (i = Ord(hwNo)), 4, 0);
     if i <> Ord(hwNo) then
     begin
       FWeapons[i].Enabled := Map.Hero.Weapons[NHeroWeapon(i)] > 0;

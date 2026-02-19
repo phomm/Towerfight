@@ -25,35 +25,6 @@
       "Name" : "ImageBackground"
     },
     {
-      "$$ClassName" : "TCastleButton",
-      "Caption" : "SEPPUKU",
-      "CustomBackgroundDisabled" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundFocused" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundNormal" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundPressed" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomTextColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Red" : 1.0000000000000000E+000
-      },
-      "CustomTextColorUse" : true,
-      "HorizontalAnchorParent" : "hpRight",
-      "HorizontalAnchorSelf" : "hpRight",
-      "Image" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "Name" : "ButtonDefeat",
-      "VerticalAnchorParent" : "vpTop",
-      "VerticalAnchorSelf" : "vpTop"
-    },
-    {
       "$$ClassName" : "TCastleViewport",
       "BackgroundColorPersistent" : {
         "$$ClassName" : "TCastleColorPersistent",
@@ -156,186 +127,266 @@
     },
     {
       "$$ClassName" : "TCastleVerticalGroup",
-      "Name" : "GroupWeapons",
+      "Name" : "VerticalGroup1",
+      "Spacing" : 1.0000000000000000E+001,
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop",
       "$Children" : [
         {
-          "$$ClassName" : "TCastleButton",
-          "BorderColorPersistent" : {
-            "$$ClassName" : "TCastleColorPersistent",
-            "Alpha" : 1.0000000000000000E+000,
-            "Blue" : 1.0000000000000000E+000
-          },
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Image" : {
+          "$$ClassName" : "TCastleImageControl",
+          "AutoSizeToChildren" : true,
+          "Content" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/katana-vectored.png"
+            "SmoothScaling" : false,
+            "Url" : "castle-data:/resources/cell-old.png"
           },
-          "ImageScale" : 1.0000000149011612E-001,
-          "Name" : "WeaponNo",
-          "Toggle" : true,
+          "Name" : "ImageDefeatBack",
           "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
+          "VerticalAnchorSelf" : "vpTop",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleButton",
+              "Alignment" : "hpLeft",
+              "AutoSize" : false,
+              "Caption" : "SEPPUKU",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/samurai-rock.png"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomTextColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Red" : 1.0000000000000000E+000
+              },
+              "CustomTextColorUse" : true,
+              "FontSize" : 7.0000000000000000E+001,
+              "Height" : 1.3000000000000000E+002,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonDefeat",
+              "VerticalAlignment" : "vpTop",
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle",
+              "Width" : 4.7000000000000000E+002
+            }
+          ]
         },
         {
-          "$$ClassName" : "TCastleButton",
-          "BorderColorPersistent" : {
-            "$$ClassName" : "TCastleColorPersistent",
-            "Alpha" : 1.0000000000000000E+000,
-            "Blue" : 1.0000000000000000E+000
-          },
-          "Caption" : "X",
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Image" : {
+          "$$ClassName" : "TCastleImageControl",
+          "AutoSizeToChildren" : true,
+          "Content" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "RegionPersistent" : {
-              "$$ClassName" : "TFloatRectanglePersistent",
-              "Bottom" : 2.3000000000000000E+002,
-              "Height" : 4.0000000000000000E+002,
-              "Left" : 2.2000000000000000E+002,
-              "Width" : 4.0000000000000000E+002
-            },
-            "Url" : "castle-data:/resources/weapons.png"
+            "Url" : "castle-data:/resources/cell-old.png"
           },
-          "ImageScale" : 2.0999999344348907E-001,
-          "Name" : "WeaponPlus",
-          "Toggle" : true,
+          "Name" : "ImageWeaponsBack",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -7.1199996948242188E+001
+            "Y" : -1.4000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
-        },
-        {
-          "$$ClassName" : "TCastleButton",
-          "BorderColorPersistent" : {
-            "$$ClassName" : "TCastleColorPersistent",
-            "Alpha" : 1.0000000000000000E+000,
-            "Blue" : 1.0000000000000000E+000
-          },
-          "Caption" : "X",
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Image" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "RegionPersistent" : {
-              "$$ClassName" : "TFloatRectanglePersistent",
-              "Bottom" : 1.5500000000000000E+002,
-              "Height" : 2.7600000000000000E+002,
-              "Left" : 1.4000000000000000E+003,
-              "Width" : 6.8300000000000000E+002
-            },
-            "Url" : "castle-data:/resources/weapons.png"
-          },
-          "ImageScale" : 1.2200000137090683E-001,
-          "Name" : "WeaponMinus",
-          "Toggle" : true,
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.7520001220703125E+002
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
-        },
-        {
-          "$$ClassName" : "TCastleButton",
-          "BorderColorPersistent" : {
-            "$$ClassName" : "TCastleColorPersistent",
-            "Alpha" : 1.0000000000000000E+000,
-            "Blue" : 1.0000000000000000E+000
-          },
-          "Caption" : "X",
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Image" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/star.png"
-          },
-          "ImageScale" : 4.4999998807907104E-001,
-          "Name" : "WeaponMultiply",
-          "Toggle" : true,
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -2.2887200927734375E+002
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
-        },
-        {
-          "$$ClassName" : "TCastleButton",
-          "BorderColorPersistent" : {
-            "$$ClassName" : "TCastleColorPersistent",
-            "Alpha" : 1.0000000000000000E+000,
-            "Blue" : 1.0000000000000000E+000
-          },
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Exists" : false,
-          "Image" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Name" : "WeaponDivide",
-          "Toggle" : true,
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.7536000061035156E+002
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop"
+          "VerticalAnchorSelf" : "vpTop",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleHorizontalGroup",
+              "Name" : "GroupWeapons",
+              "Spacing" : 4.0000000000000000E+000,
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleUserInterface",
+                  "AutoSizeToChildren" : true,
+                  "Name" : "Group1",
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleButton",
+                      "BorderColorPersistent" : {
+                        "$$ClassName" : "TCastleColorPersistent",
+                        "Alpha" : 1.0000000000000000E+000
+                      },
+                      "CustomBackground" : true,
+                      "CustomBackgroundDisabled" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundFocused" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundNormal" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/cell-old.png"
+                      },
+                      "CustomBackgroundPressed" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "HorizontalAnchorParent" : "hpMiddle",
+                      "HorizontalAnchorSelf" : "hpMiddle",
+                      "Image" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/weapon-katana.png"
+                      },
+                      "ImageScale" : 2.8000000119209290E-001,
+                      "Name" : "WeaponNo",
+                      "Toggle" : true,
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                },
+                {
+                  "$$ClassName" : "TCastleUserInterface",
+                  "AutoSizeToChildren" : true,
+                  "Name" : "Group2",
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 1.4600000000000000E+002
+                  },
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleButton",
+                      "BorderColorPersistent" : {
+                        "$$ClassName" : "TCastleColorPersistent",
+                        "Alpha" : 1.0000000000000000E+000
+                      },
+                      "Caption" : "X",
+                      "CustomBackground" : true,
+                      "CustomBackgroundDisabled" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundFocused" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundNormal" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/cell-old.png"
+                      },
+                      "CustomBackgroundPressed" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "HorizontalAnchorParent" : "hpMiddle",
+                      "HorizontalAnchorSelf" : "hpMiddle",
+                      "Image" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/weapon-shuriken.png"
+                      },
+                      "ImageScale" : 2.5000000000000000E-001,
+                      "Name" : "WeaponPlus",
+                      "Toggle" : true,
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                },
+                {
+                  "$$ClassName" : "TCastleUserInterface",
+                  "AutoSizeToChildren" : true,
+                  "Name" : "Group3",
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 2.9871997070312500E+002
+                  },
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleButton",
+                      "BorderColorPersistent" : {
+                        "$$ClassName" : "TCastleColorPersistent",
+                        "Alpha" : 1.0000000000000000E+000
+                      },
+                      "Caption" : "X",
+                      "CustomBackground" : true,
+                      "CustomBackgroundDisabled" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundFocused" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundNormal" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/cell-old.png"
+                      },
+                      "CustomBackgroundPressed" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "HorizontalAnchorParent" : "hpMiddle",
+                      "HorizontalAnchorSelf" : "hpMiddle",
+                      "Image" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/weapon-kunai.png"
+                      },
+                      "ImageScale" : 3.4999999403953552E-001,
+                      "Name" : "WeaponMinus",
+                      "Toggle" : true,
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                },
+                {
+                  "$$ClassName" : "TCastleUserInterface",
+                  "AutoSizeToChildren" : true,
+                  "Name" : "Group4",
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 4.7043997192382812E+002
+                  },
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleButton",
+                      "BorderColorPersistent" : {
+                        "$$ClassName" : "TCastleColorPersistent",
+                        "Alpha" : 1.0000000000000000E+000
+                      },
+                      "Caption" : "X",
+                      "CustomBackground" : true,
+                      "CustomBackgroundDisabled" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundFocused" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "CustomBackgroundNormal" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/cell-old.png"
+                      },
+                      "CustomBackgroundPressed" : {
+                        "$$ClassName" : "TCastleImagePersistent"
+                      },
+                      "HorizontalAnchorParent" : "hpMiddle",
+                      "HorizontalAnchorSelf" : "hpMiddle",
+                      "Image" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/weapon-star.png"
+                      },
+                      "ImageScale" : 2.8000000119209290E-001,
+                      "Name" : "WeaponMultiply",
+                      "Toggle" : true,
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
         }
       ]
     }
