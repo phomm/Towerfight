@@ -8,7 +8,7 @@ uses
 // Castle
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse,
 // Own  
-  gameentities;
+  gameentities, roomcomponent;
 
 type
   NElementReplacement = (erNone, erRight, erInPlace);
@@ -20,7 +20,7 @@ type
     ButtonGo: TCastleButton;
     GroupElements: TCastleHorizontalGroup;
   public
-    RoomButton: TCastleButton;
+    RoomComponent: TRoomComponent;
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
     procedure Resume; override;
@@ -91,7 +91,7 @@ var
 begin
   inherited;
   Weapon := TMap.Map.Hero.Weapon;
-  Formula := TMap.Map.GetRoomByIndex(RoomButton.Tag).Actors[0].Visual;
+  Formula := TMap.Map.GetRoomByIndex(RoomComponent.Tag).Actors[0].Visual;
   GroupElements.ClearControls();
   SetLength(FPositions, Length(Formula) + 1);
   for I := 1 to Length(Formula) do
@@ -129,7 +129,7 @@ var
   LNewLevel: Integer;
   LNewFormula: String;
 begin
-  LActor := TMap.Map.GetRoomByIndex(RoomButton.Tag).Actors[0];
+  LActor := TMap.Map.GetRoomByIndex(RoomComponent.Tag).Actors[0];
   // update Actor formula and level
   LNewFormula := GetFormula();
   LNewLevel := CalcFormula(LNewFormula);
@@ -137,7 +137,7 @@ begin
   LActor.Level := IIF(LNewLevel < 0, 0, LNewLevel);
   TMap.Map.Hero.UseWeapon();
   Container.PopView();
-  ViewGame.RoomFight(RoomButton);
+  ViewGame.RoomFight(RoomComponent);
 end;
 
 function TViewFormula.GetFormula(): String;

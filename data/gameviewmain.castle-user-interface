@@ -60,10 +60,6 @@
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "GroupButtons",
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : 2.0000000000000000E+001
-      },
       "$Children" : [
         {
           "$$ClassName" : "TCastleImageControl",

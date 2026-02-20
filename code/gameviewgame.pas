@@ -10,7 +10,7 @@ Classes,
 // Castle
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, 
 // Own
-  gameentities;
+  gameentities, roomcomponent;
 
 type
   TViewGame = class(TCastleView)
@@ -30,10 +30,10 @@ type
     procedure Stop; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
-    procedure RoomFight(ARoomButton: TCastleButton);
+    procedure RoomFight(ARoom: TRoomComponent);
     property WeaponButton[AIndex: NHeroWeapon]: TCastleButton read GetWeapon;
   private
-    FPreviouslyActiveButton: TCastleButton;
+    FPreviousRoom: TRoomComponent;
     FWeapons: array[0..3] of TCastleButton;
     FSkip: Boolean;
     procedure ButtonDefeatClick(Sender: TObject);
@@ -74,8 +74,8 @@ end;
 procedure TViewGame.Start();
 var 
   LRoom: TRoom;
-  LGroupTower, LVisualTower, LVisualRoom, LRoof: TCastleUserInterface;
-  LRoomButton: TCastleButton;
+  LGroupTower, LVisualTower, LRoof, LRoomUI: TCastleUserInterface;
+  LRoomComponent: TRoomComponent;
   LStockIndex, LTowerIndex: Integer;
 begin
   inherited;
@@ -99,23 +99,25 @@ begin
     LStockIndex := 0;
     for LRoom in Map.Towers[LTowerIndex].Rooms do 
     begin
-      LVisualRoom := FactoryRoom.ComponentLoad(LGroupTower) as TCastleUserInterface;
-      LGroupTower.InsertFront(LVisualRoom);
-      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + LStockIndex.ToString) as TCastleButton;
-      LRoomButton.OnClick := ButtonRoomClick;
-      LRoomButton.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
+      LRoomComponent := TRoomComponent.Create(LGroupTower);
+      LRoomUI := FactoryRoom.ComponentLoad(LGroupTower, LRoomComponent) as TCastleUserInterface; 
+      LRoomComponent.InsertFront(LRoomUI);
+      LRoomComponent.Name := 'Room' + LTowerIndex.ToString + '_' + LStockIndex.ToString;
+      LGroupTower.InsertFront(LRoomComponent);
+      LRoomComponent.ControlRoom.OnClick := ButtonRoomClick;
+      LRoomComponent.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
       if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
       begin
-        (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := LRoom.Actors[0].Visual;
-        (LRoomButton.Controls[0].Controls[0] as TCastleImageControl).Url := LRoom.Actors[0].AssetId;
+        LRoomComponent.LabelRight.Caption := LRoom.Actors[0].Visual;
+        LRoomComponent.ImageRight.Url := LRoom.Actors[0].AssetId;
       end;
-      (LRoomButton.Controls[1].Controls[1] as TCastleLabel).Caption := '';
-      if Map.IsHeroRoom(LRoomButton.Tag) then
+      LRoomComponent.LabelLeft.Caption := '';
+      if Map.IsHeroRoom(LRoomComponent.Tag) then
       begin
-        (LRoomButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
-        (LRoomButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
-        (LRoomButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
-        FPreviouslyActiveButton := LRoomButton;
+        LRoomComponent.LabelLeft.Caption := Map.Hero.Visual;
+        LRoomComponent.ImageLeft.Url := Map.Hero.AssetId;
+        LRoomComponent.LabelRight.Caption := '';
+        FPreviousRoom := LRoomComponent;
       end;
       Inc(LStockIndex);
     end;
@@ -190,7 +192,6 @@ const
 var
   LKey, W: Integer;
   LGroupTower: TCastleUserInterface;
-  LRoomButton: TCastleButton; 
   LTowerIndex, LStockIndex: Integer;
 begin
   Result := inherited;
@@ -221,8 +222,7 @@ begin
       if Map.GetRoomIndex(LTowerIndex, LStockIndex) = -1 then
         Exit(True); // key was handled, even if hero didn't move
       LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
-      LRoomButton := LGroupTower.FindRequiredComponent('ControlRoom' + LStockIndex.ToString) as TCastleButton;      
-      LRoomButton.DoClick();
+      (LGroupTower.Controls[LStockIndex] as TRoomComponent).ControlRoom.DoClick();
       Exit(True); // key was handled
     end;
   end;
@@ -230,58 +230,49 @@ end;
 
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
-  LButton: TCastleButton;
+  LRoom: TRoomComponent;
 begin
   if FSkip then Exit;
   
-  LButton := Sender as TCastleButton;
-  if not Map.SetHeroRoom(LButton.Tag) then
+  LRoom := (Sender as TCastleButton).Parent as TRoomComponent;
+  if not Map.SetHeroRoom(LRoom.Tag) then
     Exit;
   
   // Hide image on previously active button
-  if Assigned(FPreviouslyActiveButton) and (FPreviouslyActiveButton <> Sender) then
+  if Assigned(FPreviousRoom) and (FPreviousRoom <> LRoom) then
   begin
-    FPreviouslyActiveButton.Caption := '';
-    (FPreviouslyActiveButton.Controls[1].Controls[0] as TCastleImageControl).Url := '';
-    (FPreviouslyActiveButton.Controls[1].Controls[1] as TCastleLabel).Caption := '';
+    FPreviousRoom.LabelLeft.Caption := '';
+    FPreviousRoom.ImageLeft.Url := '';
   end;
   
   // Show image on currently clicked button
-  (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
-  (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
-  
-  FPreviouslyActiveButton := LButton;
-  
-  (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
-  (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+  FPreviousRoom := LRoom;
+  LRoom.ImageLeft.Url := Map.Hero.AssetId;
+  LRoom.LabelLeft.Caption := Map.Hero.Visual;
   if not Map.HeroRoom.HasEnemy() then
     Exit;
 
   if Map.Hero.Weapon = hwNo then
-    RoomFight(LButton)
+    RoomFight(LRoom)
   else 
   begin
-    ViewFormula.RoomButton := LButton;
+    ViewFormula.RoomComponent := LRoom;
     Container.PushView(ViewFormula);
   end;
 end;
 
-procedure TViewGame.RoomFight(ARoomButton: TCastleButton);
+procedure TViewGame.RoomFight(ARoom: TRoomComponent);
 var
-  LButton: TCastleButton;
   LActor: TActor;
 begin
-  LButton := ARoomButton;
-  LActor := Map.GetRoomByIndex(LButton.Tag).Actors[0];
+  LActor := Map.GetRoomByIndex(ARoom.Tag).Actors[0];
   LActor.Reveal();
-  (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := LActor.Visual;
-  (LButton.Controls[0].Controls[1] as TCastleLabel).PaddingHorizontal := -70;
-
+  ARoom.LabelRight.Caption := LActor.Visual;
   if Map.HeroRoom.Fight() then
-    (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := TMap.BloodAsset
+    ARoom.ImageRight.Url := TMap.BloodAsset
   else
-    (LButton.Controls[1].Controls[0] as TCastleImageControl).Url := Map.Hero.AssetId;
-  
+    ARoom.ImageLeft.Url := Map.Hero.AssetId; 
+
   FSkip := True;
   CastleSleep(500);
   if Map.Hero.Dead then
@@ -291,9 +282,10 @@ begin
   end
   else
   begin
-    (LButton.Controls[0].Controls[0] as TCastleImageControl).Url := '';
-    (LButton.Controls[0].Controls[1] as TCastleLabel).Caption := '';
-    (LButton.Controls[1].Controls[1] as TCastleLabel).Caption := Map.Hero.Visual;
+    ARoom.ImageRight.Url := '';
+    ARoom.LabelRight.Caption := '';
+    ARoom.LabelLeft.Caption := Map.Hero.Visual;
+
     WeaponNo.DoClick();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
