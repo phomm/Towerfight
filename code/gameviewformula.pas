@@ -34,6 +34,8 @@ type
     FPosition: Integer;
     function GetFormula(): string;
     function CalcFormula(AFormula: string): Integer;
+    procedure HandleClick(ASender: TObject);
+    procedure SetPosition(AValue: Integer);
   end;
 
 var
@@ -45,7 +47,7 @@ uses
 // System
   SysUtils, TypInfo,
 // Castle  
-  castlewindow, castlelog, castleglimages,
+  castlewindow, castlelog, castleglimages, castlecolors,
   // Own
   gameviewgame, Common;
 
@@ -65,8 +67,11 @@ end;
 procedure TViewFormula.Update(const SecondsPassed: Single; var HandleInput: boolean);
 begin
   inherited;
-  { Executed every frame. }
+end;
 
+procedure TViewFormula.HandleClick(ASender: TObject);
+begin
+  SetPosition((ASender as TCastleButton).Tag);
 end;
 
 procedure TViewFormula.Resume;
@@ -81,11 +86,19 @@ var
     if AMarked then
     begin
       LButton.ImageScale := 0.2;
-      LButton.Image.Url := 'castle-data:/resources/' + WeaponFileNames[Weapon];
-      LButton.Tag := Ord(Weapon);
+      LButton.Image.Url := 'castle-data:/resources/' + WeaponFileNames[Weapon];      
     end
     else
+    begin
       LButton.Caption := AValue;
+      if FPositions[I] <> erNone then
+      begin
+        LButton.OnClick := @HandleClick;
+        LButton.Tag := I;
+        LButton.Border.Bottom := 4;
+        LButton.BorderColor := Black;
+      end;
+    end;
     GroupElements.InsertFront(LButton);
   end;
 begin
@@ -112,14 +125,14 @@ begin
     if (FPosition = 0) and (FPositions[I] = erRight) then
     begin
       Insert(WeaponToOperation[Weapon]);
-      FPosition := I;      
+      FPosition := I;
     end;
     if (FPosition = 0) and (FPositions[I] = erInPlace) then
     begin
       GroupElements.Controls[GroupElements.ControlsCount-1].Exists := False;
       Insert(WeaponToOperation[Weapon]);
       FPosition := I;
-    end;    
+    end;
   end;
 end;
 
@@ -150,7 +163,7 @@ begin
   begin
     LButton := GroupElements.Controls[I] as TCastleButton;
     if LButton.Exists then
-      Result := Result + IIF(LButton.Tag > 0, WeaponToOperation[NHeroWeapon(LButton.Tag)], LButton.Caption);
+      Result := Result + IIF(LButton.Tag > 0, WeaponToOperation[TMap.Map.Hero.Weapon], LButton.Caption);
   end;
 end;
 
@@ -227,7 +240,6 @@ function TViewFormula.Press(const Event: TInputPressRelease): Boolean;
 var
   I, LNewPosition: Integer;
   LFound: Boolean;
-  LControl: TCastleUserInterface;
 begin
   Result := inherited;
   //if Result then Exit; // allow the ancestor to handle keys
@@ -261,18 +273,23 @@ begin
         end;
       end;
     if LFound then
-    begin
-      LControl := GroupElements.Controls[FPosition] as TCastleButton;
-      GroupElements.RemoveControl(LControl);
-      if FPositions[FPosition] = erInPlace then
-        GroupElements.Controls[FPosition - 1].Exists := True;
-      GroupElements.InsertControl(LNewPosition, LControl);
-      if FPositions[LNewPosition] = erInPlace then
-        GroupElements.Controls[LNewPosition - 1].Exists := False;
-      FPosition := LNewPosition;
-    end;
+      SetPosition(LNewPosition);
     Exit(true); // key was handled
   end;
+end;
+
+procedure TViewFormula.SetPosition(AValue: Integer);
+var
+  LControl: TCastleButton;
+begin
+  LControl := GroupElements.Controls[FPosition] as TCastleButton;
+  GroupElements.RemoveControl(LControl);
+  if FPositions[FPosition] = erInPlace then
+    GroupElements.Controls[FPosition - 1].Exists := True;
+  GroupElements.InsertControl(AValue, LControl);
+  if FPositions[AValue] = erInPlace then
+    GroupElements.Controls[AValue - 1].Exists := False;
+  FPosition := AValue;
 end;
 
 end.
