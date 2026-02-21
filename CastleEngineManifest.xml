@@ -27,6 +27,8 @@ See https://castle-engine.io/project_manifest for documentation of this file.
       <define>CASTLE_TILED_MAP_SUPPORT_DISABLE</define>
       <define>CASTLE_IFC_SUPPORT_DISABLE</define>
       <define>CASTLE_3DS_SUPPORT_DISABLE</define> 
+      <define>CASTLE_GLTF_SUPPORT_DISABLE</define> 
+      <define>CASTLE_SPRITESHEET_SUPPORT_DISABLE</define> 
     </defines>
   </compiler_options>
 </project>

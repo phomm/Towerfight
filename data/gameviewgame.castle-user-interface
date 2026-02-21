@@ -25,15 +25,14 @@
       "Name" : "ImageBackground"
     },
     {
+      "$$ClassName" : "TCastleHorizontalGroup",
+      "Alignment" : "vpBottom",
+      "Name" : "GroupTowers"
+    },
+    {
       "$$ClassName" : "TCastleViewport",
-      "BackgroundColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 2.5000000000000000E-001,
-        "Green" : 2.5000000000000000E-001,
-        "Red" : 2.5000000000000000E-001
-      },
       "Camera" : "Camera1",
-      "FullSize" : true,
+      "Height" : 3.0000000000000000E+002,
       "Items" : {
         "$$ClassName" : "TCastleRootTransform",
         "PhysicsProperties" : {
@@ -65,31 +64,61 @@
             "RotationPersistent" : {
               "$$ClassName" : "TCastleVector4RotationPersistent",
               "Z" : 1.0000000000000000E+000
-            },
-            "TranslationPersistent" : {
-              "$$ClassName" : "TCastleVector3Persistent",
-              "X" : 4.3388711547851562E+002,
-              "Y" : 4.4957220458984375E+002,
-              "Z" : 5.0000000000000000E+002
             }
+          },
+          {
+            "$$ClassName" : "TCastleScene",
+            "AutoAnimation" : "default",
+            "CastShadows" : false,
+            "Exists" : false,
+            "ExposeTransforms" : [
+            ],
+            "Name" : "BloodSplash0",
+            "ProcessEvents" : true,
+            "RenderOptions" : {
+              "$$ClassName" : "TCastleScene.TSceneRenderOptions"
+            },
+            "Url" : "castle-data:/resources/blood-splash-sprite0.castle-sprite-sheet"
+          },
+          {
+            "$$ClassName" : "TCastleScene",
+            "AutoAnimation" : "default",
+            "CastShadows" : false,
+            "Exists" : false,
+            "ExposeTransforms" : [
+            ],
+            "Name" : "BloodSplash1",
+            "ProcessEvents" : true,
+            "RenderOptions" : {
+              "$$ClassName" : "TCastleScene.TSceneRenderOptions"
+            },
+            "Url" : "castle-data:/resources/blood-splash-sprite1.castle-sprite-sheet"
+          },
+          {
+            "$$ClassName" : "TCastleScene",
+            "AutoAnimation" : "default",
+            "CastShadows" : false,
+            "Exists" : false,
+            "ExposeTransforms" : [
+            ],
+            "Name" : "BloodSplash2",
+            "ProcessEvents" : true,
+            "RenderOptions" : {
+              "$$ClassName" : "TCastleScene.TSceneRenderOptions"
+            },
+            "Url" : "castle-data:/resources/blood-splash-sprite2.castle-sprite-sheet"
           }
         ]
       },
       "Name" : "Viewport1",
       "Transparent" : true,
-      "$Children" : [
-        {
-          "$$ClassName" : "TCastleHorizontalGroup",
-          "Alignment" : "vpBottom",
-          "Name" : "GroupTowers"
-        }
-      ],
+      "Width" : 3.0000000000000000E+002,
       "InternalDesignCamera" : {
         "$$ClassName" : "TCastleCamera",
         "Name" : "",
         "Orthographic" : {
           "$$ClassName" : "TCastleOrthographic",
-          "Height" : 2.3050434570312500E+003,
+          "Height" : 4.2109347534179688E+002,
           "OriginPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
             "X" : 5.0000000000000000E-001,
@@ -252,7 +281,7 @@
                   "Name" : "Group2",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 1.4600000000000000E+002
+                    "X" : 1.4600001525878906E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -298,7 +327,7 @@
                   "Name" : "Group3",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 2.9871997070312500E+002
+                    "X" : 2.9872003173828125E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -344,7 +373,7 @@
                   "Name" : "Group4",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 4.7043997192382812E+002
+                    "X" : 4.7044000244140625E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",

@@ -9,6 +9,7 @@ uses
 Classes,
 // Castle
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, 
+  CastleScene, CastleScenecore, castleviewport, x3dnodes,
 // Own
   gameentities, roomcomponent;
 
@@ -20,6 +21,8 @@ type
     ButtonDefeat, WeaponPlus, WeaponMinus, WeaponNo, WeaponMultiply: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
+    BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
+    Viewport1: TCastleViewport;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -39,6 +42,9 @@ type
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
+    procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
+    procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
+    function RandomBloodSplash(): TCastleScene;
   end;
 
 var
@@ -264,12 +270,19 @@ end;
 procedure TViewGame.RoomFight(ARoom: TRoomComponent);
 var
   LActor: TActor;
+LScene: TCastleScene;
+  LRoom: TRoom;
 begin
-  LActor := Map.GetRoomByIndex(ARoom.Tag).Actors[0];
+  LRoom := Map.GetRoomByIndex(ARoom.Tag);
+  LActor := LRoom.Actors[0];
   LActor.Reveal();
   ARoom.LabelRight.Caption := LActor.Visual;
   if Map.HeroRoom.Fight() then
-    ARoom.ImageRight.Url := TMap.BloodAsset
+  begin
+    ARoom.ImageRight.Url := TMap.BloodAsset;
+    LScene := RandomBloodSplash();
+    RunAnimation(LScene, ARoom);
+  end
   else
     ARoom.ImageLeft.Url := Map.Hero.AssetId; 
 
@@ -281,9 +294,12 @@ begin
     Container.View := ViewDefeat
   end
   else
+begin
+    if LRoom.Actors.Count = 0 then
   begin
     ARoom.ImageRight.Url := '';
     ARoom.LabelRight.Caption := '';
+end;
     ARoom.LabelLeft.Caption := Map.Hero.Visual;
 
     WeaponNo.DoClick();
@@ -295,6 +311,37 @@ begin
     end;
   end;
   FSkip := False;  
+end;
+
+function TViewGame.RandomBloodSplash(): TCastleScene;
+begin
+  case Random(3) of
+    0: Result := BloodSplash0;
+    1: Result := BloodSplash1;
+    2: Result := BloodSplash2;
+  end;
+end;  
+
+procedure TViewGame.RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
+var
+  LAnimationParams: TPlayAnimationParameters;
+begin
+  Viewport1.Translation := ARoom.LocalToContainerPosition(Vector2(-ARoom.Width / 2, -ARoom.Height), False);
+  AScene.Exists := True;
+  LAnimationParams := TPlayAnimationParameters.Create();
+  try
+    LAnimationParams.Name := 'default';
+    LAnimationParams.StopNotification := AnimationStopped;
+    AScene.StopAnimation(True);
+    AScene.PlayAnimation(LAnimationParams);
+  finally 
+    FreeAndNil(LAnimationParams);
+  end;
+end;
+
+procedure TViewGame.AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
+begin
+  AScene.Exists := False;
 end;
 
 end.

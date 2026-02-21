@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas width="2048" height="2048" imagePath="blood-splash-sprite0.png">
+  <SubTexture x="0" y="1536" fps="8" name="default_1" width="512" height="512"/>
+  <SubTexture x="512" y="1536" name="default_2" width="512" height="512"/>
+  <SubTexture x="1024" y="1536" name="default_3" width="512" height="512"/>
+  <SubTexture x="1536" y="1536" name="default_4" width="512" height="512"/>
+  <SubTexture x="0" y="1024" name="default_5" width="512" height="512"/>
+  <SubTexture x="512" y="1024" name="default_6" width="512" height="512"/>
+  <SubTexture x="1024" y="1024" name="default_7" width="512" height="512"/>
+  <SubTexture x="1536" y="1024" name="default_8" width="512" height="512"/>
+  <SubTexture x="0" y="512" name="default_9" width="512" height="512"/>
+  <SubTexture x="512" y="512" name="default_10" width="512" height="512"/>
+  <SubTexture x="1024" y="512" name="default_11" width="512" height="512"/>
+  <SubTexture x="1536" y="512" name="default_12" width="512" height="512"/>
+  <SubTexture x="0" y="0" name="default_13" width="512" height="512"/>
+  <SubTexture x="512" y="0" name="default_14" width="512" height="512"/>
+  <SubTexture x="1024" y="0" name="default_15" width="512" height="512"/>
+</TextureAtlas>
