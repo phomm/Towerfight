@@ -56,7 +56,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, CastleLog,
+  castlewindow, castlemessages, CastleLog, 
 // Own
   Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions, gameviewformula;
 
@@ -178,8 +178,12 @@ begin
 end;
 
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
+var
+  I: Integer;
 begin
   inherited;
+  for I := 0 to High(FWeapons) do
+    FWeapons[I].FontSize := 0;
 end;
 
 function TViewGame.Press(const Event: TInputPressRelease): Boolean;
@@ -270,8 +274,9 @@ end;
 procedure TViewGame.RoomFight(ARoom: TRoomComponent);
 var
   LActor: TActor;
-LScene: TCastleScene;
+  LScene: TCastleScene;
   LRoom: TRoom;
+  LWeapon: NHeroWeapon;
 begin
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
@@ -279,9 +284,13 @@ begin
   ARoom.LabelRight.Caption := LActor.Visual;
   if Map.HeroRoom.Fight() then
   begin
-    ARoom.ImageRight.Url := TMap.BloodAsset;
     LScene := RandomBloodSplash();
     RunAnimation(LScene, ARoom);
+    // loot
+    if LRoom.Actors.Count > 0 then
+      ARoom.ImageRight.Url := LRoom.Actors[0].AssetId
+    else
+      ARoom.ImageRight.Url := TMap.BloodAsset;
   end
   else
     ARoom.ImageLeft.Url := Map.Hero.AssetId; 
@@ -294,12 +303,11 @@ begin
     Container.View := ViewDefeat
   end
   else
-begin
-    if LRoom.Actors.Count = 0 then
   begin
+    LWeapon := LRoom.PickWeapon();
+    FWeapons[Ord(LWeapon)].FontSize := 70;
     ARoom.ImageRight.Url := '';
     ARoom.LabelRight.Caption := '';
-end;
     ARoom.LabelLeft.Caption := Map.Hero.Visual;
 
     WeaponNo.DoClick();

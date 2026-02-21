@@ -40,6 +40,7 @@ type
     property Weapon: NHeroWeapon read FWeapon write FWeapon;
     property Weapons[AIndex: NHeroWeapon]: Byte read GetWeapon;
     procedure UseWeapon();
+    procedure GiveWeapon(AWeapon: NHeroWeapon);
   end;
 
   TEnemy = class(TActor)
@@ -62,6 +63,15 @@ type
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
 
+  TWeaponLoot = class(TActor)
+  private
+    FWeapon: NHeroWeapon;
+  public
+    constructor Create(AOwner: TComponent; AWeapon: NHeroWeapon); reintroduce; overload;
+    property Weapon: NHeroWeapon read FWeapon;
+    function GetVisual(): string; override;
+  end;
+
   TRoom = class(TComponent)
   private
     FActors: TObjectList<TActor>;
@@ -71,6 +81,7 @@ type
     function Fight(): Boolean;
     property Actors: TObjectList<TActor> read FActors;
     function HasEnemy(): Boolean;
+    function PickWeapon(): NHeroWeapon;
   end;
 
   TTower = class(TComponent)
@@ -158,22 +169,47 @@ begin
 end;
 
 function TRoom.Fight(): Boolean;
+var
+  LLootPossible, LHeroArmed: Boolean;
+  LLootWeapon: Integer;
 begin
   if not HasEnemy() then
     Exit(True);
-  if TMap.Map.Hero.Level >= FActors[0].Level then
+  Result := TMap.Map.Hero.Level >= FActors[0].Level;
+  if Result then
   begin
     TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
+    LLootPossible := not (FActors[0] is TDragon);
     FActors.Delete(0);
-    Exit(True);
-  end;
-  TMap.Map.Hero.Die();
-  Result := False;
+    LHeroArmed := TMap.Map.Hero.Weapon <> hwNo;
+    // 25% chance to spawn random weapon loot if not armed, 50% to spawn same weapon if armed
+    if LLootPossible and (Random(100) < (25 + 25 * Ord(LHeroArmed))) then
+    begin    
+      LLootWeapon := IIF(LHeroArmed, Ord(TMap.Map.Hero.Weapon), Random(3) + 1);
+      FActors.Add(TWeaponLoot.Create(nil, NHeroWeapon(LLootWeapon)));
+    end;
+  end
+  else
+    TMap.Map.Hero.Die();
 end;
 
 function TRoom.HasEnemy(): Boolean;
 begin
-  Result := (FActors.Count > 0) and Assigned(FActors[0]);
+  Result := (FActors.Count > 0) and Assigned(FActors[0]) and (FActors[0] is TEnemy);
+end;
+
+function TRoom.PickWeapon(): NHeroWeapon;
+var
+  LWeapon: TWeaponLoot;
+begin
+  Result := hwNo;
+  if FActors.Count > 0 then
+  begin
+    LWeapon := FActors[0] as TWeaponLoot;
+    TMap.Map.Hero.GiveWeapon(LWeapon.Weapon);
+    Result := LWeapon.Weapon;
+    FActors.Delete(0);
+  end;
 end;
 
 constructor TTower.Create(AOwner: TComponent);
@@ -318,6 +354,18 @@ begin
     + Ord(ATower > 1) * (Random(Max(7, 2 * ATower + 2 * AStock - 11)) + 17);
 end;
 
+constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
+begin
+  inherited Create(AOwner);
+  FWeapon := AWeapon;
+  FAssetId := 'castle-data:/resources/' + WeaponFileNames[AWeapon];
+end;
+
+function TWeaponLoot.GetVisual(): string;
+begin
+  Result := '';
+end;
+
 procedure TEnemy.CreateFormula(ATower, AStock: Integer);
 var
   LOp: Integer;
@@ -394,10 +442,9 @@ begin
   LAntiDifficulty := Ord(High(NDifficulty)) - Ord(Difficulty());
   FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
   FAssetId := 'castle-data:/resources/good.bmp';
-  FWeapons[hwNo] := 0;
-  FWeapons[hwPlus] := 5 + Random(2 + LAntiDifficulty div 2);
-  FWeapons[hwMinus] := 5 + Random(2 + LAntiDifficulty div 2);
-  FWeapons[hwMultiply] := 5 + Random(2 + LAntiDifficulty div 2);
+  FWeapons[hwPlus] := 2 + Random(2 + LAntiDifficulty div 2);
+  FWeapons[hwMinus] := 1 + Random(2 + LAntiDifficulty div 2);
+  FWeapons[hwMultiply] := 1 + Random(2 + LAntiDifficulty div 2);
 end;
 
 procedure THero.Die();
@@ -415,6 +462,11 @@ end;
 procedure THero.UseWeapon();
 begin
   FWeapons[FWeapon] := Max(0, FWeapons[FWeapon] - 1);
+end;
+
+procedure THero.GiveWeapon(AWeapon: NHeroWeapon);
+begin
+  Inc(FWeapons[AWeapon]);
 end;
 
 end.
