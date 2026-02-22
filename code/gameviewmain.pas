@@ -54,7 +54,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, castlesoundengine, 
+  castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, audiocomponent
   ;
@@ -85,6 +85,8 @@ begin
   Buttons[2] := ButtonOptions;
   Buttons[3] := ButtonCredits;
   Buttons[4] := ButtonExit;
+  ButtonExit.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
+  SliderFullScreen.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
   for LButton in Buttons do
     LButton.OnMotion := ButtonMotion;
   

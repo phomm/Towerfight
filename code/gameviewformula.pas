@@ -163,7 +163,7 @@ begin
   begin
     LButton := GroupElements.Controls[I] as TCastleButton;
     if LButton.Exists then
-      Result := Result + IIF(LButton.Tag > 0, WeaponToOperation[TMap.Map.Hero.Weapon], LButton.Caption);
+      Result := Result + IIF(LButton.Caption = '', WeaponToOperation[TMap.Map.Hero.Weapon], LButton.Caption);
   end;
 end;
 
@@ -178,6 +178,7 @@ var
       hwPlus: Result := Result + LValue;
       hwMinus: Result := Result - LValue;
       hwMultiply: Result := Result * LValue;
+      hwNo: Result := LValue;
     end;
   end;
   function MultLen(): Integer;

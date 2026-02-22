@@ -8,14 +8,14 @@ uses Classes,
 type
   TViewCredits = class(TCastleView)
   published
-    { Components designed using CGE editor.
-      These fields will be automatically initialized at Start. }
-    // ButtonXxx: TCastleButton;
+    ButtonMenu: TCastleButton;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
+  private
+    procedure ButtonMenuClick(Sender: TObject);
   end;
 
 var
@@ -38,7 +38,7 @@ end;
 procedure TViewCredits.Start;
 begin
   inherited;
-  { Executed once when view starts. }
+  ButtonMenu.OnClick := @ButtonMenuClick;
 end;
 
 procedure TViewCredits.Update(const SecondsPassed: Single; var HandleInput: boolean);
@@ -58,6 +58,11 @@ begin
     Container.PopView();
     Exit(true); // key was handled
   end; 
+end;
+
+procedure TViewCredits.ButtonMenuClick(Sender: TObject);
+begin
+  Container.PopView();
 end;
 
 end.
