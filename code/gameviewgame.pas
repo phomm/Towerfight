@@ -23,6 +23,7 @@ type
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
     Viewport1: TCastleViewport;
+    ImageWeapon: TCastleImageControl;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -39,12 +40,16 @@ type
     FPreviousRoom: TRoomComponent;
     FWeapons: array[0..3] of TCastleButton;
     FSkip: Boolean;
+    FPosFrom, FPosTo: TVector2;
+    FTicks: Integer;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
     procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     function RandomBloodSplash(): TCastleScene;
+  private const
+    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
   end;
 
 var
@@ -182,8 +187,16 @@ var
   I: Integer;
 begin
   inherited;
-  for I := 0 to High(FWeapons) do
-    FWeapons[I].FontSize := 0;
+  if FTicks > 0 then
+  begin
+    Dec(FTicks);
+    ImageWeapon.Translation := TVector2.Lerp(1 - FTicks / TicksToFlyWeapon, FPosFrom, FPosTo);
+    if FTicks = 0 then
+    begin
+      ImageWeapon.Url := '';
+      WeaponNo.DoClick();
+    end;  
+  end;
 end;
 
 function TViewGame.Press(const Event: TInputPressRelease): Boolean;
@@ -305,12 +318,21 @@ begin
   else
   begin
     LWeapon := LRoom.PickWeapon();
-    FWeapons[Ord(LWeapon)].FontSize := 70;
+    if LWeapon <> hwNo then
+    begin  
+      ImageWeapon.Translation := ARoom.LocalToContainerPosition(Vector2(ARoom.Width / 2, ARoom.Height), False);
+      ImageWeapon.Url := ARoom.ImageRight.Url;
+      FTicks := TicksToFlyWeapon;
+      FPosFrom := ImageWeapon.Translation;
+      with FWeapons[Ord(LWeapon)] do
+        FPosTo := LocalToContainerPosition(Vector2(Width / 2, Height / 2), False);
+    end;
     ARoom.ImageRight.Url := '';
     ARoom.LabelRight.Caption := '';
     ARoom.LabelLeft.Caption := Map.Hero.Visual;
 
-    WeaponNo.DoClick();
+    if LWeapon = hwNo then
+      WeaponNo.DoClick();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin

@@ -281,7 +281,7 @@
                   "Name" : "Group2",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 1.4600001525878906E+002
+                    "X" : 1.4600000000000000E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -327,7 +327,7 @@
                   "Name" : "Group3",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 2.9872003173828125E+002
+                    "X" : 2.9871997070312500E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -373,7 +373,7 @@
                   "Name" : "Group4",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 4.7044000244140625E+002
+                    "X" : 4.7043997192382812E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -418,6 +418,16 @@
           ]
         }
       ]
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "Height" : 6.4000000000000000E+001,
+      "Name" : "ImageWeapon",
+      "Stretch" : true,
+      "Width" : 6.4000000000000000E+001
     }
   ]
 }

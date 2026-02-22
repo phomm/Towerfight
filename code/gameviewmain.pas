@@ -26,6 +26,7 @@ type
     GroupOptions: TCastleUserInterface;
     SliderMusic, SliderFullscreen: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
+    ImageRoomRoof3: TCastleImageControl;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -86,6 +87,7 @@ begin
   Buttons[3] := ButtonCredits;
   Buttons[4] := ButtonExit;
   ButtonExit.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
+  ImageRoomRoof3.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
   SliderFullScreen.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
   for LButton in Buttons do
     LButton.OnMotion := ButtonMotion;

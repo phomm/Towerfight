@@ -399,22 +399,19 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "Url" : "castle-data:/resources/cell-old.png"
           },
           "CustomBackgroundPressed" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
           "Image" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/good.bmp"
+            "$$ClassName" : "TCastleImagePersistent"
           },
-          "ImageScale" : 0.0000000000000000E+000,
           "Name" : "ButtonDifficulty",
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
