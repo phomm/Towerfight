@@ -30,6 +30,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
+    procedure Resume; override;
     procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure WindowCloseQuery(Container: TCastleContainer);
@@ -76,7 +77,6 @@ procedure TViewMain.Start();
 var  
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
-  LMusicLevel: Integer;
   LCurrentDifficultyName: string;
 begin
   inherited;
@@ -98,13 +98,7 @@ begin
   ButtonOptions.OnClick := ButtonOptionsClick;
   ButtonCredits.OnClick := ButtonCreditsClick;
 
-  LMusicLevel := MusicLevel();
-  if not Assigned(SoundEngine.LoopingChannel[0].Sound) then 
-  begin
-    SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
-  end;  
-  SoundEngine.LoopingChannel[0].Sound.Volume := LMusicLevel / 100;
-  SliderMusic.Value := LMusicLevel;
+  SliderMusic.Value := MusicLevel();
   SliderMusic.OnChange := SliderMusicChange;
 
   SliderFullscreen.Value := Ord(Fullscreen());
@@ -119,6 +113,17 @@ begin
     LButton.Tag := Ord(LDifficulty);
     LButton.OnClick := ButtonDifficultyClick;
     GroupOptions.InsertFront(LButton);
+  end;
+end;
+
+procedure TViewMain.Resume;
+begin
+  inherited;
+  if not Assigned(SoundEngine.LoopingChannel[0].Sound) or 
+    not (SoundEngine.LoopingChannel[0].Sound.Name.Contains('Menu'))  then 
+  begin
+    SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
+    SoundEngine.LoopingChannel[0].Sound.Volume := MusicLevel() / 100;
   end;
 end;
 

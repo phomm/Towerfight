@@ -26,6 +26,42 @@
   "Width" : 2.4000000000000000E+002,
   "$Children" : [
     {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "Height" : 6.4000000000000000E+001,
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
+      "Name" : "ImageRight",
+      "Stretch" : true,
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "X" : -3.0000000000000000E+001,
+        "Y" : -5.0000000000000000E+000
+      },
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop",
+      "Width" : 6.4000000000000000E+001
+    },
+    {
+      "$$ClassName" : "TCastleLabel",
+      "Alignment" : "hpMiddle",
+      "AutoSize" : false,
+      "FontSize" : 3.5000000000000000E+001,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "LabelRight",
+      "Text" : [
+        "R"
+      ],
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "Y" : 5.0000000000000000E+000
+      },
+      "WidthFraction" : 1.0000000000000000E+000
+    },
+    {
       "$$ClassName" : "TCastleHorizontalGroup",
       "HorizontalAnchorParent" : "hpRight",
       "HorizontalAnchorSelf" : "hpRight",
@@ -35,62 +71,30 @@
         "$$ClassName" : "TCastleVector2Persistent",
         "X" : -3.0000000000000000E+001
       },
-      "VerticalAnchorParent" : "vpMiddle",
-      "VerticalAnchorSelf" : "vpMiddle",
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop",
       "$Children" : [
-        {
-          "$$ClassName" : "TCastleImageControl",
-          "Content" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Height" : 6.4000000000000000E+001,
-          "HorizontalAnchorParent" : "hpRight",
-          "HorizontalAnchorSelf" : "hpRight",
-          "Name" : "ImageRight",
-          "Stretch" : true,
-          "VerticalAnchorParent" : "vpMiddle",
-          "VerticalAnchorSelf" : "vpMiddle",
-          "Width" : 6.4000000000000000E+001
-        },
         {
           "$$ClassName" : "TCastleUserInterface",
           "HorizontalAnchorParent" : "hpRight",
           "HorizontalAnchorSelf" : "hpRight",
           "Name" : "Group1",
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "X" : -6.4000000000000000E+001
-          },
           "VerticalAnchorParent" : "vpMiddle",
-          "VerticalAnchorSelf" : "vpMiddle",
-          "$Children" : [
-            {
-              "$$ClassName" : "TCastleLabel",
-              "Alignment" : "hpMiddle",
-              "HorizontalAnchorParent" : "hpRight",
-              "HorizontalAnchorSelf" : "hpRight",
-              "Name" : "LabelRight",
-              "Text" : [
-                "R"
-              ],
-              "TranslationPersistent" : {
-                "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : 1.0000000000000000E+001
-              }
-            }
-          ]
+          "VerticalAnchorSelf" : "vpMiddle"
         }
       ]
     },
     {
       "$$ClassName" : "TCastleHorizontalGroup",
+      "AutoSizeHeight" : false,
+      "Height" : 7.0000000000000000E+001,
       "Name" : "GroupHero",
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
         "X" : 3.0000000000000000E+001
       },
-      "VerticalAnchorParent" : "vpMiddle",
-      "VerticalAnchorSelf" : "vpMiddle",
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop",
       "$Children" : [
         {
           "$$ClassName" : "TCastleImageControl",
@@ -118,7 +122,7 @@
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
                 "X" : 1.0000000000000000E+001,
-                "Y" : -1.0000000000000000E+001
+                "Y" : -3.0000000000000000E+001
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"

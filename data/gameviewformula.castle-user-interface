@@ -55,6 +55,7 @@
           "HorizontalAnchorParent" : "hpMiddle",
           "HorizontalAnchorSelf" : "hpMiddle",
           "Name" : "GroupElements",
+          "Spacing" : 4.0000000000000000E+000,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
             "Y" : 2.0000000000000000E+001

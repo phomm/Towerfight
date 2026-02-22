@@ -8,6 +8,13 @@
       "Stream" : true,
       "Url" : "castle-data:/music/Japanese%20Music%20Pack/Shamisen%20Samurai%20Rock_Loop.ogg",
       "Volume" : 1.0000000149011612E-001
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "WinTheme0",
+      "Stream" : true,
+      "Url" : "castle-data:/music/Japanese%20Music%20Pack/Dream%20Sakura_Loop.ogg",
+      "Volume" : 1.0000000149011612E-001
     }
   ]
 }
