@@ -6,22 +6,19 @@
       "$$ClassName" : "TCastleSound",
       "Name" : "MenuTheme0",
       "Stream" : true,
-      "Url" : "castle-data:/music/Japanese%20Music%20Pack/Shamisen%20Samurai%20Rock_Loop.ogg",
-      "Volume" : 1.0000000149011612E-001
+      "Url" : "castle-data:/music/Japanese%20Music%20Pack/Shamisen%20Samurai%20Rock_Loop.ogg"
     },
     {
       "$$ClassName" : "TCastleSound",
       "Name" : "WinTheme0",
       "Stream" : true,
-      "Url" : "castle-data:/music/Japanese%20Music%20Pack/Dream%20Sakura_Loop.ogg",
-      "Volume" : 1.0000000149011612E-001
+      "Url" : "castle-data:/music/Japanese%20Music%20Pack/Dream%20Sakura_Loop.ogg"
     },
     {
       "$$ClassName" : "TCastleSound",
       "Name" : "LoseTheme0",
       "Stream" : true,
-      "Url" : "castle-data:/music/Haunted%20Lullabies%20of%20Japan%20Vol.1/HauntedLullabiesofJapan_Sakura2.ogg",
-      "Volume" : 1.0000000149011612E-001
+      "Url" : "castle-data:/music/Haunted%20Lullabies%20of%20Japan%20Vol.1/HauntedLullabiesofJapan_Sakura2.ogg"
     }
   ]
 }

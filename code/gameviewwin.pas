@@ -27,7 +27,7 @@ uses
 // Castle
   CastleSoundEngine,
 // Own
-  gameviewmain, audiocomponent;
+  gameviewmain, audiocomponent, gameoptions;
 
 constructor TViewWin.Create(AOwner: TComponent);
 begin
@@ -40,6 +40,7 @@ begin
   inherited;
   ButtonMenu.OnClick := @ButtonMenuClick;
   SoundEngine.LoopingChannel[0].Sound := Audio.RandomWinTheme;
+  SoundEngine.LoopingChannel[0].Sound.Volume := 5 * MusicLevel() / 100;
 end;
 
 procedure TViewWin.ButtonMenuClick(Sender: TObject);
