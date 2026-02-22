@@ -21,11 +21,13 @@ type
     MenuThemes: TArray<TCastleSound>;
     BattleThemes: TArray<TCastleSound>;
     WinThemes: TArray<TCastleSound>;
+    LoseThemes: TArray<TCastleSound>;
   public
     constructor Create(AOwner: TComponent); override;
     function RandomMenuTheme(): TCastleSound;
     function RandomWinTheme(): TCastleSound;
     function RandomBattleTheme(): TCastleSound;
+    function RandomLoseTheme(): TCastleSound;
     procedure PlaySoundByName(const AName: string);
   end;
 
@@ -72,6 +74,7 @@ begin
   FetchSounds(MenuThemes, 'MenuTheme');
   FetchSounds(BattleThemes, 'BattleTheme');
   FetchSounds(WinThemes, 'WinTheme');
+  FetchSounds(LoseThemes, 'LoseTheme');
 end;
 
 function TAudioComponent.RandomMenuTheme(): TCastleSound;
@@ -87,6 +90,11 @@ end;
 function TAudioComponent.RandomWinTheme(): TCastleSound;
 begin
   Result := WinThemes[Random(Length(WinThemes))];
+end;
+
+function TAudioComponent.RandomLoseTheme(): TCastleSound;
+begin
+  Result := LoseThemes[Random(Length(LoseThemes))];
 end;
 
 procedure TAudioComponent.PlaySoundByName(const AName: string);

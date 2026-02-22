@@ -24,8 +24,10 @@ var
 implementation
 
 uses
+// Castle
+  CastleSoundEngine,
 // Own
-  gameviewmain;
+  gameviewmain, audiocomponent;
 
 constructor TViewDefeat.Create(AOwner: TComponent);
 begin
@@ -37,6 +39,7 @@ procedure TViewDefeat.Start;
 begin
   inherited;
   ButtonMenu.OnClick := @ButtonMenuClick;
+  SoundEngine.LoopingChannel[0].Sound := Audio.RandomLoseTheme;
 end;
 
 procedure TViewDefeat.ButtonMenuClick(Sender: TObject);
