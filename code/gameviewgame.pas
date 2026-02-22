@@ -69,6 +69,7 @@ procedure CastleSleep(AMilliseconds: Integer);
 var
   I: Integer;
 begin
+  exit;
   for I := 0 to AMilliseconds div 50 do
   begin
     Sleep(50); // milliseconds);

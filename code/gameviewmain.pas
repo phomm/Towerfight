@@ -56,7 +56,7 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties,
+  castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties, castlelog,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, audiocomponent
   ;
@@ -120,7 +120,7 @@ procedure TViewMain.Resume;
 begin
   inherited;
   if not Assigned(SoundEngine.LoopingChannel[0].Sound) or 
-    not (SoundEngine.LoopingChannel[0].Sound.Name.Contains('Menu'))  then 
+    (Pos('Menu', SoundEngine.LoopingChannel[0].Sound.Name) <= 0) then 
   begin
     SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
     SoundEngine.LoopingChannel[0].Sound.Volume := MusicLevel() / 100;
