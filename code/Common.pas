@@ -148,6 +148,7 @@ begin
   sl := TStringList.Create();
   try
     sl.Delimiter := ADelim;
+    sl.StrictDelimiter := True;
     sl.DelimitedText := AStr;
     SetLength(Result, sl.Count);
     Result := sl.ToStringArray;

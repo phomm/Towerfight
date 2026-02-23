@@ -45,6 +45,7 @@ type
     procedure ButtonDifficultyClick(Sender: TObject);
     procedure SliderMusicChange(Sender: TObject);
     procedure SliderFullscreenChange(Sender: TObject);
+    procedure WindowCloseConfirmed(Sender: TObject);
   end;
 
 var
@@ -58,7 +59,8 @@ uses
 // Castle  
   castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties, castlelog,
 // Own
-  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, audiocomponent
+  Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, 
+  audiocomponent, gameviewdialog
   ;
 
 constructor TViewMain.Create(AOwner: TComponent);
@@ -69,8 +71,12 @@ end;
 
 procedure TViewMain.WindowCloseQuery(Container: TCastleContainer);
 begin
-  if MessageYesNo(Application.MainWindow, 'Do you really want to exit?') then
-    Application.MainWindow.Close();
+  DialogYesNo(Container, 'Do you really|want to exit?', WindowCloseConfirmed, nil);
+end;
+
+procedure TViewMain.WindowCloseConfirmed(Sender: TObject);
+begin
+  Application.MainWindow.Close();
 end;
 
 procedure TViewMain.Start();

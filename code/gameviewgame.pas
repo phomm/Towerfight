@@ -48,6 +48,7 @@ type
     procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     function RandomBloodSplash(): TCastleScene;
+    procedure DefeatQuestionYes(Sender: TObject);
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
   end;
@@ -63,13 +64,13 @@ uses
 // Castle  
   castlewindow, castlemessages, CastleLog, 
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions, gameviewformula;
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions, gameviewformula, gameviewdialog;
 
 procedure CastleSleep(AMilliseconds: Integer);
 var
   I: Integer;
 begin
-  exit;
+  Exit; // disabled, as fails on web, Sleep must be reworked with timers
   for I := 0 to AMilliseconds div 50 do
   begin
     Sleep(50); // milliseconds);
@@ -174,8 +175,12 @@ end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
 begin
-  if MessageYesNo(Application.MainWindow, 'Game will be lost. Give up?') then
-    Container.View := (ViewDefeat);
+  DialogYesNo(Container, 'Game will be lost| Give up?', DefeatQuestionYes, nil);
+end;
+
+procedure TViewGame.DefeatQuestionYes(Sender: TObject);
+begin
+  Container.View := ViewDefeat;
 end;
 
 function TViewGame.GetWeapon(AIndex: NHeroWeapon): TCastleButton;
