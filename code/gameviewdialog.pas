@@ -83,7 +83,7 @@ begin
   Result := inherited Press(Event);
   //if Result then Exit;
 
-  if Event.IsKey(keyEscape) then
+  if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
     No();
   if Event.IsKey(keyEnter) then
     Yes();

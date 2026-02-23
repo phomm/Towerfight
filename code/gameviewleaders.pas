@@ -53,7 +53,7 @@ begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
 
-  if Event.IsKey(keyEscape) then
+  if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
   begin
     Container.PopView();
     Exit(true); // key was handled

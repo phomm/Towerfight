@@ -50,7 +50,7 @@ type
     function RandomBloodSplash(): TCastleScene;
     procedure DefeatQuestionYes(Sender: TObject);
   private const
-    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
+    TicksToFlyWeapon = 20; // animation will last 0.3 seconds (20 ticks * 16 ms)
   end;
 
 var
@@ -226,7 +226,7 @@ begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
 
-  if Event.IsKey(keyEscape) then
+  if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
   begin
     ButtonDefeat.DoClick();
     Exit(True); // key was handled

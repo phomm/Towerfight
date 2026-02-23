@@ -59,7 +59,7 @@ begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
 
-  if Event.IsKey(keyEscape) or Event.IsKey(keyEnter) then
+  if Event.IsKey(keyEscape) or Event.IsKey(keyEnter) or Event.IsKey(keyBackSpace) then
   begin
     Container.View := ViewMain;
     Exit(true); // key was handled
