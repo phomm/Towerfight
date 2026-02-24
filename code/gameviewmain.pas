@@ -24,7 +24,7 @@ type
     LabelFps: TCastleLabel;
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions: TCastleUserInterface;
-    SliderMusic, SliderFullscreen: TCastleIntegerSlider;
+    SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
     ImageRoomRoof3: TCastleImageControl;
   public
@@ -45,6 +45,7 @@ type
     procedure ButtonDifficultyClick(Sender: TObject);
     procedure SliderMusicChange(Sender: TObject);
     procedure SliderFullscreenChange(Sender: TObject);
+    procedure SliderUseTimerChange(Sender: TObject);
     procedure WindowCloseConfirmed(Sender: TObject);
   end;
 
@@ -110,6 +111,9 @@ begin
   SliderFullscreen.Value := Ord(Fullscreen());
   SliderFullscreen.OnChange := SliderFullscreenChange;
 
+  SliderUseTimer.Value := Ord(UseTimer());
+  SliderUseTimer.OnChange := SliderUseTimerChange;
+
   LCurrentDifficultyName := DifficultyName(Difficulty());
   for LDifficulty in NDifficulty do
   begin
@@ -161,6 +165,14 @@ var
 begin
   LFullscreenValue := (Sender as TCastleIntegerSlider).Value;
   SetFullscreen(LFullscreenValue = 1);
+end;
+
+procedure TViewMain.SliderUseTimerChange(Sender: TObject);
+var
+  LUseTimerValue: Integer;
+begin
+  LUseTimerValue := (Sender as TCastleIntegerSlider).Value;
+  SetUseTimer(LUseTimerValue = 1);
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);

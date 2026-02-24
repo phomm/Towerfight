@@ -26,6 +26,9 @@ function DifficultyName(AValue: NDifficulty): string;
 function Fullscreen(): Boolean;
 procedure SetFullscreen(AValue: Boolean);
 
+function UseTimer(): Boolean;
+procedure SetUseTimer(AValue: Boolean);
+
 implementation
 
 uses 
@@ -46,6 +49,8 @@ const
   MusicLevelDefault = 20;
   FullscreenKey = 'Fullscreen';
   FullscreenDefault = False;
+  UseTimerKey = 'UseTimer';
+  UseTimerDefault = False;
 
 function Difficulty(): NDifficulty;
 begin
@@ -85,6 +90,16 @@ procedure SetFullscreen(AValue: Boolean);
 begin
   UserConfig.SetValue(FullscreenKey, AValue);
   Application.MainWindow.FullScreen := AValue;
+end;
+
+function UseTimer(): Boolean;
+begin
+  Result := UserConfig.GetValue(UseTimerKey, UseTimerDefault);
+end;
+
+procedure SetUseTimer(AValue: Boolean);
+begin
+  UserConfig.SetValue(UseTimerKey, AValue);
 end;
 
 initialization

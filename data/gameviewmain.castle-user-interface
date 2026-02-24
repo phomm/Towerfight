@@ -348,8 +348,8 @@
       "Spacing" : 4.0000000000000000E+000,
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
-        "X" : 3.1000000000000000E+002,
-        "Y" : -1.8000000000000000E+002
+        "X" : 3.5000000000000000E+002,
+        "Y" : -1.6000000000000000E+002
       },
       "VerticalAnchorParent" : "vpMiddle",
       "VerticalAnchorSelf" : "vpMiddle",
@@ -375,6 +375,26 @@
           "Background" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
+          "Caption" : "GameTimer",
+          "Height" : 5.0000000000000000E+001,
+          "Max" : 1,
+          "Name" : "SliderUseTimer",
+          "Thumb" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -5.4000000000000000E+001
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop",
+          "Width" : 3.0000000000000000E+002
+        },
+        {
+          "$$ClassName" : "TCastleIntegerSlider",
+          "Background" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
           "Caption" : "Music",
           "Height" : 5.0000000000000000E+001,
           "Max" : 100,
@@ -384,7 +404,7 @@
           },
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -5.4000000000000000E+001
+            "Y" : -1.0800000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -409,6 +429,7 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "FontSize" : 5.0000000000000000E+001,
+          "Height" : 8.0000000000000000E+001,
           "Image" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
@@ -416,7 +437,7 @@
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.0800000000000000E+002
+            "Y" : -1.6200000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
