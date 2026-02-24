@@ -11,7 +11,7 @@ uses
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, 
   CastleScene, CastleScenecore, castleviewport, x3dnodes,
 // Own
-  gameentities, roomcomponent;
+  gameentities, roomcomponent, gameoptions;
 
 type
   TViewGame = class(TCastleView)
@@ -24,14 +24,18 @@ type
     BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
     Viewport1: TCastleViewport;
     ImageWeapon: TCastleImageControl;
+    LabelTime: TCastleLabel;
+    TimerPreEnd, TimerBlood, TimerGame: TCastleTimer;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
     function GetWeapon(AIndex: NHeroWeapon): TCastleButton;
   public
     constructor Create(AOwner: TComponent); override;
-    procedure Start; override;
-    procedure Stop; override;
+    procedure Start(); override;
+    procedure Stop(); override;
+    procedure Pause(); override;
+    procedure Resume(); override;
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure RoomFight(ARoom: TRoomComponent);
@@ -39,9 +43,11 @@ type
   private
     FPreviousRoom: TRoomComponent;
     FWeapons: array[0..3] of TCastleButton;
-    FSkip: Boolean;
+    FSkip, FPause: Boolean;
     FPosFrom, FPosTo: TVector2;
-    FTicks: Integer;
+    FAnimateWeaponTicks, FGameTicks: Integer;
+    FViewEnd: TCastleView;
+    FRoomFight: TRoomComponent;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
@@ -49,8 +55,13 @@ type
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     function RandomBloodSplash(): TCastleScene;
     procedure DefeatQuestionYes(Sender: TObject);
+    procedure TimerPreEndTick(ASender: TObject);
+    procedure TimerBloodTick(ASender: TObject);
+    procedure TimerGameTick(ASender: TObject);
+    procedure VisualizeTime();
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
+    GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
   end;
 
 var
@@ -62,26 +73,26 @@ uses
 // System
   SysUtils, 
 // Castle  
-  castlewindow, castlemessages, CastleLog, 
+  CastleLog, 
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameoptions, gameviewformula, gameviewdialog;
-
-procedure CastleSleep(AMilliseconds: Integer);
-var
-  I: Integer;
-begin
-  Exit; // disabled, as fails on web, Sleep must be reworked with timers
-  for I := 0 to AMilliseconds div 50 do
-  begin
-    Sleep(50); // milliseconds);
-    Application.ProcessAllMessages();
-  end;
-end;  
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog;
 
 constructor TViewGame.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewgame.castle-user-interface';
+end;
+
+procedure TViewGame.Pause();
+begin
+  inherited;
+  FPause := True;
+end;
+
+procedure TViewGame.Resume();
+begin
+  inherited;
+  FPause := False;
 end;
 
 procedure TViewGame.Start();
@@ -102,8 +113,18 @@ begin
   FWeapons[2] := WeaponMinus;
   FWeapons[3] := WeaponMultiply;
   WeaponNo.Doclick(); 
-  GroupTowers.ClearControls();
-  
+  TimerPreEnd.Exists := False;
+  TimerBlood.Exists := False;
+  TimerPreEnd.OnTimer := TimerPreEndTick;
+  TimerBlood.OnTimer := TimerBloodTick;
+  TimerGame.OnTimer := TimerGameTick;
+  TimerGame.IntervalSeconds := 1;
+  TimerGame.Exists := UseTimer();
+  FPause := True;
+  FGameTicks := GameSeconds[Difficulty()];
+  VisualizeTime();
+
+  GroupTowers.ClearControls();  
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
@@ -193,11 +214,11 @@ var
   I: Integer;
 begin
   inherited;
-  if FTicks > 0 then
+  if FAnimateWeaponTicks > 0 then
   begin
-    Dec(FTicks);
-    ImageWeapon.Translation := TVector2.Lerp(1 - FTicks / TicksToFlyWeapon, FPosFrom, FPosTo);
-    if FTicks = 0 then
+    Dec(FAnimateWeaponTicks);
+    ImageWeapon.Translation := TVector2.Lerp(1 - FAnimateWeaponTicks / TicksToFlyWeapon, FPosFrom, FPosTo);
+    if FAnimateWeaponTicks = 0 then
     begin
       ImageWeapon.Url := '';
       WeaponNo.DoClick();
@@ -274,7 +295,9 @@ var
   LRoom: TRoomComponent;
 begin
   if FSkip then Exit;
-  
+  if FPause and UseTimer() then
+    FPause := False;
+
   LRoom := (Sender as TCastleButton).Parent as TRoomComponent;
   if not Map.SetHeroRoom(LRoom.Tag) then
     Exit;
@@ -307,7 +330,6 @@ var
   LActor: TActor;
   LScene: TCastleScene;
   LRoom: TRoom;
-  LWeapon: NHeroWeapon;
 begin
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
@@ -327,38 +349,8 @@ begin
     ARoom.ImageLeft.Url := Map.Hero.AssetId; 
 
   FSkip := True;
-  CastleSleep(500);
-  if Map.Hero.Dead then
-  begin
-    CastleSleep(500);
-    Container.View := ViewDefeat
-  end
-  else
-  begin
-    LWeapon := LRoom.PickWeapon();
-    if LWeapon <> hwNo then
-    begin  
-      ImageWeapon.Translation := ARoom.LocalToContainerPosition(Vector2(ARoom.Width / 2, ARoom.Height), False);
-      ImageWeapon.Url := ARoom.ImageRight.Url;
-      FTicks := TicksToFlyWeapon;
-      FPosFrom := ImageWeapon.Translation;
-      with FWeapons[Ord(LWeapon)] do
-        FPosTo := LocalToContainerPosition(Vector2(Width / 2, Height / 2), False);
-    end;
-    ARoom.ImageRight.Url := '';
-    ARoom.LabelRight.Caption := '';
-    ARoom.LabelLeft.Caption := Map.Hero.Visual;
-
-    if LWeapon = hwNo then
-      WeaponNo.DoClick();
-    //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
-    if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
-    begin
-      CastleSleep(500);
-      Container.View := ViewWin;
-    end;
-  end;
-  FSkip := False;  
+  TimerBlood.Exists := True;
+  FRoomFight := ARoom;   
 end;
 
 function TViewGame.RandomBloodSplash(): TCastleScene;
@@ -390,6 +382,71 @@ end;
 procedure TViewGame.AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
 begin
   AScene.Exists := False;
+end;
+
+procedure TViewGame.TimerBloodTick(ASender: TObject);
+var
+  LWeapon: NHeroWeapon;
+begin
+  TimerBlood.Exists := False;
+
+  if Map.Hero.Dead then
+  begin
+    TimerPreEnd.Exists := True;
+    FViewEnd := ViewDefeat;
+  end
+  else
+  begin
+    LWeapon := Map.GetRoomByIndex(FRoomFight.Tag).PickWeapon();
+    if LWeapon <> hwNo then
+    begin  
+      ImageWeapon.Translation := FRoomFight.LocalToContainerPosition(Vector2(FRoomFight.Width / 2, FRoomFight.Height), False);
+      ImageWeapon.Url := FRoomFight.ImageRight.Url;
+      FAnimateWeaponTicks := TicksToFlyWeapon;
+      FPosFrom := ImageWeapon.Translation;
+      with FWeapons[Ord(LWeapon)] do
+        FPosTo := LocalToContainerPosition(Vector2(Width / 2, Height / 2), False);
+    end;
+    FRoomFight.ImageRight.Url := '';
+    FRoomFight.LabelRight.Caption := '';
+    FRoomFight.LabelLeft.Caption := Map.Hero.Visual;
+
+    if LWeapon = hwNo then
+      WeaponNo.DoClick();
+    //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
+    if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
+    begin
+      TimerPreEnd.Exists := True;
+      FViewEnd := ViewWin;      
+    end;
+  end;
+  FSkip := False; 
+end;
+
+procedure TViewGame.TimerPreEndTick(ASender: TObject);
+begin
+  TimerPreEnd.Exists := False;
+  Container.View := FViewEnd;
+end;
+
+procedure TViewGame.TimerGameTick(ASender: TObject);
+begin
+  if FPause then Exit;
+  Dec(FGameTicks);
+  VisualizeTime();
+  if FGameTicks <= 0 then
+  begin
+    TimerGame.Exists := False;
+    Container.View := ViewDefeat;
+  end; 
+end;
+
+procedure TViewGame.VisualizeTime();
+begin
+  if UseTimer() then
+    LabelTime.Caption := Format('%.2d:%.2d', [FGameTicks div 60, FGameTicks mod 60])
+  else
+    LabelTime.Caption := '';
 end;
 
 end.

@@ -174,41 +174,68 @@
           "VerticalAnchorSelf" : "vpTop",
           "$Children" : [
             {
-              "$$ClassName" : "TCastleButton",
-              "Alignment" : "hpLeft",
-              "AutoSize" : false,
-              "Caption" : "SEPPUKU",
-              "CustomBackground" : true,
-              "CustomBackgroundDisabled" : {
-                "$$ClassName" : "TCastleImagePersistent"
-              },
-              "CustomBackgroundFocused" : {
-                "$$ClassName" : "TCastleImagePersistent"
-              },
-              "CustomBackgroundNormal" : {
-                "$$ClassName" : "TCastleImagePersistent",
-                "Url" : "castle-data:/resources/samurai-rock.png"
-              },
-              "CustomBackgroundPressed" : {
-                "$$ClassName" : "TCastleImagePersistent"
-              },
-              "CustomTextColorPersistent" : {
-                "$$ClassName" : "TCastleColorPersistent",
-                "Red" : 1.0000000000000000E+000
-              },
-              "CustomTextColorUse" : true,
-              "FontSize" : 7.0000000000000000E+001,
-              "Height" : 1.3000000000000000E+002,
-              "HorizontalAnchorParent" : "hpMiddle",
-              "HorizontalAnchorSelf" : "hpMiddle",
-              "Image" : {
-                "$$ClassName" : "TCastleImagePersistent"
-              },
-              "Name" : "ButtonDefeat",
-              "VerticalAlignment" : "vpTop",
-              "VerticalAnchorParent" : "vpMiddle",
-              "VerticalAnchorSelf" : "vpMiddle",
-              "Width" : 4.7000000000000000E+002
+              "$$ClassName" : "TCastleHorizontalGroup",
+              "Name" : "HorizontalGroup1",
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleButton",
+                  "Alignment" : "hpLeft",
+                  "AutoSize" : false,
+                  "Caption" : "SEPPUKU",
+                  "CustomBackground" : true,
+                  "CustomBackgroundDisabled" : {
+                    "$$ClassName" : "TCastleImagePersistent"
+                  },
+                  "CustomBackgroundFocused" : {
+                    "$$ClassName" : "TCastleImagePersistent"
+                  },
+                  "CustomBackgroundNormal" : {
+                    "$$ClassName" : "TCastleImagePersistent",
+                    "Url" : "castle-data:/resources/samurai-rock.png"
+                  },
+                  "CustomBackgroundPressed" : {
+                    "$$ClassName" : "TCastleImagePersistent"
+                  },
+                  "CustomTextColorPersistent" : {
+                    "$$ClassName" : "TCastleColorPersistent",
+                    "Red" : 1.0000000000000000E+000
+                  },
+                  "CustomTextColorUse" : true,
+                  "FontSize" : 7.0000000000000000E+001,
+                  "Height" : 1.2000000000000000E+002,
+                  "Image" : {
+                    "$$ClassName" : "TCastleImagePersistent"
+                  },
+                  "Name" : "ButtonDefeat",
+                  "VerticalAlignment" : "vpTop",
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "Width" : 4.4800000000000000E+002
+                },
+                {
+                  "$$ClassName" : "TCastleUserInterface",
+                  "Name" : "Group5",
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 4.4799996948242188E+002
+                  },
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "Width" : 1.8200000000000000E+002,
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleLabel",
+                      "FontSize" : 7.0000000000000000E+001,
+                      "Name" : "LabelTime",
+                      "Text" : [
+                        "00:00"
+                      ],
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                }
+              ]
             }
           ]
         },
@@ -222,7 +249,7 @@
           "Name" : "ImageWeaponsBack",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.4000000000000000E+002
+            "Y" : -1.3000000000000000E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -428,6 +455,21 @@
       "Name" : "ImageWeapon",
       "Stretch" : true,
       "Width" : 6.4000000000000000E+001
+    },
+    {
+      "$$ClassName" : "TCastleTimer",
+      "IntervalSeconds" : 5.0000000000000000E-001,
+      "Name" : "TimerPreEnd"
+    },
+    {
+      "$$ClassName" : "TCastleTimer",
+      "IntervalSeconds" : 5.0000000000000000E-001,
+      "Name" : "TimerBlood"
+    },
+    {
+      "$$ClassName" : "TCastleTimer",
+      "IntervalSeconds" : 1.0000000000000000E+000,
+      "Name" : "TimerGame"
     }
   ]
 }
