@@ -251,7 +251,7 @@ begin
     Exit(true); // key was handled
   end;
 
-  if Event.IsKey(keyTab) then
+  if Event.Key in [keyE, keyPeriod] then
   begin
     LFound := False;
     for I := FPosition + 1 to Length(FPositions) - 1 do

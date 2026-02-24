@@ -50,7 +50,7 @@ type
     function RandomBloodSplash(): TCastleScene;
     procedure DefeatQuestionYes(Sender: TObject);
   private const
-    TicksToFlyWeapon = 20; // animation will last 0.3 seconds (20 ticks * 16 ms)
+    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
   end;
 
 var
@@ -232,13 +232,25 @@ begin
     Exit(True); // key was handled
   end;
 
-  if Event.IsKey(keyTab) then
+  if Event.Key in [keyE, keyPeriod] then
   begin
     W := Ord(Map.Hero.Weapon);
     repeat
       W := (W + 1) mod Length(FWeapons);
     until FWeapons[W].Enabled;        
     FWeapons[W].DoClick();    
+    Exit(True); // key was handled
+  end;
+
+  if Event.Key in [key1, key2, key3, key4] then
+  begin
+    FWeapons[Ord(Event.Key) - Ord(key1)].DoClick();    
+    Exit(True); // key was handled
+  end;
+
+  if Event.Key in [keyNumpad1, keyNumpad2, keyNumpad3, keyNumpad4] then
+  begin
+    FWeapons[Ord(Event.Key) - Ord(keyNumpad1)].DoClick();    
     Exit(True); // key was handled
   end;
 
