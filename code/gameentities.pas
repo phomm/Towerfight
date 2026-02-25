@@ -386,13 +386,13 @@ begin
   
   if LOp = 0 then
   begin
-    a1 := Min(Random(FLevel * 2 div 3), FLevel div 2);
+    a1 := Max(Min(1, FLevel div 10), Min(Random(FLevel * 2 div 3), FLevel div 2));
     a2 := FLevel - a1;
     FFormula := Format('%d+%d', [a1, a2]);
   end
   else if LOp = 1 then
   begin
-    a1 := Random(FLevel div 2);
+    a1 := Max(1, Random(FLevel div 2));
     a2 := FLevel + a1;
     FFormula := Format('%d-%d', [a2, a1]);
   end
