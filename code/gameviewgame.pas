@@ -18,13 +18,12 @@ type
   published
     { Components designed using CGE editor.
       These fields will be automatically initialized at Start. }
-    ButtonDefeat, WeaponPlus, WeaponMinus, WeaponNo, WeaponMultiply: TCastleButton;
+    ButtonDefeat, ButtonGameTime, WeaponPlus, WeaponMinus, WeaponNo, WeaponMultiply: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
     Viewport1: TCastleViewport;
     ImageWeapon: TCastleImageControl;
-    LabelTime: TCastleLabel;
     TimerPreEnd, TimerBlood, TimerGame: TCastleTimer;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
@@ -84,15 +83,33 @@ begin
 end;
 
 procedure TViewGame.Pause();
+var
+  WeaponButton: TCastleButton;
 begin
   inherited;
   FPause := True;
+  for WeaponButton in FWeapons do
+  begin
+    WeaponButton.Enabled := False;
+    WeaponButton.Pressed := False;
+  end;
+  ButtonDefeat.Enabled := False;
+  ButtonGameTime.Enabled := False;
 end;
 
 procedure TViewGame.Resume();
+var
+  I: Integer;
 begin
   inherited;
   FPause := False;
+  for I := 0 to High(FWeapons) do
+  begin
+    FWeapons[i].Pressed := (i = Ord(Map.Hero.Weapon)) or (i = Ord(hwNo));
+    FWeapons[I].Enabled := Map.Hero.Weapons[NHeroWeapon(I)] > 0;
+  end;
+  ButtonDefeat.Enabled := True;
+  ButtonGameTime.Enabled := True;
 end;
 
 procedure TViewGame.Start();
@@ -444,9 +461,9 @@ end;
 procedure TViewGame.VisualizeTime();
 begin
   if UseTimer() then
-    LabelTime.Caption := Format('%.2d:%.2d', [FGameTicks div 60, FGameTicks mod 60])
+    ButtonGameTime.Caption := Format('%.2d:%.2d', [FGameTicks div 60, FGameTicks mod 60])
   else
-    LabelTime.Caption := '';
+    ButtonGameTime.Caption := '';
 end;
 
 end.

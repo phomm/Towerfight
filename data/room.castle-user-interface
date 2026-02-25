@@ -63,29 +63,6 @@
     },
     {
       "$$ClassName" : "TCastleHorizontalGroup",
-      "HorizontalAnchorParent" : "hpRight",
-      "HorizontalAnchorSelf" : "hpRight",
-      "LeftToRight" : false,
-      "Name" : "GroupEnemies",
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "X" : -3.0000000000000000E+001
-      },
-      "VerticalAnchorParent" : "vpTop",
-      "VerticalAnchorSelf" : "vpTop",
-      "$Children" : [
-        {
-          "$$ClassName" : "TCastleUserInterface",
-          "HorizontalAnchorParent" : "hpRight",
-          "HorizontalAnchorSelf" : "hpRight",
-          "Name" : "Group1",
-          "VerticalAnchorParent" : "vpMiddle",
-          "VerticalAnchorSelf" : "vpMiddle"
-        }
-      ]
-    },
-    {
-      "$$ClassName" : "TCastleHorizontalGroup",
       "AutoSizeHeight" : false,
       "Height" : 7.0000000000000000E+001,
       "Name" : "GroupHero",

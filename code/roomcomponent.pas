@@ -24,6 +24,7 @@ uses
 constructor TRoomComponent.Create(AOwner: TComponent);
 begin
   inherited;
+  AutoSizeToChildren := True;
 end;
 
 end.
