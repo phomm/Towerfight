@@ -24,7 +24,7 @@ type
     BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
     Viewport1: TCastleViewport;
     ImageWeapon: TCastleImageControl;
-    TimerPreEnd, TimerBlood, TimerGame: TCastleTimer;
+    TimerPreEnd, TimerBlood, TimerGame, TimerHint: TCastleTimer;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -57,6 +57,8 @@ type
     procedure TimerPreEndTick(ASender: TObject);
     procedure TimerBloodTick(ASender: TObject);
     procedure TimerGameTick(ASender: TObject);
+    procedure TimerHintTick(ASender: TObject);
+    procedure WeaponHint(ADoShow: Boolean; AWeapon: NHeroWeapon = hwNo);
     procedure VisualizeTime();
     procedure UpdateRooms();
   private const
@@ -107,7 +109,7 @@ begin
   for I := 0 to High(FWeapons) do
   begin
     FWeapons[i].Pressed := (i = Ord(Map.Hero.Weapon)) or (i = Ord(hwNo));
-    FWeapons[I].Enabled := Map.Hero.Weapons[NHeroWeapon(I)] > 0;
+    FWeapons[I].Enabled := (Map.Hero.Weapons[NHeroWeapon(I)] > 0) or (i = Ord(hwNo));
   end;
   ButtonDefeat.Enabled := True;
   ButtonGameTime.Enabled := True;
@@ -122,9 +124,9 @@ var
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
+  WeaponNo.OnClick := ButtonWeaponClick;
   WeaponPlus.OnClick := ButtonWeaponClick;
   WeaponMinus.OnClick := ButtonWeaponClick;
-  WeaponNo.OnClick := ButtonWeaponClick;
   WeaponMultiply.OnClick := ButtonWeaponClick;
   FWeapons[0] := WeaponNo;
   FWeapons[1] := WeaponPlus;
@@ -135,6 +137,7 @@ begin
   TimerBlood.Exists := False;
   TimerPreEnd.OnTimer := TimerPreEndTick;
   TimerBlood.OnTimer := TimerBloodTick;
+  TimerHint.OnTimer := TimerHintTick;
   TimerGame.OnTimer := TimerGameTick;
   TimerGame.IntervalSeconds := 1;
   TimerGame.Exists := UseTimer();
@@ -192,7 +195,11 @@ begin
   begin
     LIsWeapon := FWeapons[i] = LWeaponButton;    
     if LIsWeapon then
+    begin
+      WeaponHint(False);
       Map.Hero.Weapon := NHeroWeapon(i);
+      WeaponHint(True);
+    end;
     FWeapons[i].Pressed := LIsWeapon or (i = Ord(hwNo));
     FWeapons[i].Border.AllSides := IIF(LIsWeapon or (i = Ord(hwNo)), 4, 0);
     if i <> Ord(hwNo) then
@@ -232,16 +239,21 @@ end;
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
 begin
   inherited;
-  if FAnimateWeaponTicks > 0 then
+  if not FPause and (FAnimateWeaponTicks > 0) then
   begin
     Dec(FAnimateWeaponTicks);
     ImageWeapon.Translation := TVector2.Lerp(1 - FAnimateWeaponTicks / TicksToFlyWeapon, FPosFrom, FPosTo);
+    with ImageWeapon do
+      Rotation := Rotation + 8 * SecondsPassed;
     if FAnimateWeaponTicks = 0 then
     begin
       ImageWeapon.Url := '';
       WeaponNo.DoClick();
     end;  
   end;
+  if not FPause and (Map.Hero.Weapon <> hwNo) then
+    with FWeapons[Ord(Map.Hero.Weapon)].Image do
+      Rotation := Rotation + 4 * SecondsPassed;
 end;
 
 function TViewGame.Press(const Event: TInputPressRelease): Boolean;
@@ -446,6 +458,26 @@ procedure TViewGame.TimerPreEndTick(ASender: TObject);
 begin
   TimerPreEnd.Exists := False;
   Container.View := FViewEnd;
+end;
+
+procedure TViewGame.TimerHintTick(ASender: TObject);
+var
+  LWeapon: NHeroWeapon;
+begin
+  for LWeapon := Low(NHeroWeapon) to High(NHeroWeapon) do
+    WeaponHint(False, LWeapon);
+end;
+
+procedure TViewGame.WeaponHint(ADoShow: Boolean; AWeapon: NHeroWeapon = hwNo);
+var
+  LWeapon: NHeroWeapon;
+begin
+  TimerHint.Exists := ADoShow;
+  if AWeapon = hwNo then
+    LWeapon := Map.Hero.Weapon
+  else
+    LWeapon := AWeapon;
+  FWeapons[Ord(LWeapon)].Controls[0].Exists := ADoShow;
 end;
 
 procedure TViewGame.TimerGameTick(ASender: TObject);

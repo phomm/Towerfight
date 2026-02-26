@@ -287,9 +287,13 @@ begin
   GroupElements.RemoveControl(LControl);
   if FPositions[FPosition] = erInPlace then
     GroupElements.Controls[FPosition - 1].Exists := True;
+  if FPositions[FPosition] = erRight then
+    GroupElements.Controls[FPosition - 1].Border.Bottom := 4;
   GroupElements.InsertControl(AValue, LControl);
   if FPositions[AValue] = erInPlace then
     GroupElements.Controls[AValue - 1].Exists := False;
+  if FPositions[AValue] = erRight then
+    GroupElements.Controls[AValue - 1].Border.Bottom := 0;
   FPosition := AValue;
 end;
 
