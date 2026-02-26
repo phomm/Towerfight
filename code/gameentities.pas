@@ -119,6 +119,7 @@ type
     function IsHeroRoom(ARoomIndex: Integer): Boolean;
     function GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
     function GetRoomByIndex(ARoomIndex: Integer): TRoom;
+    function IsRoomReachable(ATowerIndex, AStockIndex: Integer): Boolean;
   class function Map(): TMap;
   class procedure Die();
   const BloodAsset = 'castle-data:/resources/blood_splat.png';
@@ -303,7 +304,7 @@ begin
   FTargetTower := LTowerIndex;
   FTargetStock := LStockIndex;
   //WriteLnLog(Format('SX%d SY%d TX%d TY%d', [FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex]));
-  if PathFind.FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex, PathFindCost) = nil then
+  if not IsRoomReachable(LTowerIndex, LStockIndex) then
     Exit(False);
   FHeroRoom := FTowers[LTowerIndex].Rooms[LStockIndex];
   FHeroTowerIndex := LTowerIndex;
@@ -337,6 +338,13 @@ begin
     Result := 1
   else
     Result := -1;
+end;
+
+function TMap.IsRoomReachable(ATowerIndex, AStockIndex: Integer): Boolean;
+begin
+  FTargetTower := ATowerIndex;
+  FTargetStock := AStockIndex;
+  Result := PathFind.FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, ATowerIndex, AStockIndex, PathFindCost) <> nil;
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);

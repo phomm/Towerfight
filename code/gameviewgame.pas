@@ -58,6 +58,7 @@ type
     procedure TimerBloodTick(ASender: TObject);
     procedure TimerGameTick(ASender: TObject);
     procedure VisualizeTime();
+    procedure UpdateRooms();
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
     GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
@@ -156,6 +157,7 @@ begin
       LRoomComponent.Name := 'Room' + LTowerIndex.ToString + '_' + LStockIndex.ToString;
       LGroupTower.InsertFront(LRoomComponent);
       LRoomComponent.ControlRoom.OnClick := ButtonRoomClick;
+      LRoomComponent.ControlRoom.Enabled := False;
       LRoomComponent.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
       if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
       begin
@@ -176,6 +178,7 @@ begin
     LGroupTower.RemoveControl(LRoof);
     LGroupTower.InsertFront(LRoof);
   end;
+  UpdateRooms();
 end;
 
 procedure TViewGame.ButtonWeaponClick(Sender: TObject);
@@ -227,8 +230,6 @@ begin
 end;
 
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
-var
-  I: Integer;
 begin
   inherited;
   if FAnimateWeaponTicks > 0 then
@@ -436,8 +437,9 @@ begin
       TimerPreEnd.Exists := True;
       FViewEnd := ViewWin;      
     end;
+    UpdateRooms();
   end;
-  FSkip := False; 
+  FSkip := False;  
 end;
 
 procedure TViewGame.TimerPreEndTick(ASender: TObject);
@@ -464,6 +466,23 @@ begin
     ButtonGameTime.Caption := Format('%.2d:%.2d', [FGameTicks div 60, FGameTicks mod 60])
   else
     ButtonGameTime.Caption := '';
+end;
+
+procedure TViewGame.UpdateRooms();
+var
+  LGroupTower: TCastleUserInterface;
+  LTowerIndex, LStockIndex: Integer;
+  LRoomComponent: TRoomComponent;
+begin
+  for LTowerIndex := 0 to Pred(Map.Towers.Count) do
+  begin
+    LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+    for LStockIndex := 0 to Pred(Map.Towers[LTowerIndex].Rooms.Count) do 
+    begin
+      LRoomComponent := LGroupTower.Controls[LStockIndex] as TRoomComponent;
+      LRoomComponent.ControlRoom.Enabled := {Map.IsHeroRoom(LRoomComponent.Tag) or} Map.IsRoomReachable(LTowerIndex, LStockIndex);
+    end;
+  end;
 end;
 
 end.

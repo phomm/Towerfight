@@ -3,7 +3,8 @@
   "AutoSize" : false,
   "CustomBackground" : true,
   "CustomBackgroundDisabled" : {
-    "$$ClassName" : "TCastleImagePersistent"
+    "$$ClassName" : "TCastleImagePersistent",
+    "Url" : "castle-data:/resources/cell-disabled.png"
   },
   "CustomBackgroundFocused" : {
     "$$ClassName" : "TCastleImagePersistent"
