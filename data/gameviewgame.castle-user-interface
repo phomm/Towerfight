@@ -243,11 +243,11 @@
               "Name" : "ButtonGameTime",
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 4.4799996948242188E+002
+                "X" : 4.4800000000000000E+002
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle",
-              "Width" : 2.0000000000000000E+002
+              "Width" : 1.8200000000000000E+002
             }
           ]
         },
@@ -261,7 +261,7 @@
           "Name" : "ImageWeaponsBack",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.2200000000000000E+002
+            "Y" : -1.2200000762939453E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -336,7 +336,7 @@
                   "Name" : "Group2",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 1.5800000000000000E+002
+                    "X" : 1.5799998474121094E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",

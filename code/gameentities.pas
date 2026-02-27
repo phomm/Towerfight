@@ -7,6 +7,8 @@ interface
 uses 
 // System
   Classes, generics.collections,
+// ThirdParty
+  PathFind,    
 // Own
   gameoptions;
 
@@ -100,6 +102,7 @@ type
     FLastTower, FLastStock, FHeroTowerIndex, FHeroStockIndex, FTargetTower, FTargetStock: Integer;
     FHero: THero;
     FHeroRoom: TRoom;
+    FPathMap: TPathMap;
     function PathFindCost(T, S, Direction: Smallint) : Smallint;
   class var FMap: TMap;
   public
@@ -135,8 +138,6 @@ implementation
 uses 
 // System
   SysUtils, typinfo, Math,
-// ThirdParty
-  PathFind,  
 // Castle  
   castlelog,
 // Own  
@@ -234,31 +235,25 @@ begin
   inherited Create(AOwner);
   FMap := Self;
   FHero := THero.Create(nil);
-  
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
   FLastTower := 3 + Ord(FDifficulty);
   for T := 1 to FLastTower do
   begin
     LTower := TTower.Create(nil);
+    FTowers.Add(LTower);
     FLastStock := Min(T + 3, 8);
     for R := 1 to FLastStock do
     begin
       LRoom := TRoom.Create(nil);
+      LTower.FRooms.Add(LRoom);
       if IsFinalRoom(T, R) then
         LRoom.Actors.Add(TDragon.Create(nil, T, R))
       else if (T <> 1) or (R <> 1) then
-        LRoom.Actors.Add(TEnemy.Create(nil, T, R))
-      else
-      begin
-        FHeroRoom := LRoom;
-        FHeroTowerIndex := 0;
-        FHeroStockIndex := 0;
-      end;  
-      LTower.FRooms.Add(LRoom);
+        LRoom.Actors.Add(TEnemy.Create(nil, T, R))        
     end;
-    FTowers.Add(LTower);
   end;
+  SetHeroRoom(0);
 end;
 
 destructor TMap.Destroy();
@@ -301,8 +296,7 @@ var
 begin
   LTowerIndex := ARoomIndex div 10;
   LStockIndex := ARoomIndex mod 10;
-  FTargetTower := LTowerIndex;
-  FTargetStock := LStockIndex;
+  FPathMap := nil;
   //WriteLnLog(Format('SX%d SY%d TX%d TY%d', [FHeroTowerIndex, FHeroStockIndex, LTowerIndex, LStockIndex]));
   if not IsRoomReachable(LTowerIndex, LStockIndex) then
     Exit(False);
@@ -310,6 +304,9 @@ begin
   FHeroTowerIndex := LTowerIndex;
   FHeroStockIndex := LStockIndex;
   Result := True;
+  FTargetTower := FHeroTowerIndex;
+  FTargetStock := FHeroStockIndex;
+  FPathMap := MakePathMap(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, PathFindCost);
 end;
 
 function TMap.IsHeroRoom(ARoomIndex: Integer): Boolean;
@@ -331,20 +328,24 @@ begin
 end;
 
 function TMap.PathFindCost(T, S, Direction: Smallint) : Smallint;
+var
+  LT, LS: Integer;
 begin
-  // if T within towers count and S is within stock count of tower T and room hasnot enemy, except target room, then return 1, else -1, 
-  if (T >= 0) and (T < FTowers.Count) and (S >= 0) and (S < FTowers[T].Rooms.Count) and (Direction mod 2 = 0)
-    and (not FTowers[T].Rooms[S].HasEnemy() or ((T = FTargetTower) and (S = FTargetStock))) then
-    Result := 1
-  else
-    Result := -1;
+  LT := T - DirToDX(Direction);
+  LS := S - DirToDY(Direction);
+  Result := Ord((Direction mod 2 = 0) and (T >= 0) and (S >= 0) and (T < FTowers.Count) and (S < FTowers[T].Rooms.Count) 
+    and (((LT = FTargetTower) and (LS = FTargetStock))
+    or (not FTowers[T].Rooms[S].HasEnemy() or not FTowers[LT].Rooms[LS].HasEnemy()))) * 2 - 1;
 end;
 
 function TMap.IsRoomReachable(ATowerIndex, AStockIndex: Integer): Boolean;
 begin
   FTargetTower := ATowerIndex;
-  FTargetStock := AStockIndex;
-  Result := PathFind.FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, ATowerIndex, AStockIndex, PathFindCost) <> nil;
+  FTargetStock := AStockIndex;  
+  if Assigned(FPathMap) then
+    Result := FindPathOnMap(FPathMap, ATowerIndex, AStockIndex) <> nil
+  else
+    Result := FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, ATowerIndex, AStockIndex, PathFindCost) <> nil;
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);

@@ -42,7 +42,7 @@ type
   private
     FPreviousRoom: TRoomComponent;
     FWeapons: array[0..3] of TCastleButton;
-    FSkip, FPause: Boolean;
+    FSkip, FPause, FInternalWeaponSwitch: Boolean;
     FPosFrom, FPosTo: TVector2;
     FAnimateWeaponTicks, FGameTicks: Integer;
     FViewEnd: TCastleView;
@@ -61,6 +61,7 @@ type
     procedure WeaponHint(ADoShow: Boolean; AWeapon: NHeroWeapon = hwNo);
     procedure VisualizeTime();
     procedure UpdateRooms();
+    procedure WeaponClick(AWeapon: NHeroWeapon; AFromUser: Boolean = False);
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
     GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
@@ -132,7 +133,7 @@ begin
   FWeapons[1] := WeaponPlus;
   FWeapons[2] := WeaponMinus;
   FWeapons[3] := WeaponMultiply;
-  WeaponNo.Doclick(); 
+  WeaponNo.DoClick(); 
   TimerPreEnd.Exists := False;
   TimerBlood.Exists := False;
   TimerPreEnd.OnTimer := TimerPreEndTick;
@@ -145,7 +146,8 @@ begin
   FGameTicks := GameSeconds[Difficulty()];
   VisualizeTime();
 
-  GroupTowers.ClearControls();  
+  GroupTowers.ClearControls();
+  GroupTowers.Spacing := (Ord(High(NDifficulty)) - Ord(Difficulty()) - 1) * 40; 
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
@@ -196,9 +198,11 @@ begin
     LIsWeapon := FWeapons[i] = LWeaponButton;    
     if LIsWeapon then
     begin
-      WeaponHint(False);
+      if not FInternalWeaponSwitch then
+        WeaponHint(False);
       Map.Hero.Weapon := NHeroWeapon(i);
-      WeaponHint(True);
+      if not FInternalWeaponSwitch then
+        WeaponHint(True);
     end;
     FWeapons[i].Pressed := LIsWeapon or (i = Ord(hwNo));
     FWeapons[i].Border.AllSides := IIF(LIsWeapon or (i = Ord(hwNo)), 4, 0);
@@ -248,7 +252,7 @@ begin
     if FAnimateWeaponTicks = 0 then
     begin
       ImageWeapon.Url := '';
-      WeaponNo.DoClick();
+      WeaponClick(hwNo);
     end;  
   end;
   if not FPause and (Map.Hero.Weapon <> hwNo) then
@@ -289,19 +293,19 @@ begin
     repeat
       W := (W + 1) mod Length(FWeapons);
     until FWeapons[W].Enabled;        
-    FWeapons[W].DoClick();    
+    WeaponClick(NHeroWeapon(W), True);    
     Exit(True); // key was handled
   end;
 
   if Event.Key in [key1, key2, key3, key4] then
   begin
-    FWeapons[Ord(Event.Key) - Ord(key1)].DoClick();    
+    WeaponClick(NHeroWeapon(Ord(Event.Key) - Ord(key1)), True);    
     Exit(True); // key was handled
   end;
 
   if Event.Key in [keyNumpad1, keyNumpad2, keyNumpad3, keyNumpad4] then
   begin
-    FWeapons[Ord(Event.Key) - Ord(keyNumpad1)].DoClick();    
+    WeaponClick(NHeroWeapon(Ord(Event.Key) - Ord(keyNumpad1)), True);    
     Exit(True); // key was handled
   end;
 
@@ -442,7 +446,7 @@ begin
     FRoomFight.LabelLeft.Caption := Map.Hero.Visual;
 
     if LWeapon = hwNo then
-      WeaponNo.DoClick();
+      WeaponClick(hwNo);
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
@@ -472,6 +476,7 @@ procedure TViewGame.WeaponHint(ADoShow: Boolean; AWeapon: NHeroWeapon = hwNo);
 var
   LWeapon: NHeroWeapon;
 begin
+  TimerHint.ResetNextTimerEvent();
   TimerHint.Exists := ADoShow;
   if AWeapon = hwNo then
     LWeapon := Map.Hero.Weapon
@@ -512,9 +517,16 @@ begin
     for LStockIndex := 0 to Pred(Map.Towers[LTowerIndex].Rooms.Count) do 
     begin
       LRoomComponent := LGroupTower.Controls[LStockIndex] as TRoomComponent;
-      LRoomComponent.ControlRoom.Enabled := {Map.IsHeroRoom(LRoomComponent.Tag) or} Map.IsRoomReachable(LTowerIndex, LStockIndex);
+      LRoomComponent.ControlRoom.Enabled := Map.IsRoomReachable(LTowerIndex, LStockIndex);
     end;
   end;
+end;
+
+procedure TViewGame.WeaponClick(AWeapon: NHeroWeapon; AFromUser: Boolean = False);
+begin
+  FInternalWeaponSwitch := not AFromUser;
+  FWeapons[Ord(AWeapon)].DoClick();
+  FInternalWeaponSwitch := False;
 end;
 
 end.
