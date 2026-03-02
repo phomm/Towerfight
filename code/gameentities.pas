@@ -125,7 +125,6 @@ type
     function IsRoomReachable(ATowerIndex, AStockIndex: Integer): Boolean;
   class function Map(): TMap;
   class procedure Die();
-  const BloodAsset = 'castle-data:/resources/blood_splat.png';
   end;
 
 const
@@ -141,7 +140,7 @@ uses
 // Castle  
   castlelog,
 // Own  
-  Common, gameviewgame;
+  Common, gameviewgame, imagescomponent;
 
 procedure TActor.SetLevel(AValue: Integer);
 begin
@@ -352,7 +351,7 @@ constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
 begin
   inherited Create(AOwner);
   FLevel := CalcLevel(ATower, AStock);
-  FAssetId := 'castle-data:/resources/' + IIF(Random(2) = 0, 'neutral', 'bad') + '.bmp';
+  FAssetId := Images.ImageUrl(NActorPicture(Ord(apEnemy1) + Random(3)));
   CreateFormula(ATower, AStock);
 end;
 
@@ -440,7 +439,7 @@ end;
 constructor TDragon.Create(AOwner: TComponent; ATower, AStock: Integer);
 begin
   inherited Create(AOwner, ATower, AStock);
-  FAssetId := 'castle-data:/resources/dragon.png';
+  FAssetId := Images.ImageUrl(apBoss);
 end;
 
 constructor THero.Create(AOwner: TComponent);
@@ -450,7 +449,7 @@ begin
   inherited Create(AOwner);
   LAntiDifficulty := Ord(High(NDifficulty)) - Ord(Difficulty());
   FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
-  FAssetId := 'castle-data:/resources/good.bmp';
+  FAssetId := Images.ImageUrl(apHero);
   FWeapons[hwPlus] := 2 + Random(2 + LAntiDifficulty div 2);
   FWeapons[hwMinus] := 1 + Random(2 + LAntiDifficulty div 2);
   FWeapons[hwMultiply] := 1 + Random(2 + LAntiDifficulty div 2);
@@ -459,7 +458,7 @@ end;
 procedure THero.Die();
 begin
   FDead := True;
-  AssetId := TMap.BloodAsset;
+  AssetId := Images.ImageUrl(apBlood);
   Level := 0;
 end;
 

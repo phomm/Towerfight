@@ -1,0 +1,36 @@
+{
+  "$$ClassName" : "TCastleComponent",
+  "Name" : "Component1",
+  "$NonVisualComponents" : [
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "Hero",
+      "Url" : "castle-data:/resources/hero-samurai.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "Boss",
+      "Url" : "castle-data:/resources/dragon.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "Enemy1",
+      "Url" : "castle-data:/resources/enemy-yokai.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "Enemy2",
+      "Url" : "castle-data:/resources/enemy-yurei.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "Enemy3",
+      "Url" : "castle-data:/resources/enemy-ninja.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "Blood",
+      "Url" : "castle-data:/resources/blood_splat.png"
+    }
+  ]
+}

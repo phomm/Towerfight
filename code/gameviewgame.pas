@@ -78,7 +78,7 @@ uses
 // Castle  
   CastleLog, 
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog;
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, imagescomponent;
 
 constructor TViewGame.Create(AOwner: TComponent);
 begin
@@ -377,7 +377,7 @@ begin
     if LRoom.Actors.Count > 0 then
       ARoom.ImageRight.Url := LRoom.Actors[0].AssetId
     else
-      ARoom.ImageRight.Url := TMap.BloodAsset;
+      ARoom.ImageRight.Url := Images.ImageUrl(apBlood);
   end
   else
     ARoom.ImageLeft.Url := Map.Hero.AssetId; 
