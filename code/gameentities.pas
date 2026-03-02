@@ -57,7 +57,15 @@ type
     property Formula: string read FFormula write FFormula;
   end;
 
-  TDragon = class(TEnemy)
+  TMiniBoss = class(TEnemy)
+  protected
+    FVisualFormula: string;
+    function GetVisual(): string; override;
+  public
+    constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
+  end;
+
+  TBoss = class(TEnemy)
   protected
     function CalcLevel(ATower, AStock: Integer): Integer; override;
     function GetVisual(): string; override;  
@@ -180,7 +188,7 @@ begin
   if Result then
   begin
     TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
-    LLootPossible := not (FActors[0] is TDragon);
+    LLootPossible := not (FActors[0] is TBoss);
     FActors.Delete(0);
     LHeroArmed := TMap.Map.Hero.Weapon <> hwNo;
     // 25% chance to spawn random weapon loot if not armed, 50% to spawn same weapon if armed
@@ -247,9 +255,11 @@ begin
       LRoom := TRoom.Create(nil);
       LTower.FRooms.Add(LRoom);
       if IsFinalRoom(T, R) then
-        LRoom.Actors.Add(TDragon.Create(nil, T, R))
+        LRoom.Actors.Add(TBoss.Create(nil, T, R))
+      else if (T <> FLastTower) and (T <> 1) and (R = FLastStock) then
+        LRoom.Actors.Add(TMiniBoss.Create(nil, T, R))
       else if (T <> 1) or (R <> 1) then
-        LRoom.Actors.Add(TEnemy.Create(nil, T, R))        
+        LRoom.Actors.Add(TEnemy.Create(nil, T, R))     
     end;
   end;
   SetHeroRoom(0);
@@ -360,6 +370,8 @@ begin
   Result := (ATower + Random(AStock)) * Max(ATower + 2, AStock + Random(10) - ATower)
     * (ATower + Random(Ord(ATower > 1) + 1)) * (ATower - Random(Ord(ATower > 1) + 1)) 
     + Ord(ATower > 1) * (Random(Max(7, 2 * ATower + 2 * AStock - 11)) + 17);
+  if (ATower = 1) and (AStock = 2) then
+  Result := Min(Tmap.Map.Hero.Level, Result);
 end;
 
 constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
@@ -416,7 +428,7 @@ begin
   Result := IIF(FRevealed, FLevel.ToString, FFormula);
 end;
 
-function TDragon.CalcLevel(ATower, AStock: Integer): Integer;
+function TBoss.CalcLevel(ATower, AStock: Integer): Integer;
 begin
   case Difficulty of
     gdEasy: Result := 444;
@@ -426,7 +438,7 @@ begin
   end;
 end;
 
-function TDragon.GetVisual(): string;
+function TBoss.GetVisual(): string;
 begin
   if FRevealed then
     Exit(FLevel.ToString);
@@ -436,7 +448,7 @@ begin
   Result := Result + IIF(Level mod 10 = 4, '4', '?');
 end;
 
-constructor TDragon.Create(AOwner: TComponent; ATower, AStock: Integer);
+constructor TBoss.Create(AOwner: TComponent; ATower, AStock: Integer);
 begin
   inherited Create(AOwner, ATower, AStock);
   FAssetId := Images.ImageUrl(apBoss);
@@ -475,6 +487,37 @@ end;
 procedure THero.GiveWeapon(AWeapon: NHeroWeapon);
 begin
   Inc(FWeapons[AWeapon]);
+end;
+
+constructor TMiniBoss.Create(AOwner: TComponent; ATower, AStock: Integer);
+var
+  I, LReroll: Integer;
+begin
+  inherited Create(AOwner, ATower, AStock);
+  FAssetId := Images.ImageUrl(NActorPicture(Ord(apMiniBoss1) + Random(2)));
+  FVisualFormula := Formula;
+  LReroll := 0;
+  for I := 2 to Length(FVisualFormula) do
+    if (Formula[I] in ['0'..'9']) then
+    begin
+      if Random(Ord(High(NDifficulty)) - Ord(Difficulty()) + 2) = 0 then
+      begin
+        FVisualFormula[I] := '?';
+        LReroll := 0;
+      end  
+      else
+        Inc(LReroll);
+      if (LReroll > 2) or (I = Length(FVisualFormula)) then
+      begin
+        FVisualFormula[I] := '?';
+        LReroll := 0;
+      end;
+    end;
+end;
+
+function TMiniBoss.GetVisual(): string;
+begin
+  Result := IIF(FRevealed, FLevel.ToString, FVisualFormula);
 end;
 
 end.

@@ -31,6 +31,16 @@
       "$$ClassName" : "TCastleTerrainImage",
       "Name" : "Blood",
       "Url" : "castle-data:/resources/blood_splat.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "MiniBoss1",
+      "Url" : "castle-data:/resources/mini-boss-oni.png"
+    },
+    {
+      "$$ClassName" : "TCastleTerrainImage",
+      "Name" : "MiniBoss2",
+      "Url" : "castle-data:/resources/mini-boss-shinigami.png"
     }
   ]
 }

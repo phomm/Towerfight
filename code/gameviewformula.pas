@@ -32,7 +32,7 @@ type
     Weapon: NHeroWeapon;
     FPositions: specialize TArray<NElementReplacement>;
     FPosition: Integer;
-    function GetFormula(): string;
+    function GetFormula(const AOldFormula: string): string;
     function CalcFormula(AFormula: string): Integer;
     procedure HandleClick(ASender: TObject);
     procedure SetPosition(AValue: Integer);
@@ -144,7 +144,7 @@ var
 begin
   LActor := TMap.Map.GetRoomByIndex(RoomComponent.Tag).Actors[0];
   // update Actor formula and level
-  LNewFormula := GetFormula();
+  LNewFormula := GetFormula((LActor as TEnemy).Formula);
   LNewLevel := CalcFormula(LNewFormula);
   (LActor as TEnemy).Formula := LNewFormula;
   LActor.Level := IIF(LNewLevel < 0, 0, LNewLevel);
@@ -153,17 +153,27 @@ begin
   ViewGame.RoomFight(RoomComponent);
 end;
 
-function TViewFormula.GetFormula(): String;
+function TViewFormula.GetFormula(const AOldFormula: string): String;
 var
-  I: Integer;
+  I, LShift: Integer;
   LButton: TCastleButton;
 begin
   Result := '';
+  LShift := 1;
   for I := 0 to GroupElements.ControlsCount - 1 do
   begin
     LButton := GroupElements.Controls[I] as TCastleButton;
     if LButton.Exists then
-      Result := Result + IIF(LButton.Caption = '', WeaponToOperation[TMap.Map.Hero.Weapon], LButton.Caption);
+    begin
+      if LButton.Caption = '' then
+        Result := Result + WeaponToOperation[Weapon]
+      else if LButton.Caption = '?' then
+        Result := Result + AOldFormula[LShift]
+      else
+        Result := Result + LButton.Caption;
+      if FPositions[LShift] <> erRight then
+        Inc(LShift);      
+    end;
   end;
 end;
 
