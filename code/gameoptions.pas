@@ -52,13 +52,19 @@ const
   UseTimerKey = 'UseTimer';
   UseTimerDefault = False;
 
+procedure SetValue<T>(const AKey: string; AValue: T);
+begin
+  UserConfig.SetValue(AKey, AValue);
+  UserConfig.Save();
+end;
+
 function Difficulty(): NDifficulty;
 begin
   Result := NDifficulty(EnumValue(ETPDifficulty, UserConfig.GetValue(DifficultyKey, '')));
   if Ord(Result) in [0..254] then
     Exit;
   Result := DifficultyDefault;
-  UserConfig.SetValue(DifficultyKey, EnumName(ETPDifficulty, Ord(Result)));
+  SetValue<string>(DifficultyKey, EnumName(ETPDifficulty, Ord(Result)));
 end;
 
 function MusicLevel(): Byte;
@@ -68,12 +74,12 @@ end;
 
 procedure SetMusicLevel(AValue: Byte);
 begin
-  UserConfig.SetValue(MusicKey, AValue);
+  SetValue<byte>(MusicKey, AValue);
 end;
 
 procedure SetDifficulty(AValue: NDifficulty);
 begin
-  UserConfig.SetValue(DifficultyKey, DifficultyName(AValue));
+  SetValue<string>(DifficultyKey, DifficultyName(AValue));
 end;
 
 function DifficultyName(AValue: NDifficulty): string;
@@ -88,7 +94,7 @@ end;
 
 procedure SetFullscreen(AValue: Boolean);
 begin
-  UserConfig.SetValue(FullscreenKey, AValue);
+  SetValue<Boolean>(FullscreenKey, AValue);
   Application.MainWindow.FullScreen := AValue;
 end;
 
@@ -99,7 +105,7 @@ end;
 
 procedure SetUseTimer(AValue: Boolean);
 begin
-  UserConfig.SetValue(UseTimerKey, AValue);
+  SetValue<Boolean>(UseTimerKey, AValue);
 end;
 
 initialization
