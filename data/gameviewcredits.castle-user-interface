@@ -28,58 +28,132 @@
     {
       "$$ClassName" : "TCastleLabel",
       "Alignment" : "hpMiddle",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 9.0196079015731812E-001
+      },
       "FontSize" : 5.5000000000000000E+001,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "LabelRules",
-      "Outline" : 2,
-      "OutlineColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Green" : 7.0588237047195435E-001,
-        "Red" : 1.0000000000000000E+000
-      },
+      "Outline" : 1,
       "Text" : [
-        "RULES",
-        "Brave Nameless Samurai fights ",
-        "in the Towers, captured by Ninjas",
-        "He can go Up, Down, Left and Right",
-        "for Fight or go to any empty room",
-        "WASD or Arrows or Mouse to move",
-        "Esc and Enter to close or start Fight",
+        "Japan is captured by Dragon and Demons",
+        "Fight them in the Towers, Brave Samurai!",
+        "WASD/Arrows/Mouse: move into Room ",
+        "Leave: Esc/Backspace, Enter(menu): start",
         "",
-        "Calculate enemy Level before Fight",
-        "If your Level >= Enemy Level, you Win",
+        "Calculate enemy Level to Fight in Room",
+        "You Win if your Level >= Enemy Level  ",
         "and gain more Levels, otherwise Lose",
         "In First tower Fight gives you +Level ",
-        "of the same amount as Enemy Level,",
-        "Each next gives you halved of previous",
+        "same as Enemy Level, each next gives ",
+        "you 1/(2N - 2) fraction of enemy Level",
         "",
-        "Tab/Mouse to use weapon before Fight",
-        "Shuriken is +, Kunai is -, Press tab in ",
-        "Formula dialog to change enemy formula"
+        "1234/E/Mouse before Fight: select weapon",
+        "Shuriken(+) Kunai(-) Star(*), E/Mouse in ",
+        "Formula dialog to re-math enemy formula"
       ]
     },
     {
-      "$$ClassName" : "TCastleLabel",
-      "Alignment" : "hpMiddle",
-      "ColorPersistent" : {
+      "$$ClassName" : "TCastleButton",
+      "Border" : {
+        "$$ClassName" : "TBorder",
+        "Bottom" : 4.0000000000000000E+000
+      },
+      "BorderColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Alpha" : 1.0000000000000000E+000,
+        "Blue" : 7.0196080207824707E-001
+      },
+      "Caption" : "author : phomm",
+      "Cursor" : "mcHand",
+      "CustomBackground" : true,
+      "CustomBackgroundDisabled" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundFocused" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundNormal" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundPressed" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomTextColorPersistent" : {
         "$$ClassName" : "TCastleColorPersistent",
         "Blue" : 7.0196080207824707E-001
       },
+      "CustomTextColorUse" : true,
       "FontSize" : 1.0000000000000000E+002,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
-      "Name" : "LabelCredits",
-      "Outline" : 2,
+      "Html" : true,
+      "Image" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "Name" : "ButtonAuthor",
+      "Outline" : 1,
       "OutlineColorPersistent" : {
         "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 6.2745100259780884E-001,
-        "Red" : 1.0000000000000000E+000
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 4.3921568989753723E-001
       },
-      "Text" : [
-        "author : phomm",
-        "made with Castle Engine"
-      ],
+      "VerticalAnchorParent" : "vpTop",
+      "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleButton",
+      "Border" : {
+        "$$ClassName" : "TBorder",
+        "Bottom" : 4.0000000000000000E+000
+      },
+      "BorderColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Alpha" : 1.0000000000000000E+000,
+        "Blue" : 7.0196080207824707E-001
+      },
+      "Caption" : "made with castle-engine",
+      "Cursor" : "mcHand",
+      "CustomBackground" : true,
+      "CustomBackgroundDisabled" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundFocused" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundNormal" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomBackgroundPressed" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "CustomTextColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 4.9019607901573181E-001
+      },
+      "CustomTextColorUse" : true,
+      "FontSize" : 1.0000000000000000E+002,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Html" : true,
+      "Image" : {
+        "$$ClassName" : "TCastleImagePersistent"
+      },
+      "Name" : "ButtonCastle",
+      "Outline" : 1,
+      "OutlineColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 8.4313726425170898E-001
+      },
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "Y" : -1.0000000000000000E+002
+      },
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
     },
