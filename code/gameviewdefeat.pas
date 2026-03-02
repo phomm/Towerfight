@@ -12,7 +12,6 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
-    procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     procedure ButtonMenuClick(Sender: TObject);
@@ -46,12 +45,6 @@ end;
 procedure TViewDefeat.ButtonMenuClick(Sender: TObject);
 begin
   Container.View := ViewMain;
-end;
-
-procedure TViewDefeat.Update(const SecondsPassed: Single; var HandleInput: boolean);
-begin
-  inherited;
-  { Executed every frame. }
 end;
 
 function TViewDefeat.Press(const Event: TInputPressRelease): Boolean;

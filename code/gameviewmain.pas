@@ -19,9 +19,6 @@ type
   { Main view, where most of the application logic takes place. }
   TViewMain = class(TCastleView)
   published
-    { Components designed using CGE editor.
-      These fields will be automatically initialized at Start. }
-    LabelFps: TCastleLabel;
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions: TCastleUserInterface;
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
@@ -31,7 +28,6 @@ type
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
     procedure Resume; override;
-    procedure Update(const SecondsPassed: Single; var HandleInput: Boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure WindowCloseQuery(Container: TCastleContainer);
   private
@@ -209,14 +205,6 @@ end;
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
   Container.PushView(ViewCredits);
-end;
-
-procedure TViewMain.Update(const SecondsPassed: Single; var HandleInput: Boolean);
-begin
-  inherited;
-  { This virtual method is executed every frame (many times per second). }
-  Assert(LabelFps <> nil, 'If you remove LabelFps from the design, remember to remove also the assignment "LabelFps.Caption := ..." from code');
-  LabelFps.Caption := 'FPS: ' + Container.Fps.ToString;
 end;
 
 function TViewMain.Press(const Event: TInputPressRelease): Boolean;

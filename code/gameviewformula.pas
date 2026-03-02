@@ -24,7 +24,6 @@ type
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
     procedure Resume; override;
-    procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure ButtonGoClick(Sender: TObject);
   private
@@ -62,11 +61,6 @@ begin
   inherited;
   ButtonGo.OnClick := @ButtonGoClick;
   InterceptInput := True;
-end;
-
-procedure TViewFormula.Update(const SecondsPassed: Single; var HandleInput: boolean);
-begin
-  inherited;
 end;
 
 procedure TViewFormula.HandleClick(ASender: TObject);

@@ -400,7 +400,7 @@ procedure TViewGame.RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterfa
 var
   LAnimationParams: TPlayAnimationParameters;
 begin
-  Viewport1.Translation := ARoom.LocalToContainerPosition(Vector2(-ARoom.Width / 2, -ARoom.Height), False);
+  Viewport1.Translation := ARoom.LocalToContainerPosition(Vector2(ARoom.Width / 4, -ARoom.Height), False);
   AScene.Exists := True;
   LAnimationParams := TPlayAnimationParameters.Create();
   try

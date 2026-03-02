@@ -14,7 +14,6 @@ type
     OnYes, OnNo: TNotifyEvent;
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
-    procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     Text: string;
@@ -62,12 +61,6 @@ begin
   ButtonYes.OnClick := @ButtonClick;
   ButtonNo.OnClick := @ButtonClick;
   ViewDialog.LabelText.Text.Text := Text;
-end;
-
-procedure TViewDialog.Update(const SecondsPassed: Single; var HandleInput: boolean);
-begin
-  inherited;
-  { Executed every frame. }
 end;
 
 procedure TViewDialog.ButtonClick(Sender: TObject);
