@@ -168,6 +168,8 @@ begin
       begin
         LRoomComponent.LabelRight.Caption := LRoom.Actors[0].Visual;
         LRoomComponent.ImageRight.Url := LRoom.Actors[0].AssetId;
+        if LRoom.Actors[0] is TBoss then
+          LRoomComponent.LabelRight.Border.AllSides := 4;
       end;
       LRoomComponent.LabelLeft.Caption := '';
       if Map.IsHeroRoom(LRoomComponent.Tag) then
@@ -350,7 +352,7 @@ begin
   if not Map.HeroRoom.HasEnemy() then
     Exit;
 
-  if Map.Hero.Weapon = hwNo then
+  if (Map.Hero.Weapon = hwNo) or (Map.HeroRoom.Actors[0] is TBoss) then
     RoomFight(LRoom)
   else 
   begin

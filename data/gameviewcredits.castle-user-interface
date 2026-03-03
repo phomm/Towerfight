@@ -53,7 +53,8 @@
         "",
         "1234/E/Mouse before Fight: select weapon",
         "Shuriken(+) Kunai(-) Star(*), E/Mouse in ",
-        "Formula dialog to re-math enemy formula"
+        "Formula dialog to re-math enemy formula",
+        "Weapons less-to-none effective on bosses"
       ]
     },
     {

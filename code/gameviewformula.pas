@@ -1,5 +1,7 @@
 unit GameViewFormula;
 
+{$mode delphi}
+
 interface
 
 uses 
@@ -29,7 +31,7 @@ type
   private
     Formula: string;
     Weapon: NHeroWeapon;
-    FPositions: specialize TArray<NElementReplacement>;
+    FPositions: TArray<NElementReplacement>;
     FPosition: Integer;
     function GetFormula(const AOldFormula: string): string;
     function CalcFormula(AFormula: string): Integer;
@@ -59,7 +61,7 @@ end;
 procedure TViewFormula.Start;
 begin
   inherited;
-  ButtonGo.OnClick := @ButtonGoClick;
+  ButtonGo.OnClick := ButtonGoClick;
   InterceptInput := True;
 end;
 
@@ -72,6 +74,7 @@ procedure TViewFormula.Resume;
 var
   I: Integer;
   LButton: TCastleButton;
+  LActor: TActor;
   procedure Insert(const AValue: String; AMarked: Boolean = True);
   begin
     LButton := TCastleButton.Create(Self);
@@ -87,7 +90,7 @@ var
       LButton.Caption := AValue;
       if FPositions[I] <> erNone then
       begin
-        LButton.OnClick := @HandleClick;
+        LButton.OnClick := HandleClick;
         LButton.Tag := I;
         LButton.Border.Bottom := 4;
         LButton.BorderColor := Black;
@@ -98,7 +101,8 @@ var
 begin
   inherited;
   Weapon := TMap.Map.Hero.Weapon;
-  Formula := TMap.Map.GetRoomByIndex(RoomComponent.Tag).Actors[0].Visual;
+  LActor := TMap.Map.GetRoomByIndex(RoomComponent.Tag).Actors[0];
+  Formula := LActor.Visual;
   GroupElements.ClearControls();
   SetLength(FPositions, Length(Formula) + 1);
   for I := 1 to Length(Formula) do
@@ -108,7 +112,7 @@ begin
     else if (Formula[I] in ['+', '-', '*']) and (Formula[I] <> WeaponToOperation[Weapon]) then
       FPositions[I] := erInPlace
     else if ((Formula[I] in ['0'..'9']) and (I < Length(Formula)) and (Formula[I + 1] in ['0'..'9'])) then
-      FPositions[I] := erRight
+      FPositions[I] := IfThen<NElementReplacement>(LActor is TMiniBoss, erNone, erRight)
     else
       FPositions[I] := erNone;
   end;

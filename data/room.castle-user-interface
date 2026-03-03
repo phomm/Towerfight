@@ -48,7 +48,10 @@
     {
       "$$ClassName" : "TCastleLabel",
       "Alignment" : "hpMiddle",
-      "AutoSize" : false,
+      "BorderColorPersistent" : {
+        "$$ClassName" : "TCastleColorPersistent",
+        "Alpha" : 1.0000000000000000E+000
+      },
       "FontSize" : 3.5000000000000000E+001,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
