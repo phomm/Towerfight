@@ -61,6 +61,7 @@ type
     procedure WeaponHint(ADoShow: Boolean; AWeapon: NHeroWeapon = hwNo);
     procedure VisualizeTime();
     procedure UpdateRooms();
+    procedure UpdateMiniBossRooms();
     procedure WeaponClick(AWeapon: NHeroWeapon; AFromUser: Boolean = False);
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
@@ -471,6 +472,7 @@ begin
       FViewEnd := ViewWin;      
     end;
     UpdateRooms();
+    UpdateMiniBossRooms();
   end;
   FSkip := False;  
 end;
@@ -526,16 +528,29 @@ procedure TViewGame.UpdateRooms();
 var
   LGroupTower: TCastleUserInterface;
   LTowerIndex, LStockIndex: Integer;
-  LRoomComponent: TRoomComponent;
 begin
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
     for LStockIndex := 0 to Pred(Map.Towers[LTowerIndex].Rooms.Count) do 
-    begin
-      LRoomComponent := LGroupTower.Controls[LStockIndex] as TRoomComponent;
-      LRoomComponent.ControlRoom.Enabled := Map.IsRoomReachable(LTowerIndex, LStockIndex);
-    end;
+      (LGroupTower.Controls[LStockIndex] as TRoomComponent).ControlRoom.Enabled := Map.IsRoomReachable(LTowerIndex, LStockIndex);
+  end;
+end;
+
+procedure TViewGame.UpdateMiniBossRooms();
+var
+  LGroupTower: TCastleUserInterface;
+  LTowerIndex: Integer;
+  LRoomComponent: TRoomComponent;
+  LRoom: TRoom;
+begin
+  for LTowerIndex := 0 to Pred(Map.Towers.Count) do
+  begin
+    LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+    LRoomComponent := LGroupTower.Controls[Pred(Map.Towers[LTowerIndex].Rooms.Count)] as TRoomComponent;
+    LRoom := Map.GetRoomByIndex(LRoomComponent.Tag);
+    if (LRoom.Actors.Count > 0) and (LRoom.Actors[0] is TMiniBoss) then
+      LRoomComponent.LabelRight.Caption := HighlightCaption(LRoom.Actors[0].Visual);
   end;
 end;
 

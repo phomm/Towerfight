@@ -113,6 +113,7 @@ type
     FHeroRoom: TRoom;
     FPathMap: TPathMap;
     function PathFindCost(T, S, Direction: Smallint) : Smallint;
+    procedure EnemiesWeakened();
   class var FMap: TMap;
   public
     constructor Create(AOwner: TComponent); override;
@@ -182,14 +183,16 @@ function TRoom.Fight(): Boolean;
 var
   LHeroArmed: Boolean;
   LLootWeapon, LLootChanceModifier: Integer;
+  LIsMiniBoss: Boolean;
 begin
   if not HasEnemy() then
     Exit(True);
+  LIsMiniBoss := FActors[0] is TMiniBoss;
   Result := TMap.Map.Hero.Level >= FActors[0].Level;
   if Result then
   begin
     TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
-    LLootChanceModifier := IIF(FActors[0] is TBoss, 0, IIF(FActors[0] is TMiniBoss, 100, 1));
+    LLootChanceModifier := IIF(FActors[0] is TBoss, 0, IIF(LIsMiniBoss, 100, 1));
     FActors.Delete(0);
     LHeroArmed := TMap.Map.Hero.Weapon <> hwNo;
     // 25% chance to spawn random weapon loot if not armed, 50% to spawn same weapon if armed
@@ -198,6 +201,8 @@ begin
       LLootWeapon := IIF(LHeroArmed, Ord(TMap.Map.Hero.Weapon), Random(3) + 1);
       FActors.Add(TWeaponLoot.Create(nil, NHeroWeapon(LLootWeapon)));
     end;
+    if LIsMiniBoss then
+      TMap.Map.EnemiesWeakened();
   end
   else
     TMap.Map.Hero.Die();
@@ -356,6 +361,35 @@ begin
     Result := FindPathOnMap(FPathMap, ATowerIndex, AStockIndex) <> nil
   else
     Result := FindPath(FTowers.Count, FTowers.Last.Rooms.Count, FHeroTowerIndex, FHeroStockIndex, ATowerIndex, AStockIndex, PathFindCost) <> nil;
+end;
+
+procedure TMap.EnemiesWeakened();
+var
+  T, Q, I: Integer;
+  LActor: TActor;
+  LActors: TArray<TActor>;
+begin
+  Setlength(LActors, 32);
+  Q := 0;
+  for T := 0 to Towers.Count - 1 do
+    for LActor in Towers[T].Rooms[Towers[T].Rooms.Count - 1].Actors do
+      if LActor is TMiniBoss then
+        for I := 1 to Length(LActor.Visual) do
+          if LActor.Visual[I] = '?' then
+            LActors[PostInc(Q)] := LActor;
+  if Q > 1 then
+    LActor := LActors[Random(Q)]
+  else if Q = 1 then
+    LActor := LActors[0]
+  else
+    Exit;
+  for I := Length(LActor.Visual) downto 1 do
+    if LActor.Visual[I] = '?' then
+    begin  
+      (LActor as TMiniBoss).FVisualFormula[I] := (LActor as TMiniBoss).Formula[I];
+      if Random(2) = 0 then
+        Break;
+    end;
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
