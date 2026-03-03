@@ -61,6 +61,7 @@ type
   protected
     FVisualFormula: string;
     function GetVisual(): string; override;
+    function CalcLevel(ATower, AStock: Integer): Integer; override;
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
@@ -179,8 +180,8 @@ end;
 
 function TRoom.Fight(): Boolean;
 var
-  LLootPossible, LHeroArmed: Boolean;
-  LLootWeapon: Integer;
+  LHeroArmed: Boolean;
+  LLootWeapon, LLootChanceModifier: Integer;
 begin
   if not HasEnemy() then
     Exit(True);
@@ -188,11 +189,11 @@ begin
   if Result then
   begin
     TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
-    LLootPossible := not (FActors[0] is TBoss);
+    LLootChanceModifier := IIF(FActors[0] is TBoss, 0, IIF(FActors[0] is TMiniBoss, 100, 1));
     FActors.Delete(0);
     LHeroArmed := TMap.Map.Hero.Weapon <> hwNo;
     // 25% chance to spawn random weapon loot if not armed, 50% to spawn same weapon if armed
-    if LLootPossible and (Random(100) < (25 + 25 * Ord(LHeroArmed))) then
+    if Random(100) < (25 + 25 * Ord(LHeroArmed)) * LLootChanceModifier then
     begin    
       LLootWeapon := IIF(LHeroArmed, Ord(TMap.Map.Hero.Weapon), Random(3) + 1);
       FActors.Add(TWeaponLoot.Create(nil, NHeroWeapon(LLootWeapon)));
@@ -367,7 +368,7 @@ end;
 
 function TEnemy.CalcLevel(ATower, AStock: Integer): Integer;
 begin
-  Result := (ATower + Random(AStock)) * Max(ATower + 2, AStock + Random(10) - ATower)
+  Result := (ATower + Random(AStock)) * Max(ATower + 1, AStock + Random(10) - ATower)
     * (ATower + Random(Ord(ATower > 1) + 1)) * (ATower - Random(Ord(ATower > 1) + 1)) 
     + Ord(ATower > 1) * (Random(Max(7, 2 * ATower + 2 * AStock - 11)) + 17);
   if (ATower = 1) and (AStock = 2) then
@@ -518,6 +519,11 @@ end;
 function TMiniBoss.GetVisual(): string;
 begin
   Result := IIF(FRevealed, FLevel.ToString, FVisualFormula);
+end;
+
+function TMiniBoss.CalcLevel(ATower, AStock: Integer): Integer;
+begin
+  Result := inherited CalcLevel(ATower, AStock) + (100 + Random(50)) * ATower;
 end;
 
 end.

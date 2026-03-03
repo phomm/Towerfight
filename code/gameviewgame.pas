@@ -80,6 +80,21 @@ uses
 // Own
   Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, imagescomponent;
 
+function HighlightCaption(const ACaption: string): string;
+var
+  I: Integer;
+begin
+  Result := '';
+  if Pos('?', ACaption) <= 0 then  
+    Result := ACaption
+  else
+    for I := 1 to Length(ACaption) do
+      if ACaption[I] = '?' then
+        Result := Result + '<font color="#FF0000">?</font>'
+      else 
+        Result := Result + ACaption[I];
+end;
+
 constructor TViewGame.Create(AOwner: TComponent);
 begin
   inherited;
@@ -166,7 +181,7 @@ begin
       LRoomComponent.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
       if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
       begin
-        LRoomComponent.LabelRight.Caption := LRoom.Actors[0].Visual;
+        LRoomComponent.LabelRight.Caption := HighlightCaption(LRoom.Actors[0].Visual);
         LRoomComponent.ImageRight.Url := LRoom.Actors[0].AssetId;
         if LRoom.Actors[0] is TBoss then
           LRoomComponent.LabelRight.Border.AllSides := 4;
@@ -370,7 +385,7 @@ begin
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
   LActor.Reveal();
-  ARoom.LabelRight.Caption := LActor.Visual;
+  ARoom.LabelRight.Caption := HighlightCaption(LActor.Visual);
   if Map.HeroRoom.Fight() then
   begin
     LScene := RandomBloodSplash();

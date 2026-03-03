@@ -55,6 +55,7 @@
       "FontSize" : 3.5000000000000000E+001,
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
+      "Html" : true,
       "Name" : "LabelRight",
       "Text" : [
         "R"
