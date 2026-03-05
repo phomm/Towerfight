@@ -25,8 +25,8 @@
         "$$ClassName" : "TCastleImagePersistent",
         "Url" : "castle-data:/resources/leaders.png"
       },
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
       "Name" : "ImageTitle",
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
@@ -174,74 +174,89 @@
               "VerticalAnchorSelf" : "vpTop"
             },
             {
-              "$$ClassName" : "TCastleLabel",
-              "Name" : "Label1",
-              "Text" : [
-                "1               5000       Winner"
-              ],
+              "$$ClassName" : "TCastleVerticalGroup",
+              "Name" : "GroupLeaders",
+              "Padding" : 2.0000000000000000E+001,
+              "Spacing" : 1.0000000000000000E+001,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
                 "X" : 1.0000000000000000E+002,
                 "Y" : -1.4400000000000000E+002
               },
               "VerticalAnchorParent" : "vpTop",
-              "VerticalAnchorSelf" : "vpTop"
-            },
-            {
-              "$$ClassName" : "TCastleLabel",
-              "Name" : "Label2",
-              "Text" : [
-                "2               4900       Winner"
-              ],
-              "TranslationPersistent" : {
-                "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0000000000000000E+002,
-                "Y" : -1.8800000000000000E+002
-              },
-              "VerticalAnchorParent" : "vpTop",
-              "VerticalAnchorSelf" : "vpTop"
-            },
-            {
-              "$$ClassName" : "TCastleLabel",
-              "Name" : "Label3",
-              "Text" : [
-                "3               4800       Winner"
-              ],
-              "TranslationPersistent" : {
-                "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0000000000000000E+002,
-                "Y" : -2.3200000000000000E+002
-              },
-              "VerticalAnchorParent" : "vpTop",
-              "VerticalAnchorSelf" : "vpTop"
-            },
-            {
-              "$$ClassName" : "TCastleLabel",
-              "Name" : "Label4",
-              "Text" : [
-                "4               4700       Winner"
-              ],
-              "TranslationPersistent" : {
-                "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0000000000000000E+002,
-                "Y" : -2.7600000000000000E+002
-              },
-              "VerticalAnchorParent" : "vpTop",
-              "VerticalAnchorSelf" : "vpTop"
-            },
-            {
-              "$$ClassName" : "TCastleLabel",
-              "Name" : "Label5",
-              "Text" : [
-                "5               4600       Winner"
-              ],
-              "TranslationPersistent" : {
-                "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0000000000000000E+002,
-                "Y" : -3.2000000000000000E+002
-              },
-              "VerticalAnchorParent" : "vpTop",
-              "VerticalAnchorSelf" : "vpTop"
+              "VerticalAnchorSelf" : "vpTop",
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "Name" : "Label1",
+                  "Text" : [
+                    "1               5000       Winner"
+                  ],
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 2.0000000000000000E+001,
+                    "Y" : -2.0000000000000000E+001
+                  },
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                },
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "Name" : "Label2",
+                  "Text" : [
+                    "2               4900       Winner"
+                  ],
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 2.0000000000000000E+001,
+                    "Y" : -5.4000000000000000E+001
+                  },
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                },
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "Name" : "Label3",
+                  "Text" : [
+                    "3               4800       Winner"
+                  ],
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 2.0000000000000000E+001,
+                    "Y" : -8.8000000000000000E+001
+                  },
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                },
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "Name" : "Label4",
+                  "Text" : [
+                    "4               4700       Winner"
+                  ],
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 2.0000000000000000E+001,
+                    "Y" : -1.2200000000000000E+002
+                  },
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                },
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "Name" : "Label5",
+                  "Text" : [
+                    "5               4600       Winner"
+                  ],
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "X" : 2.0000000000000000E+001,
+                    "Y" : -1.5600000000000000E+002
+                  },
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                }
+              ]
             }
           ]
         }

@@ -29,17 +29,20 @@ type
   published
     ButtonMenu, ButtonSync: TCastleButton;
     FactoryButton: TCastleComponentFactory;
-    GroupDifficulty: TCastleUserInterface;
+    GroupDifficulty, GroupLeaders: TCastleUserInterface;
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Start; override;
+    procedure Resume; override;
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     FLeaders: TObjectList<TLeader>;
+    FCurrentDifficultyButton: TCastleButton;
     procedure ButtonMenuClick(Sender: TObject);
     procedure ButtonSyncClick(Sender: TObject);
     procedure ButtonDifficultyClick(Sender: TObject);
+    procedure SwitchDifficulty(AButton: TCastleButton);
     procedure GetLeadersFinished(const AContent: string);
   const 
     ServerApiUrl = 'https://localhost:7150/api/';//'https://towerfightserver.onrender.com/api/';
@@ -99,11 +102,21 @@ begin
     LButton := FactoryButton.ComponentLoad(GroupDifficulty) as TCastleButton;
     LButton.Caption := DifficultyName(LDifficulty);
     LButton.Pressed := LButton.Caption = LCurrentDifficultyName;
+    if LButton.Pressed then
+      FCurrentDifficultyButton := LButton;
     LButton.Tag := Ord(LDifficulty);
     LButton.OnClick := ButtonDifficultyClick;
     GroupDifficulty.InsertFront(LButton);
   end;
+  GroupLeaders.ClearControls();
 end;
+
+procedure TViewLeaders.Resume;
+begin
+  inherited;
+  if FLeaders.Count = 0 then
+    ButtonSyncClick(nil);
+end;  
 
 function TViewLeaders.Press(const Event: TInputPressRelease): Boolean;
 begin
@@ -129,16 +142,34 @@ begin
 end;
 
 procedure TViewLeaders.ButtonDifficultyClick(Sender: TObject);
+begin
+  if not (Sender is TCastleButton) or TCastleButton(Sender).Pressed then 
+    Exit;
+  SwitchDifficulty(TCastleButton(Sender));
+end;
+
+procedure TViewLeaders.SwitchDifficulty(AButton: TCastleButton);
 var
   LButton: TCastleUserInterface;
+  LDifficulty: NDifficulty;
+  LLeader: TLeader;
+  LLabel: TCastleLabel;
 begin
   for LButton in GroupDifficulty do
     if LButton is TCastleButton then
+      TCastleButton(LButton).Pressed := LButton = AButton;
+  FCurrentDifficultyButton := AButton;
+
+//  populate the list of leaders for the selected difficulty. 
+  GroupLeaders.ClearControls();
+  LDifficulty := NDifficulty(FCurrentDifficultyButton.Tag);
+  for LLeader in FLeaders do
+    if LLeader.Difficulty = Ord(LDifficulty) then
     begin
-      TCastleButton(LButton).Pressed := LButton = Sender;
+      LLabel := TCastleLabel.Create(GroupLeaders);
+      LLabel.Caption := Format('%d             %d         %s', [LLeader.Number, LLeader.Score, LLeader.Name]);
+      GroupLeaders.InsertFront(LLabel);
     end;
-// Load from server if not yet done, and populate the list of leaders for the selected difficulty. 
-  
 end;
 
 procedure TViewLeaders.GetLeadersFinished(const AContent: string);
@@ -153,17 +184,21 @@ begin
     for LElement in LJsonArray do
     try
       LLeader := TLeader.Create();
+      //WriteLnLog('leader json: ' + LElement.Value.AsJson);
       with TJSONDeStreamer.Create(nil) do
         try
+          Options := [jdoCaseInsensitive];
           JSONToObject(LElement.Value as TJSONObject, LLeader);
         finally
           Free();
         end;
       FLeaders.Add(LLeader);
+      //WriteLnLog(Format('Loaded leader: %d, %d, %s, difficulty: %d', [LLeader.Number, LLeader.Score, LLeader.Name, LLeader.Difficulty]));
     except
       WriteLnLog('Incorrect leader: ' + LElement.Key);
     end;
-    WriteLnLog('Leaders loaded: ' + IntToStr(FLeaders.Count));
+    //WriteLnLog('Leaders loaded: ' + IntToStr(FLeaders.Count));
+    SwitchDifficulty(FCurrentDifficultyButton);
   end
   else
     WriteLnLog('Failed to parse leaders: ' + AContent);
