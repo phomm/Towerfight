@@ -261,6 +261,10 @@
           ]
         }
       ]
+    },
+    {
+      "$$ClassName" : "TCastleNotifications",
+      "Name" : "PanelNotifications"
     }
   ]
 }

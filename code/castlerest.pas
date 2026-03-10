@@ -6,87 +6,152 @@ interface
 
 uses
 // System
-  Classes,
+  Classes, fpjson,
   // Castle
   castledownload
   ;
 
 type
-  TRetStringEvent = procedure(const AStr: string) of object;
+  TRetStringEvent = procedure(const AStr: string; ASuccess: Boolean) of object;
 
   TCastleRest = class
     private
+      class var Download: TCastleDownload;
       class var FEvent: TRetStringEvent;
       class procedure RequestFinish(const ASender: TCastleDownload; var AFreeSender: Boolean);
-      class procedure OnServerRequestCompleted(const AContent: string; AEventKey: Integer);  
+      class procedure OnServerRequestCompleted(const AContent: string; ASuccess: Boolean);  
     public
       class function ServerRequest(const AUrl: string; ACompletedEvent: TRetStringEvent; 
         const ABody: string = ''; const AHeaders: string = ''; const AMethod: string = ''): Boolean;
+      class function IsRunning(): Boolean;
   end;
+
+  function ParseJsonArray(AJson: TJSONStringType; out AJsonArray: TJSONArray): Boolean;
+  function ParseJsonObject(AJson: TJSONStringType; out AJsonObject: TJSONObject): Boolean;
+  procedure ReadJsonToObject<T>(AJson: TJSONObject; AObject: T);
+  function Serialize(AObject: TObject): TJSONObject;
+
+  const 
+    ServerApiUrl = 'https://localhost:7150/api/leaders';//'https://towerfightserver.onrender.com/api/leaders';  
 
 implementation
 
 uses
 // System
-  SysUtils,
+  SysUtils, fpjsonrtti, jsonparser, jsonscanner,
 // Castle
   CastleLog, CastleUriUtils, CastleStringUtils, CastleClassUtils, CastleHttps, 
 // Own
   Common
 ;
 
+function ParseJsonArray(AJson: TJSONStringType; out AJsonArray: TJSONArray): Boolean;
+begin
+  Result := False;
+  if AJson[1] <> '[' then
+    Exit;
+  with TJSONParser.Create(AJson, DefaultOptions) do
+  try
+    AJsonArray := Parse() as TJSONArray;
+    Result := Assigned(AJsonArray);
+  finally
+    Free();
+  end;
+end;
+
+function ParseJsonObject(AJson: TJSONStringType; out AJsonObject: TJSONObject): Boolean;
+begin
+  Result := False;
+  if AJson[1] <> '{' then
+    Exit;
+  with TJSONParser.Create(AJson, DefaultOptions) do
+  try
+    AJsonObject := Parse() as TJSONObject;
+    Result := Assigned(AJsonObject);
+  finally
+    Free();
+  end;
+end;
+
+procedure ReadJsonToObject<T>(AJson: TJSONObject; AObject: T);
+begin
+  with TJSONDeStreamer.Create(nil) do
+  try
+    Options := [jdoCaseInsensitive, jdoIgnoreNulls, jdoNullClearsProperty];
+    JSONToObject(AJson, AObject);
+  finally
+    Free();
+  end;
+end;
+
+function Serialize(AObject: TObject): TJSONObject;
+begin
+  with TJSONStreamer.Create(nil) do
+  try
+    Options := [jsoLowerPropertyNames];
+    Result := ObjectToJSON(AObject);
+  finally
+    Free();
+  end;
+end;
+
 class function TCastleRest.ServerRequest(const AUrl: string; ACompletedEvent: TRetStringEvent; 
   const ABody: string = ''; const AHeaders: string = ''; const AMethod: string = ''): Boolean;
 var
-  LDownload: TCastleDownload;
   LStringStream: TStringStream;
   LHeaderParts: TArray<string>;
   LMethod: string;
   procedure SetMethod();
   begin
     if AMethod = 'POST' then
-      LDownload.HttpMethod := hmPost
+      Download.HttpMethod := hmPost
     else if AMethod = 'DELETE' then
-      LDownload.HttpMethod := hmDelete
+      Download.HttpMethod := hmDelete
     else if ABody <> '' then
-      LDownload.HttpMethod := hmPost
+      Download.HttpMethod := hmPost
     else
-      LDownload.HttpMethod := hmGet;
+      Download.HttpMethod := hmGet;
   end;
 begin
   Result := False;
   Assert(Assigned(ACompletedEvent), 'NRE:ACompletedEvent');
 
 // https://github.com/castle-engine/castle-engine/blob/master/examples/network/asynchronous_download/code/gameviewmain.pas
-  LDownload := TCastleDownload.Create(nil);
+  Download := TCastleDownload.Create(nil);
   FEvent := ACompletedEvent;
   SetMethod();
-  LMethod := EnumName(TypeInfo(THttpMethod), Ord(LDownload.HttpMethod));
+  LMethod := EnumName(TypeInfo(THttpMethod), Ord(Download.HttpMethod));
   WriteLnLog(LMethod + ' request to ' + AUrl);
-  LDownload.Url := AUrl;
-  LDownload.OnFinish := RequestFinish;
+  Download.Url := AUrl;
+  Download.OnFinish := RequestFinish;
   if (AHeaders <> '') then
   begin
     LHeaderParts := AHeaders.Split(':');
     if Length(LHeaderParts) = 2 then
-      LDownload.HttpHeader(LHeaderParts[0], LHeaderParts[1]);
+      Download.HttpHeader(LHeaderParts[0], LHeaderParts[1]);
   end;
   if (ABody <> '') then 
   begin
-    LDownload.HttpHeader('Content-Type', 'application/json');
+    Download.HttpHeader('Content-Type', 'application/json');
     LStringStream := TStringStream.Create(ABody);
     try
-      LDownload.HttpRequestBody.CopyFrom(LStringStream, 0);
+      WriteLnLog(ABody);
+      Download.HttpRequestBody.CopyFrom(LStringStream, 0);
     finally
       FreeAndNil(LStringStream);
     end;
   end;
 
-  try  
-    LDownload.Start(); // must be last, async call
+  try
+    Download.Start(); // must be last, async call
     Result := True;
   except
   end;
+end;
+
+class function TCastleRest.IsRunning(): Boolean;
+begin
+  Result := Assigned(Download) and (Download.Status = dsDownloading);
 end;
 
 class procedure TCastleRest.RequestFinish(const ASender: TCastleDownload; var AFreeSender: Boolean);
@@ -148,16 +213,15 @@ begin
   if (LContent = '') and (ASender.Status = dsError) then
     LContent := Format('Server response code: %d %s', [ASender.HttpResponseCode, Status()]);
 
-  OnServerRequestCompleted(LContent, ASender.Tag);
+  Download := nil;
+  OnServerRequestCompleted(LContent, ASender.Status = dsSuccess);
 end;
 
-class procedure TCastleRest.OnServerRequestCompleted(const AContent: string; AEventKey: Integer);
-var
-  LCompletedEvent: TRetStringEvent;
+class procedure TCastleRest.OnServerRequestCompleted(const AContent: string; ASuccess: Boolean);
 begin
   try
     if Assigned(FEvent) then
-      FEvent(AContent);
+      FEvent(AContent, ASuccess);
   except
     WriteLnLog('Failed processing client event after ServerRequestCompleted: ' + AContent);
   end;

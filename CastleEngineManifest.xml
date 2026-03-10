@@ -8,7 +8,8 @@ See https://castle-engine.io/project_manifest for documentation of this file.
 <project name="TowerFight"
   standalone_source="TowerFight_standalone.dpr"
   game_units="GameInitialize"
-  qualified_name="com.mycompany.TowerFight"
+  qualified_name="ru.ephyre.towerfight"
+  author="ephyre team"
   caption="Tower Fight"
 >
   <compiler_options>
@@ -30,4 +31,23 @@ See https://castle-engine.io/project_manifest for documentation of this file.
       <define>CASTLE_GLTF_SUPPORT_DISABLE</define> 
     </defines>
   </compiler_options>
+  <dependencies>
+    <!-- read font files like .ttf -->
+    <dependency name="Freetype" />
+    <!-- read .gz files -->
+    <dependency name="Zlib" />
+    <!-- read .png files -->
+    <dependency name="Png" />
+    <!-- play sound -->
+    <dependency name="Sound" />
+    <!-- read .ogg (OggVorbis) compressed audio files -->
+    <dependency name="OggVorbis" />
+    <!-- ability to download using https (not only http) -->
+    <dependency name="Https" />
+  </dependencies>
+  <android>
+    <services>
+      <service name="keyboard" />
+    </services>
+  </android>
 </project>

@@ -8,6 +8,7 @@ uses
 // System
   Classes, generics.collections,
 // Castle  
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, CastleNotifications,
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize;
 
 type
@@ -30,7 +31,9 @@ type
     ButtonMenu, ButtonSync: TCastleButton;
     FactoryButton: TCastleComponentFactory;
     GroupDifficulty, GroupLeaders: TCastleUserInterface;
+    PanelNotifications: TCastleNotifications;
   public
+    NeedsSync: Boolean;
     constructor Create(AOwner: TComponent); override;
     destructor Destroy; override;
     procedure Start; override;
@@ -43,9 +46,7 @@ type
     procedure ButtonSyncClick(Sender: TObject);
     procedure ButtonDifficultyClick(Sender: TObject);
     procedure SwitchDifficulty(AButton: TCastleButton);
-    procedure GetLeadersFinished(const AContent: string);
-  const 
-    ServerApiUrl = 'https://localhost:7150/api/';//'https://towerfightserver.onrender.com/api/';
+    procedure GetLeadersFinished(const AContent: string; ASuccess: Boolean);
   end;
 
 var
@@ -55,24 +56,12 @@ implementation
 
 uses 
 // System
-  SysUtils, fpjson, fpjsonrtti, jsonparser, jsonscanner,
+  SysUtils, fpjson,
 // Castle  
   castlewindow, castlelog,
 // Own
   gameoptions, castlerest
 ;
-
-function ParseJSONArray(AJson: TJSONStringType; out AJsonArray: TJSONArray): Boolean;
-begin
-  Result := False;
-  with TJSONParser.Create(AJson, DefaultOptions) do
-  try
-    AJsonArray := Parse() as TJSONArray;
-    Result := Assigned(AJsonArray);
-  finally
-    Free();
-  end;
-end;
 
 constructor TViewLeaders.Create(AOwner: TComponent);
 begin
@@ -114,8 +103,8 @@ end;
 procedure TViewLeaders.Resume;
 begin
   inherited;
-  if FLeaders.Count = 0 then
-    ButtonSyncClick(nil);
+  if (FLeaders.Count = 0) or NeedsSync then
+    ButtonSync.DoClick();
 end;  
 
 function TViewLeaders.Press(const Event: TInputPressRelease): Boolean;
@@ -138,7 +127,10 @@ end;
 procedure TViewLeaders.ButtonSyncClick(Sender: TObject);
 begin
 // Sync with server, and update the list of leaders for the current difficulty.
-  TCastleRest.ServerRequest(ServerApiUrl + 'leaders', GetLeadersFinished);
+  if not TCastleRest.IsRunning() then 
+    TCastleRest.ServerRequest(ServerApiUrl, GetLeadersFinished)
+  else
+    PanelNotifications.Show('Another request is running');
 end;
 
 procedure TViewLeaders.ButtonDifficultyClick(Sender: TObject);
@@ -172,7 +164,7 @@ begin
     end;
 end;
 
-procedure TViewLeaders.GetLeadersFinished(const AContent: string);
+procedure TViewLeaders.GetLeadersFinished(const AContent: string; ASuccess: Boolean);
 var
   LJsonArray: TJSONArray;
   LElement: TJSONEnum;
@@ -185,13 +177,7 @@ begin
     try
       LLeader := TLeader.Create();
       //WriteLnLog('leader json: ' + LElement.Value.AsJson);
-      with TJSONDeStreamer.Create(nil) do
-        try
-          Options := [jdoCaseInsensitive];
-          JSONToObject(LElement.Value as TJSONObject, LLeader);
-        finally
-          Free();
-        end;
+      ReadJsonToObject<TLeader>(LElement.Value as TJSONObject, LLeader);
       FLeaders.Add(LLeader);
       //WriteLnLog(Format('Loaded leader: %d, %d, %s, difficulty: %d', [LLeader.Number, LLeader.Score, LLeader.Name, LLeader.Difficulty]));
     except
@@ -199,6 +185,8 @@ begin
     end;
     //WriteLnLog('Leaders loaded: ' + IntToStr(FLeaders.Count));
     SwitchDifficulty(FCurrentDifficultyButton);
+    PanelNotifications.Show('Leaders loaded');
+    NeedsSync := False;
   end
   else
     WriteLnLog('Failed to parse leaders: ' + AContent);
