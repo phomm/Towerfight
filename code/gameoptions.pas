@@ -29,6 +29,12 @@ procedure SetFullscreen(AValue: Boolean);
 function UseTimer(): Boolean;
 procedure SetUseTimer(AValue: Boolean);
 
+function UserName(): string;
+procedure SetUserName(const AValue: string);
+
+function UserGuid(): string;
+procedure SetUserGuid(const AValue: string);
+
 implementation
 
 uses 
@@ -55,7 +61,8 @@ const
 procedure SetValue<T>(const AKey: string; AValue: T);
 begin
   UserConfig.SetValue(AKey, AValue);
-  UserConfig.Save();
+  if UserConfig.Modified then
+    UserConfig.Save();
 end;
 
 function Difficulty(): NDifficulty;
@@ -106,6 +113,26 @@ end;
 procedure SetUseTimer(AValue: Boolean);
 begin
   SetValue<Boolean>(UseTimerKey, AValue);
+end;
+
+function UserName(): string;
+begin
+  Result := UserConfig.GetValue('UserName', '');
+end;
+
+procedure SetUserName(const AValue: string);
+begin
+  SetValue<string>('UserName', AValue);
+end;
+
+function UserGuid(): string;
+begin
+  Result := UserConfig.GetValue('UserGuid', '');
+end;
+
+procedure SetUserGuid(const AValue: string);
+begin
+  SetValue<string>('UserGuid', AValue);
 end;
 
 initialization

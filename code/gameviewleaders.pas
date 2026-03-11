@@ -9,23 +9,11 @@ uses
   Classes, generics.collections,
 // Castle  
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, CastleNotifications,
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize;
+// Own
+  models  
+  ;
 
 type
-
-  TLeader = class
-  private
-    FNumber: Integer;
-    FScore: Integer;
-    FDifficulty: Integer;
-    FName: string;
-  published
-    property Number: Integer read FNumber write FNumber;
-    property Score: Integer read FScore write FScore;
-    property Difficulty: Integer read FDifficulty write FDifficulty;
-    property Name: string read FName write FName;
-  end;
-
   TViewLeaders = class(TCastleView)
   published
     ButtonMenu, ButtonSync: TCastleButton;

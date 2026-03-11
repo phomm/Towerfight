@@ -1,0 +1,3 @@
+[submodule "code/drpeaboss-sha2"]
+	path = code/drpeaboss-sha2
+	url = https://github.com/DrPeaboss/sha2
