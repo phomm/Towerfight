@@ -64,8 +64,7 @@ type
     procedure UpdateMiniBossRooms();
     procedure WeaponClick(AWeapon: NHeroWeapon; AFromUser: Boolean = False);
   private const
-    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
-    GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
+    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)    
   end;
 
 var
@@ -469,7 +468,8 @@ begin
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
       TimerPreEnd.Exists := True;
-      FViewEnd := ViewWin;      
+      FViewEnd := ViewWin;
+      ViewWin.Score := Map.Score(FGameTicks);
     end;
     UpdateRooms();
     UpdateMiniBossRooms();

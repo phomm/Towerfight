@@ -59,6 +59,111 @@
       "PaddingVertical" : 2.0000000000000000E+001,
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "AutoSizeToChildren" : true,
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/formulaback.png"
+      },
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "ImageControl1",
+      "Stretch" : true,
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleVerticalGroup",
+          "Name" : "VerticalGroup2",
+          "Padding" : 1.0000000000000000E+002,
+          "Spacing" : 2.0000000000000000E+001,
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleLabel",
+              "FontSize" : 6.0000000000000000E+001,
+              "Name" : "LabelTitle",
+              "Text" : [
+                "Your Score:"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.0000000000000000E+002,
+                "Y" : -1.0000000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleLabel",
+              "FontSize" : 1.5000000000000000E+002,
+              "Name" : "LabelScore",
+              "Text" : [
+                "Score"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.0000000000000000E+002,
+                "Y" : -1.6500000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleEdit",
+              "CaptureAllInput" : false,
+              "FontSize" : 8.0000000000000000E+001,
+              "Name" : "EditName",
+              "Placeholder" : "Insert Name",
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.0000000000000000E+002,
+                "Y" : -2.9750000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "Width" : 8.0000000000000000E+002
+            },
+            {
+              "$$ClassName" : "TCastleButton",
+              "Caption" : "Submit Scores",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/cell-old.png"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "FontSize" : 7.0000000000000000E+001,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonSubmit",
+              "PaddingHorizontal" : 2.0000000000000000E+001,
+              "PaddingVertical" : 2.0000000000000000E+001,
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.0000000000000000E+002,
+                "Y" : -3.8910000610351562E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$$ClassName" : "TCastleNotifications",
+      "Name" : "PanelNotifications"
     }
   ]
 }

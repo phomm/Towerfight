@@ -1,20 +1,33 @@
 unit GameViewWin;
 
+{$mode delphi}
+
 interface
 
-uses Classes,
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
+uses 
+// System
+  Classes,
+// Castle
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleNotifications;
 
 type
   TViewWin = class(TCastleView)
   published
-    ButtonMenu: TCastleButton;
+    ButtonMenu, ButtonSubmit: TCastleButton;
+    LabelScore: TCastleLabel;
+    EditName: TCastleEdit;
+    PanelNotifications: TCastleNotifications;
   public
+    Score: Integer;    
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
+    procedure Resume; override;
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     procedure ButtonMenuClick(Sender: TObject);
+    procedure ButtonSubmitClick(Sender: TObject);
+    procedure SubmitScores();
+    procedure SubmitScoresFinished(const AContent: string; ASuccess: Boolean);
   end;
 
 var
@@ -23,10 +36,12 @@ var
 implementation
 
 uses
+// System
+  SysUtils, fpjson,
 // Castle
-  CastleSoundEngine,
+  CastleSoundEngine, castlelog,
 // Own
-  gameviewmain, audiocomponent, gameoptions;
+  gameviewmain, audiocomponent, gameoptions, gameviewleaders, castleRest, gameentities, models, Common;
 
 constructor TViewWin.Create(AOwner: TComponent);
 begin
@@ -37,14 +52,30 @@ end;
 procedure TViewWin.Start;
 begin
   inherited;
-  ButtonMenu.OnClick := @ButtonMenuClick;
+  ButtonMenu.OnClick := ButtonMenuClick;
+  ButtonSubmit.OnClick := ButtonSubmitClick;
   SoundEngine.LoopingChannel[0].Sound := Audio.RandomWinTheme;
   SoundEngine.LoopingChannel[0].Sound.Volume := 5 * MusicLevel() / 100;
+end;
+
+procedure TViewWin.Resume;
+begin
+  inherited;
+  LabelScore.Caption := Score.ToString();
+  EditName.Text := UserName();
 end;
 
 procedure TViewWin.ButtonMenuClick(Sender: TObject);
 begin
   Container.View := ViewMain;
+end;
+
+procedure TViewWin.ButtonSubmitClick(Sender: TObject);
+begin
+  if Trim(EditName.Text) = '' then
+    PanelNotifications.Show('Empty name passed')
+  else
+    SubmitScores();
 end;
 
 function TViewWin.Press(const Event: TInputPressRelease): Boolean;
@@ -57,6 +88,46 @@ begin
     Container.View := ViewMain;
     Exit(true); // key was handled
   end; 
+end;
+
+procedure TViewWin.SubmitScores();
+var
+  LLeader: TSubmitLeader;
+begin
+  if not TCastleRest.IsRunning() then
+  begin
+    LLeader := TSubmitLeader.Create(EditName.Text, Score, Difficulty());
+    TCastleRest.ServerRequest(ServerApiUrl, SubmitScoresFinished, LLeader.Serialize());
+    FreeAndNil(LLeader);
+  end
+  else
+    PanelNotifications.Show('Another request is running');
+end;
+
+procedure TViewWin.SubmitScoresFinished(const AContent: string; ASuccess: Boolean);
+var
+  LJsonObject: TJsonObject;
+  LProblemDetails: TProblemDetails;
+begin
+  if ASuccess then
+  begin
+    if ParseJsonObject(AContent, LJsonObject) then
+    begin
+      SetUserGuid(LJsonObject.Strings['guid']);
+      SetUserName(EditName.Text);
+    end;
+    ViewLeaders.NeedsSync := True;
+    Container.View := ViewLeaders;
+  end
+  else if ParseJsonObject(AContent, LJsonObject) then
+  begin
+    LProblemDetails := TProblemDetails.Create();
+    ReadJsonToObject<TProblemDetails>(LJSONObject, LProblemDetails);
+    PanelNotifications.Show(LProblemDetails.ToString());
+    FreeAndnil(LProblemDetails);
+  end
+  else 
+    PanelNotifications.Show('Submit failed: ' + AContent);
 end;
 
 end.

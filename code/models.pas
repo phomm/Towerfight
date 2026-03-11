@@ -90,7 +90,9 @@ const
 begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
   WriteLnLog('ForHash ' + FHash);
-  FHash := TSHA2.HashString(UTF8Encode(FHash), SHA2_256).ToString
+  FHash := SHA2String(FHash, SHA2_256).ToString;
+  //FHash := SHA2String(('A'), SHA2_256).ToString;
+  //FHash := Sha2File('a.txt', SHA2_256).ToString;
 end;
 
 function TSubmitLeader.Serialize(): string;

@@ -133,11 +133,13 @@ type
     function GetRoomIndex(ATowerIndex, AStockIndex: Integer): Integer;
     function GetRoomByIndex(ARoomIndex: Integer): TRoom;
     function IsRoomReachable(ATowerIndex, AStockIndex: Integer): Boolean;
+    function Score(ATimeLeft: Integer): Integer;
   class function Map(): TMap;
   class procedure Die();
   end;
 
 const
+  GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
   WeaponToOperation: array[NHeroWeapon] of string = ('', '+', '-', '*');
   WeaponFileNames: array[Succ(Low(NHeroWeapon))..High(NHeroWeapon)] of string = 
     ('weapon-shuriken.png', 'weapon-kunai.png', 'weapon-star.png');
@@ -390,6 +392,11 @@ begin
       if Random(2) = 0 then
         Break;
     end;
+end;
+
+function TMap.Score(ATimeLeft: Integer): Integer;
+begin
+  Result := Hero.Level;
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
