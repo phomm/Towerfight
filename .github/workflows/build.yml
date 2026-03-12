@@ -41,7 +41,7 @@ jobs:
         env:
           salt: ${{ secrets.Salt }}
         run: |
-          cd ${{ github.workspace }} |
+          cd |
           ls -a |
           echo "$salt" >> /code/salt.inc 
 
