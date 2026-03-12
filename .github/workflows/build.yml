@@ -31,18 +31,18 @@ jobs:
     runs-on: ubuntu-latest
     container: kambi/castle-engine-cloud-builds-tools:cge-unstable
     steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: 'recursive'   # fetch submodules listed in .gitmodules
+          fetch-depth: 0            # fetch full history (required for some submodule setups)
+      
       - shell: bash
         name: generate salt include file from secret
         env:
           Salt: ${{ secrets.Salt }}
         run: |
-          0 > /code/salt.inc && echo "$Salt" >> /code/salt.inc  
-        
-      - uses: actions/checkout@v4
-        with:
-          submodules: 'recursive'   # fetch submodules listed in .gitmodules
-          fetch-depth: 0            # fetch full history (required for some submodule setups)
-
+          0 > /code/salt.inc && echo "$Salt" >> /code/salt.inc 
+          
       # We use "cge-unstable" Docker image, that already contains
       # Castle Game Engine sources and build tools.
       #

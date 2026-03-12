@@ -63,6 +63,7 @@ begin
   inherited;
   LabelScore.Caption := Score.ToString();
   EditName.Text := UserName();
+  EditName.Enabled := True;
 end;
 
 procedure TViewWin.ButtonMenuClick(Sender: TObject);
@@ -73,9 +74,13 @@ end;
 procedure TViewWin.ButtonSubmitClick(Sender: TObject);
 begin
   if Trim(EditName.Text) = '' then
-    PanelNotifications.Show('Empty name passed')
-  else
-    SubmitScores();
+  begin
+    PanelNotifications.Show('Empty name passed');
+    Exit;
+  end;
+  
+  EditName.Enabled := False;
+  SubmitScores();
 end;
 
 function TViewWin.Press(const Event: TInputPressRelease): Boolean;
