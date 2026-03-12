@@ -36,14 +36,10 @@ jobs:
           submodules: 'recursive'   # fetch submodules listed in .gitmodules
           fetch-depth: 0            # fetch full history (required for some submodule setups)
       
-      - shell: bash
-        name: generate salt include file from secret
-        env:
-          salt: ${{ secrets.Salt }}
+      - name: generate salt include file from secret
         run: |
-          cd ${{ runner.temp }} |
           ls -a |
-          echo "$salt" >> /code/salt.inc 
+          echo ${{ secrets.Salt }} > /code/salt.inc 
 
       # We use "cge-unstable" Docker image, that already contains
       # Castle Game Engine sources and build tools.
