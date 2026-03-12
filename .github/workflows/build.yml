@@ -31,6 +31,13 @@ jobs:
     runs-on: ubuntu-latest
     container: kambi/castle-engine-cloud-builds-tools:cge-unstable
     steps:
+      - shell: bash
+        name: generate salt include file from secret
+        env:
+          Salt: ${{ secrets.Salt }}
+        run: |
+          echo "$Salt" >> /code/salt.inc  
+        
       - uses: actions/checkout@v4
         with:
           submodules: 'recursive'   # fetch submodules listed in .gitmodules
@@ -66,14 +73,14 @@ jobs:
           path: "*-win64-x86_64.zip"
           if-no-files-found: error
 
-      #- name: Package Linux
-      #  run: castle-engine package --os=linux --cpu=x86_64 --verbose
-      #- name: Archive Artifacts
-      #  uses: actions/upload-artifact@v4
-      #  with:
-      #    name: linux-build
-      #    path: "*-linux-x86_64.tar.gz"
-      #    if-no-files-found: error       
+      - name: Package Linux
+        run: castle-engine package --os=linux --cpu=x86_64 --verbose
+      - name: Archive Artifacts
+        uses: actions/upload-artifact@v4
+        with:
+          name: linux-build
+          path: "*-linux-x86_64.tar.gz"
+          if-no-files-found: error       
       # tests are disabled for now    
       #- name: Run tests
       #  run: ./Intact_Castle
@@ -114,7 +121,7 @@ jobs:
     # Releases files in the "snapshot" release.
     - name: Release Artifacts
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *.apk #*.tar.gz
+      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *.apk *.tar.gz
       env:
         GH_TOKEN: ${{ github.token }}
 
