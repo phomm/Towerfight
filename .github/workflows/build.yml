@@ -41,9 +41,7 @@ jobs:
         env:
           salt: ${{ secrets.Salt }}
         run: |
-          cd |
-          ls -a |
-          echo "$salt" >> /code/salt.inc 
+          echo "$salt" >> ${{ runner.temp }}/code/salt.inc 
 
       # We use "cge-unstable" Docker image, that already contains
       # Castle Game Engine sources and build tools.
