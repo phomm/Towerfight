@@ -36,7 +36,7 @@ jobs:
         env:
           Salt: ${{ secrets.Salt }}
         run: |
-          echo "$Salt" >> /code/salt.inc  
+          0 > /code/salt.inc && echo "$Salt" >> /code/salt.inc  
         
       - uses: actions/checkout@v4
         with:
