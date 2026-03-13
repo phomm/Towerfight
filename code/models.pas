@@ -63,10 +63,14 @@ implementation
 uses
 // System
   SysUtils,
+// Thirdparty
+  HlpHashFactory, 
+  HlpIHash, 
+  HlpIHashResult, 
 // Castle
   castlelog,
 // Own
-  Common, sha2;
+  Common;
 
 function TProblemDetails.ToString(): string; 
 begin
@@ -86,13 +90,17 @@ end;
 procedure TSubmitLeader.CalcHash();
 const
 // sorted alphabetically
-  HashTemplate = 'Difficulty=%d%s:Name=%s:Salt=%s:Score=%d';  
+  HashTemplate = 'Difficulty=%d%s:Name=%s:Salt=%s:Score=%d'; 
+var
+  LHash: IHash;
+  LHashResult: IHashResult; 
 begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
   WriteLnLog('ForHash ' + FHash);
-  FHash := SHA2String(FHash, SHA2_256).ToString;
-  //FHash := SHA2String(('A'), SHA2_256).ToString;
-  //FHash := Sha2File('a.txt', SHA2_256).ToString;
+
+  LHash := THashFactory.TCrypto.CreateSHA2_256();
+  LHashResult := LHash.ComputeString(FHash, TEncoding.UTF8);
+  FHash := LHashResult.ToString(); 
 end;
 
 function TSubmitLeader.Serialize(): string;

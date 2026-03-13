@@ -48,7 +48,7 @@ uses
 // Castle  
   castlewindow, castlelog,
 // Own
-  gameoptions, castlerest
+  gameoptions, castlerest, gameviewmain
 ;
 
 constructor TViewLeaders.Create(AOwner: TComponent);
@@ -102,14 +102,14 @@ begin
 
   if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
   begin
-    Container.PopView();
+    Container.View := ViewMain;
     Exit(true); // key was handled
   end; 
 end;
 
 procedure TViewLeaders.ButtonMenuClick(Sender: TObject);
 begin
-  Container.PopView();
+  Container.View := ViewMain;
 end;
 
 procedure TViewLeaders.ButtonSyncClick(Sender: TObject);
