@@ -38,7 +38,7 @@ jobs:
       
       - name: generate salt include file from secret
         run: |
-          echo '${{ secrets.Salt }}' > ./code/salt.inc 
+          printf "Salt = '%s';" "${{ secrets.APP_SALT }}" > code/salt.inc
 
       # We use "cge-unstable" Docker image, that already contains
       # Castle Game Engine sources and build tools.

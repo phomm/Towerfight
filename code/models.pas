@@ -27,7 +27,7 @@ type
   TSubmitLeader = class(TLeader)
   private 
     FHash, FGuid: string;
-    const Salt = {$I salt.inc};
+    const {$I salt.inc}
   protected
     procedure CalcHash();
   public 
