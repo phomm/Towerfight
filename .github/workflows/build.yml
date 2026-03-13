@@ -39,7 +39,7 @@ jobs:
       - name: Install HashLib4Pascal Package
         run: |
           # The --add-package flag registers it without building it yet
-          lazbuild --add-package code/HashLib4Pascal/Packages/FPC/HashLib4PascalLib.lpk
+          lazbuild --add-package code/HashLib4Pascal/HashLib/src/Packages/FPC/HashLib4PascalPackage.lpk
 
       - name: generate salt include file from secret
         run: |
