@@ -36,6 +36,11 @@ jobs:
           submodules: 'recursive'   # fetch submodules listed in .gitmodules
           fetch-depth: 0            # fetch full history (required for some submodule setups)
       
+      - name: Install HashLib4Pascal Package
+        run: |
+          # The --add-package flag registers it without building it yet
+          lazbuild --add-package code/HashLib4Pascal/Packages/FPC/HashLib4PascalLib.lpk
+
       - name: generate salt include file from secret
         run: |
           printf "Salt = '%s';" "${{ secrets.APP_SALT }}" > code/salt.inc

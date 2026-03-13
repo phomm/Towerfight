@@ -15,20 +15,6 @@ See https://castle-engine.io/project_manifest for documentation of this file.
   <compiler_options>
     <search_paths>
       <path value="code/" />
-      <path value="code/HashLib4Pascal/HashLib/src/Base" />
-      <path value="code/HashLib4Pascal/HashLib/src/Interfaces" />
-      <path value="code/HashLib4Pascal/HashLib/src/Interfaces/IBlake2SParams" />
-      <path value="code/HashLib4Pascal/HashLib/src/Interfaces/IBlake2BParams" />
-      <path value="code/HashLib4Pascal/HashLib/src/Utils" />
-      <path value="code/HashLib4Pascal/HashLib/src/KDF" />
-      <path value="code/HashLib4Pascal/HashLib/src/NullDigest" />
-      <path value="code/HashLib4Pascal/HashLib/src/Checksum" />
-      <path value="code/HashLib4Pascal/HashLib/src/Hash32" />
-      <path value="code/HashLib4Pascal/HashLib/src/Hash64" />
-      <path value="code/HashLib4Pascal/HashLib/src/Hash128" />
-      <path value="code/HashLib4Pascal/HashLib/src/Crypto" />
-      <path value="code/HashLib4Pascal/HashLib/src/Crypto/Blake2BParams" />
-      <path value="code/HashLib4Pascal/HashLib/src/Crypto/Blake2SParams" />
     </search_paths>
 	<defines>
       <define>CASTLE_GEO_SUPPORT_DISABLE</define>
