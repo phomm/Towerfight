@@ -104,6 +104,7 @@ var
 begin
   if not TCastleRest.IsRunning() then
   begin
+    PanelNotifications.Show('Sending Score to server...');
     LLeader := TSubmitLeader.Create(EditName.Text, Score, Difficulty());
     TCastleRest.ServerRequest(ServerApiUrl, SubmitScoresFinished, LLeader.Serialize());
     FreeAndNil(LLeader);
