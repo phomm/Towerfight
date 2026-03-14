@@ -45,9 +45,6 @@ uses
 // Own  
   Common;
 
-var 
-  ETPDifficulty: Pointer;
-
 const
   DifficultyDefault = gdEasy;
   DifficultyKey = 'Difficulty';
@@ -69,11 +66,11 @@ end;
 
 function Difficulty(): NDifficulty;
 begin
-  Result := NDifficulty(EnumValue(ETPDifficulty, UserConfig.GetValue(DifficultyKey, '')));
+  Result := NDifficulty(EnumValue(TypeInfo(NDifficulty), UserConfig.GetValue(DifficultyKey, '')));
   if Ord(Result) in [0..254] then
     Exit;
   Result := DifficultyDefault;
-  SetValue<string>(DifficultyKey, EnumName(ETPDifficulty, Ord(Result)));
+  SetValue<string>(DifficultyKey, EnumName(TypeInfo(NDifficulty), Ord(Result)));
 end;
 
 function MusicLevel(): Byte;
@@ -93,7 +90,7 @@ end;
 
 function DifficultyName(AValue: NDifficulty): string;
 begin
-  Result := EnumName(ETPDifficulty, Ord(AValue));
+  Result := EnumName(TypeInfo(NDifficulty), Ord(AValue));
 end;
 
 function Fullscreen(): Boolean;
@@ -136,8 +133,5 @@ procedure SetUserGuid(const AValue: string);
 begin
   SetValue<string>(UserGuidKey, AValue);
 end;
-
-initialization
-  ETPDifficulty := TypeInfo(NDifficulty);
 
 end.
