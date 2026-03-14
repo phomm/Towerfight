@@ -443,8 +443,8 @@ begin
 
   if Map.Hero.Dead then
   begin
-    TimerPreEnd.Exists := True;
-    FViewEnd := ViewDefeat;
+    //TimerPreEnd.Exists := True;
+    Container.View := ViewDefeat;
   end
   else
   begin
@@ -464,21 +464,22 @@ begin
 
     if LWeapon = hwNo then
       WeaponClick(hwNo);
+    UpdateRooms();
+    UpdateMiniBossRooms();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
-      TimerPreEnd.Exists := True;
-      FViewEnd := ViewWin;
+      //TimerPreEnd.Exists := True;
       ViewWin.Score := Map.Score(FGameTicks);
+      Container.View := ViewWin;
     end;
-    UpdateRooms();
-    UpdateMiniBossRooms();
   end;
   FSkip := False;  
 end;
 
 procedure TViewGame.TimerPreEndTick(ASender: TObject);
 begin
+  FPause := True;
   TimerPreEnd.Exists := False;
   Container.View := FViewEnd;
 end;

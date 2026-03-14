@@ -60,30 +60,7 @@ const
   UserNameKey = 'UserName';
   UserGuidKey = 'UserGuid';
 
-{
 procedure SetValue<T>(const AKey: string; AValue: T);
-begin
-  UserConfig.SetValue(AKey, AValue);
-  if UserConfig.Modified then
-    UserConfig.Save();
-end;
-}
-
-procedure SetValue(const AKey: string; const AValue: string); overload;
-begin
-  UserConfig.SetValue(AKey, AValue);
-  if UserConfig.Modified then
-    UserConfig.Save();
-end;
-
-procedure SetValue(const AKey: string; AValue: Boolean); overload;
-begin
-  UserConfig.SetValue(AKey, AValue);
-  if UserConfig.Modified then
-    UserConfig.Save();
-end;
-
-procedure SetValue(const AKey: string; AValue: Integer); overload;
 begin
   UserConfig.SetValue(AKey, AValue);
   if UserConfig.Modified then
@@ -96,7 +73,7 @@ begin
   if Ord(Result) in [0..254] then
     Exit;
   Result := DifficultyDefault;
-  SetValue(DifficultyKey, EnumName(ETPDifficulty, Ord(Result)));
+  SetValue<string>(DifficultyKey, EnumName(ETPDifficulty, Ord(Result)));
 end;
 
 function MusicLevel(): Byte;
@@ -106,12 +83,12 @@ end;
 
 procedure SetMusicLevel(AValue: Byte);
 begin
-  SetValue(MusicKey, AValue);
+  SetValue<byte>(MusicKey, AValue);
 end;
 
 procedure SetDifficulty(AValue: NDifficulty);
 begin
-  SetValue(DifficultyKey, DifficultyName(AValue));
+  SetValue<string>(DifficultyKey, DifficultyName(AValue));
 end;
 
 function DifficultyName(AValue: NDifficulty): string;
@@ -126,7 +103,7 @@ end;
 
 procedure SetFullscreen(AValue: Boolean);
 begin
-  SetValue(FullscreenKey, AValue);
+  SetValue<Boolean>(FullscreenKey, AValue);
   Application.MainWindow.FullScreen := AValue;
 end;
 
@@ -137,7 +114,7 @@ end;
 
 procedure SetUseTimer(AValue: Boolean);
 begin
-  SetValue(UseTimerKey, AValue);
+  SetValue<Boolean>(UseTimerKey, AValue);
 end;
 
 function UserName(): string;
@@ -147,7 +124,7 @@ end;
 
 procedure SetUserName(const AValue: string);
 begin
-  SetValue(UserNameKey, AValue);
+  SetValue<string>(UserNameKey, AValue);
 end;
 
 function UserGuid(): string;
@@ -157,7 +134,7 @@ end;
 
 procedure SetUserGuid(const AValue: string);
 begin
-  SetValue(UserGuidKey, AValue);
+  SetValue<string>(UserGuidKey, AValue);
 end;
 
 initialization
