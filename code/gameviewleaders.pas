@@ -92,7 +92,9 @@ procedure TViewLeaders.Resume;
 begin
   inherited;
   if (FLeaders.Count = 0) or NeedsSync then
-    ButtonSync.DoClick();
+    ButtonSync.DoClick()
+  else
+    SwitchDifficulty(FCurrentDifficultyButton);
 end;  
 
 function TViewLeaders.Press(const Event: TInputPressRelease): Boolean;

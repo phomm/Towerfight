@@ -95,17 +95,32 @@ begin
   begin
     Container.View := ViewMain;
     Exit(true); // key was handled
-  end; 
+  end;
 end;
 
 procedure TViewWin.SubmitScores();
 var
   LLeader: TSubmitLeader;
+  LName: string;
+  I: Integer;
+  LNameCorrected: Boolean;
 begin
   if not TCastleRest.IsRunning() then
   begin
+    LNameCorrected := False;
+    LName := '';
+    for I := 1 to Length(EditName.Text) do
+      if EditName.Text[I] in [':', '/'] then
+        LNameCorrected := True
+      else
+        LName := LName + EditName.Text[I];
+    if LNameCorrected then
+    begin
+      EditName.Text := LName;
+      PanelNotifications.Show('Name Corrected. ":/" symbols are not allowed');
+    end;
     PanelNotifications.Show('Sending Score to server...');
-    LLeader := TSubmitLeader.Create(EditName.Text, Score, Difficulty());
+    LLeader := TSubmitLeader.Create(LName, Score, Difficulty());
     TCastleRest.ServerRequest(ServerApiUrl, SubmitScoresFinished, LLeader.Serialize());
     FreeAndNil(LLeader);
   end
@@ -127,8 +142,9 @@ begin
     end;
     ViewLeaders.NeedsSync := True;
     Container.View := ViewLeaders;
-  end
-  else if ParseJsonObject(AContent, LJsonObject) then
+    Exit;
+  end;
+  if ParseJsonObject(AContent, LJsonObject) then
   begin
     LProblemDetails := TProblemDetails.Create();
     ReadJsonToObject<TProblemDetails>(LJSONObject, LProblemDetails);
