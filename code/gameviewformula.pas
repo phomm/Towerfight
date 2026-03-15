@@ -196,7 +196,7 @@ var
 begin
   LOp := hwNo;
   LValue := 0;
-  WriteLnLog('Original formula: ' + AFormula);
+  //WriteLnLog('Original formula: ' + AFormula);
   I := 1;
   while I <= Length(AFormula) do
   begin
@@ -219,7 +219,7 @@ begin
   end;
   if LOp = hwMultiply then
     AFormula := Copy(AFormula, 1, Length(AFormula) - MultLen) + (Arg1 * LValue).ToString;
-  WriteLnLog('Modified formula: ' + AFormula);
+  //WriteLnLog('Modified formula: ' + AFormula);
 
   Result := 0;
   LValue := 0;  

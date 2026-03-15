@@ -137,6 +137,7 @@ begin
   end
   else 
     PanelNotifications.Show('Submit failed: ' + AContent);
+  EditName.Enabled := True;
 end;
 
 end.

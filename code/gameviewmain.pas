@@ -189,12 +189,12 @@ end;
 
 procedure TViewMain.ButtonStartClick(Sender: TObject);
 begin
-  Container.View := (ViewGame);
+  Container.View := ViewGame;
 end;
 
 procedure TViewMain.ButtonLeadersClick(Sender: TObject);
 begin
-  Container.PushView(ViewLeaders);
+  Container.View := ViewLeaders;
 end;
 
 procedure TViewMain.ButtonOptionsClick(Sender: TObject);
@@ -204,7 +204,7 @@ end;
 
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
-  Container.PushView(ViewCredits);
+  Container.View := ViewCredits;
 end;
 
 function TViewMain.Press(const Event: TInputPressRelease): Boolean;

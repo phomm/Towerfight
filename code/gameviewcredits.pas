@@ -28,7 +28,9 @@ uses
 // System
   SysUtils,
 // Castle  
-  castlewindow, CastleOpenDocument;
+  castlewindow, CastleOpenDocument,
+// Own  
+  gameviewmain;
 
 constructor TViewCredits.Create(AOwner: TComponent);
 begin
@@ -51,14 +53,14 @@ begin
 
   if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
   begin
-    Container.PopView();
+    Container.View := ViewMain;
     Exit(true); // key was handled
   end; 
 end;
 
 procedure TViewCredits.ButtonMenuClick(Sender: TObject);
 begin
-  Container.PopView();
+  Container.View := ViewMain;
 end;
 
 procedure TViewCredits.ButtonCastleClick(Sender: TObject);

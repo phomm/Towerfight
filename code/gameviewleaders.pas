@@ -115,8 +115,11 @@ end;
 procedure TViewLeaders.ButtonSyncClick(Sender: TObject);
 begin
 // Sync with server, and update the list of leaders for the current difficulty.
-  if not TCastleRest.IsRunning() then 
-    TCastleRest.ServerRequest(ServerApiUrl, GetLeadersFinished)
+  if not TCastleRest.IsRunning() then
+  begin 
+    PanelNotifications.Show('Retrieving Leaders from server...');
+    TCastleRest.ServerRequest(ServerApiUrl, GetLeadersFinished);
+  end
   else
     PanelNotifications.Show('Another request is running');
 end;

@@ -74,14 +74,14 @@ uses
 
 function TProblemDetails.ToString(): string; 
 begin
-  Result := Title;
+  Result := Title + ': ' + Detail;
 end;
 
 constructor TSubmitLeader.Create(const AName: string; AScore: Integer; ADifficulty: NDifficulty);
 begin
   inherited Create();
   Name := AName;
-  Guid := IIF(UserName = Name, UserGuid, '');
+  Guid := UserGuid;
   Score := AScore;
   Difficulty := Ord(ADifficulty);
   CalcHash();
@@ -96,7 +96,7 @@ var
   LHashResult: IHashResult; 
 begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
-  WriteLnLog('ForHash ' + FHash);
+  //WriteLnLog('ForHash ' + FHash);
 
   LHash := THashFactory.TCrypto.CreateSHA2_256();
   LHashResult := LHash.ComputeString(FHash, TEncoding.UTF8);

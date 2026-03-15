@@ -80,7 +80,7 @@ end;
 
 procedure SetMusicLevel(AValue: Byte);
 begin
-  SetValue<byte>(MusicKey, AValue);
+  SetValue<Integer>(MusicKey, AValue);
 end;
 
 procedure SetDifficulty(AValue: NDifficulty);
