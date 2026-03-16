@@ -32,7 +32,7 @@ type
   function Serialize(AObject: TObject): TJSONObject;
 
   const 
-    ServerApiUrl = {'https://localhost:7150/api/leaders';//}'https://towerfightserver.onrender.com/api/leaders';  
+    ServerApiUrl = 'https://tetraedercraft.org/api/leaders'; //}'https://localhost:7150/api/leaders';//'https://towerfightserver.onrender.com/api/leaders';  
 
 implementation
 

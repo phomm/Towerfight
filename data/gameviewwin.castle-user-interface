@@ -112,6 +112,7 @@
             },
             {
               "$$ClassName" : "TCastleEdit",
+              "AutoOnScreenKeyboard" : true,
               "CaptureAllInput" : false,
               "FontSize" : 8.0000000000000000E+001,
               "Name" : "EditName",
