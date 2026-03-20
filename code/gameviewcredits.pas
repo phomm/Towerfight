@@ -2,7 +2,10 @@ unit GameViewCredits;
 
 interface
 
-uses Classes,
+uses 
+// System
+  Classes,
+// Castle
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
 
 type

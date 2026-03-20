@@ -11,6 +11,7 @@ See https://castle-engine.io/project_manifest for documentation of this file.
   qualified_name="ru.ephyre.towerfight"
   author="ephyre team"
   caption="Tower Fight"
+  screen_orientation="landscape"
 >
   <compiler_options>
     <search_paths>

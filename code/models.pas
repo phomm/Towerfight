@@ -64,9 +64,7 @@ uses
 // System
   SysUtils,
 // Thirdparty
-  HlpHashFactory, 
-  HlpIHash, 
-  HlpIHashResult, 
+  HlpHashFactory, HlpIHash, HlpIHashResult,
 // Castle
   castlelog,
 // Own

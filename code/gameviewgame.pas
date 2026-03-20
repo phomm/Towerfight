@@ -24,7 +24,7 @@ type
     BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
     Viewport1: TCastleViewport;
     ImageWeapon: TCastleImageControl;
-    TimerPreEnd, TimerBlood, TimerGame, TimerHint: TCastleTimer;
+    TimerBlood, TimerGame, TimerHint: TCastleTimer;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -45,7 +45,6 @@ type
     FSkip, FPause, FInternalWeaponSwitch: Boolean;
     FPosFrom, FPosTo: TVector2;
     FAnimateWeaponTicks, FGameTicks: Integer;
-    FViewEnd: TCastleView;
     FRoomFight: TRoomComponent;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
@@ -54,7 +53,6 @@ type
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     function RandomBloodSplash(): TCastleScene;
     procedure DefeatQuestionYes(Sender: TObject);
-    procedure TimerPreEndTick(ASender: TObject);
     procedure TimerBloodTick(ASender: TObject);
     procedure TimerGameTick(ASender: TObject);
     procedure TimerHintTick(ASender: TObject);
@@ -149,9 +147,7 @@ begin
   FWeapons[2] := WeaponMinus;
   FWeapons[3] := WeaponMultiply;
   WeaponNo.DoClick(); 
-  TimerPreEnd.Exists := False;
   TimerBlood.Exists := False;
-  TimerPreEnd.OnTimer := TimerPreEndTick;
   TimerBlood.OnTimer := TimerBloodTick;
   TimerHint.OnTimer := TimerHintTick;
   TimerGame.OnTimer := TimerGameTick;
@@ -297,6 +293,7 @@ var
 begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
+  if FPause then Exit;
 
   if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
   begin
@@ -442,10 +439,7 @@ begin
   TimerBlood.Exists := False;
 
   if Map.Hero.Dead then
-  begin
-    //TimerPreEnd.Exists := True;
-    Container.View := ViewDefeat;
-  end
+    Container.View := ViewDefeat
   else
   begin
     LWeapon := Map.GetRoomByIndex(FRoomFight.Tag).PickWeapon();
@@ -469,19 +463,11 @@ begin
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
-      //TimerPreEnd.Exists := True;
       ViewWin.Score := Map.Score(FGameTicks);
       Container.View := ViewWin;
     end;
   end;
   FSkip := False;  
-end;
-
-procedure TViewGame.TimerPreEndTick(ASender: TObject);
-begin
-  FPause := True;
-  TimerPreEnd.Exists := False;
-  Container.View := FViewEnd;
 end;
 
 procedure TViewGame.TimerHintTick(ASender: TObject);
