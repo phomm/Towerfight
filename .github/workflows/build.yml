@@ -129,7 +129,7 @@ jobs:
         CHANNEL: windows
         ITCH_GAME: tower-fight
         ITCH_USER: phomm
-        PACKAGE: windows-build
+        PACKAGE: TowerFight-0.1-win64.zip
     - name: Push to Itch.io with butler, linux build
       uses: yeslayla/butler-publish-itchio-action@master
       env:
@@ -137,7 +137,7 @@ jobs:
         CHANNEL: linux
         ITCH_GAME: tower-fight
         ITCH_USER: phomm
-        PACKAGE: linux-build
+        PACKAGE: TowerFight-0.1-linux64.tar.gz
     - name: Push to Itch.io with butler, android build
       uses: yeslayla/butler-publish-itchio-action@master        
       env:
@@ -145,7 +145,7 @@ jobs:
         CHANNEL: android
         ITCH_GAME: tower-fight
         ITCH_USER: phomm
-        PACKAGE: android-build
+        PACKAGE: TowerFight-0.1-android.apk
 
   update-release-tag:
     name: Update Release Tag (make snapshot tag point to the build commit on master branch)
