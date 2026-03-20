@@ -121,27 +121,31 @@ jobs:
       run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *.apk *.tar.gz
       env:
         GH_TOKEN: ${{ github.token }}
-        
-    - name: Push to Itch.io with butler
+
+    - name: Push to Itch.io with butler, windows build
       uses: yeslayla/butler-publish-itchio-action@master
       env:
         BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
         CHANNEL: windows
         ITCH_GAME: tower-fight
         ITCH_USER: phomm
-        PACKAGE: *.zip
+        PACKAGE: windows-build
+    - name: Push to Itch.io with butler, linux build
+      uses: yeslayla/butler-publish-itchio-action@master
       env:
         BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
         CHANNEL: linux
         ITCH_GAME: tower-fight
         ITCH_USER: phomm
-        PACKAGE: *.tar.gz
+        PACKAGE: linux-build
+    - name: Push to Itch.io with butler, android build
+      uses: yeslayla/butler-publish-itchio-action@master        
       env:
         BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
         CHANNEL: android
         ITCH_GAME: tower-fight
         ITCH_USER: phomm
-        PACKAGE: *.apk
+        PACKAGE: android-build
 
   update-release-tag:
     name: Update Release Tag (make snapshot tag point to the build commit on master branch)
