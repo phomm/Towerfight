@@ -20,6 +20,8 @@ See https://castle-engine.io/project_manifest for documentation of this file.
       <path value="code/HashLib4Pascal/HashLib/src/Interfaces" />
       <path value="code/HashLib4Pascal/HashLib/src/Utils" />
       <path value="code/HashLib4Pascal/HashLib/src/Crypto" />
+      <path value="code/HashLib4Pascal/HashLib/src/KDF" />
+      <path value="code/HashLib4Pascal/HashLib/src/Include" />
     </search_paths>
 	<defines>
       <define>CASTLE_GEO_SUPPORT_DISABLE</define>
