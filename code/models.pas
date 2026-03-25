@@ -55,7 +55,7 @@ type
   private 
     FGuid: string;
   published
-    property Guid: string read FGuid write FGuid;    
+    property Guid: string read FGuid write FGuid;
   end;
 
 implementation
@@ -64,7 +64,7 @@ uses
 // System
   SysUtils,
 // Thirdparty
-  HlpHashFactory, HlpIHash, HlpIHashResult,
+  HlpSHA2_256, HlpIHash, HlpIHashResult,
 // Castle
   castlelog,
 // Own
@@ -89,16 +89,10 @@ procedure TSubmitLeader.CalcHash();
 const
 // sorted alphabetically
   HashTemplate = 'Difficulty=%d%s:Name=%s:Salt=%s:Score=%d'; 
-var
-  LHash: IHash;
-  LHashResult: IHashResult; 
 begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
   //WriteLnLog('ForHash ' + FHash);
-
-  LHash := THashFactory.TCrypto.CreateSHA2_256();
-  LHashResult := LHash.ComputeString(FHash, TEncoding.UTF8);
-  FHash := LHashResult.ToString(); 
+  FHash := TSHA2_256.Create().ComputeString(FHash, TEncoding.UTF8).ToString(); 
 end;
 
 function TSubmitLeader.Serialize(): string;
