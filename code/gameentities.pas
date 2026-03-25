@@ -112,6 +112,7 @@ type
     FHero: THero;
     FHeroRoom: TRoom;
     FPathMap: TPathMap;
+    FBoss: TBoss;
     function PathFindCost(T, S, Direction: Smallint) : Smallint;
     procedure EnemiesWeakened();
   class var FMap: TMap;
@@ -253,7 +254,9 @@ begin
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
   FLastTower := 3 + Ord(FDifficulty);
-  for T := 1 to FLastTower do
+  FLastStock := Min(LastTower + 3, 8);
+  FBoss := TBoss.Create(nil, LastTower, FLastStock);
+  for T := 1 to LastTower do
   begin
     LTower := TTower.Create(nil);
     FTowers.Add(LTower);
@@ -263,8 +266,8 @@ begin
       LRoom := TRoom.Create(nil);
       LTower.FRooms.Add(LRoom);
       if IsFinalRoom(T, R) then
-        LRoom.Actors.Add(TBoss.Create(nil, T, R))
-      else if (T <> FLastTower) and (T <> 1) and (R = FLastStock) then
+        LRoom.Actors.Add(FBoss)
+      else if (T <> LastTower) and (T <> 1) and (R = FLastStock) then
         LRoom.Actors.Add(TMiniBoss.Create(nil, T, R))
       else if (T <> 1) or (R <> 1) then
         LRoom.Actors.Add(TEnemy.Create(nil, T, R))     
@@ -412,8 +415,10 @@ begin
   Result := (ATower + Random(AStock)) * Max(ATower + 1, AStock + Random(10) - ATower)
     * (ATower + Random(Ord(ATower > 1) + 1)) * (ATower - Random(Ord(ATower > 1) + 1)) 
     + Ord(ATower > 1) * (Random(Max(7, 2 * ATower + 2 * AStock - 11)) + 17);
-  if (ATower = 1) and (AStock = 2) then
-  Result := Min(Tmap.Map.Hero.Level, Result);
+  if ATower = 1 then
+    Result := TMap.Map.Hero.Level * (AStock - 1) - Random(AStock)
+  else
+    Result := Min(TMap.Map.FBoss.Level * 95 div 100, Result);  
 end;
 
 constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
