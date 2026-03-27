@@ -135,6 +135,7 @@ type
     function GetRoomByIndex(ARoomIndex: Integer): TRoom;
     function IsRoomReachable(ATowerIndex, AStockIndex: Integer): Boolean;
     function Score(ATimeLeft: Integer): Integer;
+    function BossCap(): Integer;
   class function Map(): TMap;
   class procedure Die();
   end;
@@ -402,6 +403,11 @@ begin
   Result := Hero.Level;
 end;
 
+function TMap.BossCap(): Integer;
+begin
+  Result := FBoss.Level * 95 div 100 - (Random(5) + 5) * (Ord(Difficulty) + 1)
+end;
+
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
 begin
   inherited Create(AOwner);
@@ -418,7 +424,7 @@ begin
   if ATower = 1 then
     Result := TMap.Map.Hero.Level * (AStock - 1) - Random(AStock)
   else
-    Result := Min(TMap.Map.FBoss.Level * 95 div 100, Result);
+    Result := Min(TMap.Map.BossCap(), Result);
 end;
 
 constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
@@ -570,7 +576,7 @@ end;
 function TMiniBoss.CalcLevel(ATower, AStock: Integer): Integer;
 begin
   Result := inherited CalcLevel(ATower, AStock) + (100 + Random(50)) * ATower;
-  Result := Min(TMap.Map.FBoss.Level * 95 div 100, Result);
+  Result := Min(TMap.Map.BossCap(), Result);
 end;
 
 end.
