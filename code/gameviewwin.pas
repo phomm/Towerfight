@@ -91,7 +91,7 @@ begin
   if Event.IsKey(keyEnter) then
     ButtonSubmit.DoClick();
 
-  if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
+  if Event.IsKey(keyEscape) then
   begin
     Container.View := ViewMain;
     Exit(true); // key was handled

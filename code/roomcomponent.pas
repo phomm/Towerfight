@@ -9,7 +9,7 @@ type
   TRoomComponent = class(TCastleUserInterface)
   published
     ControlRoom: TCastleButton;
-    ImageRight, ImageLeft: TCastleImageControl;
+    ImageRight, ImageLeft, ImageHeroWeapon: TCastleImageControl;
     LabelRight, LabelLeft: TCastleLabel;
   public
     constructor Create(AOwner: TComponent); override;

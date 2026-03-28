@@ -61,6 +61,7 @@ type
     procedure UpdateRooms();
     procedure UpdateMiniBossRooms();
     procedure WeaponClick(AWeapon: NHeroWeapon; AFromUser: Boolean = False);
+    procedure SwitchHeroWeaponImage(AForce: Boolean = False);
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)    
   end;
@@ -216,6 +217,7 @@ begin
       Map.Hero.Weapon := NHeroWeapon(i);
       if not FInternalWeaponSwitch then
         WeaponHint(True);
+      SwitchHeroWeaponImage();
     end;
     FWeapons[i].Pressed := LIsWeapon or (i = Ord(hwNo));
     FWeapons[i].Border.AllSides := IIF(LIsWeapon or (i = Ord(hwNo)), 4, 0);
@@ -236,6 +238,7 @@ procedure TViewGame.Stop();
 begin
   inherited;
   TMap.Die();
+  FPreviousRoom := nil;  
 end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
@@ -269,7 +272,7 @@ begin
     end;  
   end;
   if not FPause and (Map.Hero.Weapon <> hwNo) then
-    with FWeapons[Ord(Map.Hero.Weapon)].Image do
+    with FPreviousRoom.ImageHeroWeapon do
       Rotation := Rotation + 4 * SecondsPassed;
 end;
 
@@ -355,12 +358,14 @@ begin
   begin
     FPreviousRoom.LabelLeft.Caption := '';
     FPreviousRoom.ImageLeft.Url := '';
+    FPreviousRoom.ImageHeroWeapon.Url := '';    
   end;
   
   // Show image on currently clicked button
-  FPreviousRoom := LRoom;
+  FPreviousRoom := LRoom;  
   LRoom.ImageLeft.Url := Map.Hero.AssetId;
   LRoom.LabelLeft.Caption := Map.Hero.Visual;
+  SwitchHeroWeaponImage();
   if not Map.HeroRoom.HasEnemy() then
     Exit;
 
@@ -396,6 +401,7 @@ begin
   else
     ARoom.ImageLeft.Url := Map.Hero.AssetId; 
 
+  SwitchHeroWeaponImage(True);
   FSkip := True;
   TimerBlood.Exists := True;
   FRoomFight := ARoom;   
@@ -546,6 +552,12 @@ begin
   FInternalWeaponSwitch := not AFromUser;
   FWeapons[Ord(AWeapon)].DoClick();
   FInternalWeaponSwitch := False;
+end;
+
+procedure TViewGame.SwitchHeroWeaponImage(AForce: Boolean = False);
+begin
+  if Assigned(FPreviousRoom) then
+    FPreviousRoom.ImageHeroWeapon.Url := IIF((Map.Hero.Weapon = hwNo) or AForce, '', FWeapons[Ord(Map.Hero.Weapon)].Image.Url);
 end;
 
 end.

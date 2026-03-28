@@ -91,7 +91,8 @@
           "Width" : 6.4000000000000000E+001
         },
         {
-          "$$ClassName" : "TCastleUserInterface",
+          "$$ClassName" : "TCastleVerticalGroup",
+          "Bottom" : -1.5000000000000000E+001,
           "Name" : "Group2",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
@@ -108,13 +109,24 @@
               "Text" : [
                 "L"
               ],
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleImageControl",
+              "Content" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Height" : 6.0000000000000000E+001,
+              "Name" : "ImageHeroWeapon",
+              "Stretch" : true,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0000000000000000E+001,
                 "Y" : -3.0000000000000000E+001
               },
               "VerticalAnchorParent" : "vpTop",
-              "VerticalAnchorSelf" : "vpTop"
+              "VerticalAnchorSelf" : "vpTop",
+              "Width" : 6.0000000000000000E+001
             }
           ]
         }
