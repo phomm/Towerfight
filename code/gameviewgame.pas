@@ -239,6 +239,7 @@ begin
   inherited;
   TMap.Die();
   FPreviousRoom := nil;  
+  FPause := True;
 end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
