@@ -159,6 +159,7 @@ const
   NL = #13#10;
 var
   LHttpResponseHeaders, LContent: string;
+  LIsError: Boolean;
   function Status(): string;
   begin
     case ASender.HttpResponseCode of
@@ -182,8 +183,9 @@ begin
     LHttpResponseHeaders := ASender.HttpResponseHeaders.Text
   else
     LHttpResponseHeaders := '';
+  LIsError := (ASender.Status = dsError) or (ASender.HttpResponseCode >= 400);
 
-  if ASender.Status = dsError then
+  if LIsError then
     WriteLnLog(Format('Downloading "%s" failed: %s.' + NL +
       'HTTP response code: %d' + NL +
       'HTTP response headers: %s' + NL +
@@ -210,11 +212,11 @@ begin
   end;
   if (Assigned(ASender.Contents) and (ASender.Contents.Size > 0)) then
     LContent := StreamToString(ASender.Contents);
-  if (LContent = '') and (ASender.Status = dsError) then
+  if (LContent = '') and LIsError then
     LContent := Format('Server response code: %d %s', [ASender.HttpResponseCode, Status()]);
 
   Download := nil;
-  OnServerRequestCompleted(LContent, ASender.Status = dsSuccess);
+  OnServerRequestCompleted(LContent, not LIsError);
 end;
 
 class procedure TCastleRest.OnServerRequestCompleted(const AContent: string; ASuccess: Boolean);
