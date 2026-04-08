@@ -24,7 +24,7 @@ type
     BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
     Viewport1: TCastleViewport;
     ImageWeapon: TCastleImageControl;
-    TimerBlood, TimerGame, TimerHint: TCastleTimer;
+    TimerGame, TimerHint: TCastleTimer;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -54,7 +54,7 @@ type
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     function RandomBloodSplash(): TCastleScene;
     procedure DefeatQuestionYes(Sender: TObject);
-    procedure TimerBloodTick(ASender: TObject);
+    procedure TimerBloodTrigger();
     procedure TimerGameTick(ASender: TObject);
     procedure TimerHintTick(ASender: TObject);
     procedure WeaponHint(ADoShow: Boolean; AWeapon: NHeroWeapon = hwNo);
@@ -148,9 +148,7 @@ begin
   FWeapons[1] := WeaponPlus;
   FWeapons[2] := WeaponMinus;
   FWeapons[3] := WeaponMultiply;
-  WeaponNo.DoClick(); 
-  TimerBlood.Exists := False;
-  TimerBlood.OnTimer := TimerBloodTick;
+  WeaponNo.DoClick();
   TimerHint.OnTimer := TimerHintTick;
   TimerGame.OnTimer := TimerGameTick;
   TimerGame.IntervalSeconds := 1;
@@ -210,7 +208,7 @@ begin
   LWeaponButton := Sender as TCastleButton;
   for i := 0 to High(FWeapons) do
   begin
-    LIsWeapon := FWeapons[i] = LWeaponButton;    
+    LIsWeapon := FWeapons[i] = LWeaponButton;
     if LIsWeapon then
     begin
       if not FInternalWeaponSwitch then
@@ -239,8 +237,7 @@ procedure TViewGame.Stop();
 begin
   inherited;
   TMap.Die();
-  FPreviousRoom := nil;  
-  FPause := True;
+  FPreviousRoom := nil;
 end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
@@ -271,7 +268,7 @@ begin
     begin
       ImageWeapon.Url := '';
       WeaponClick(hwNo);
-    end;  
+    end;
   end;
   if not FPause and (Map.Hero.Weapon <> hwNo) then
     with FPreviousRoom.ImageHeroWeapon do
@@ -281,7 +278,7 @@ begin
     FBloodTime := FBloodTime - SecondsPassed;
     if FBloodTime <= 0 then
     begin
-      TimerBloodTick(nil);
+      TimerBloodTrigger();
       FBloodTime := 0;
     end;
   end;
@@ -320,20 +317,20 @@ begin
     W := Ord(Map.Hero.Weapon);
     repeat
       W := (W + 1) mod Length(FWeapons);
-    until FWeapons[W].Enabled;        
-    WeaponClick(NHeroWeapon(W), True);    
+    until FWeapons[W].Enabled;
+    WeaponClick(NHeroWeapon(W), True);
     Exit(True); // key was handled
   end;
 
   if Event.Key in [key1, key2, key3, key4] then
   begin
-    WeaponClick(NHeroWeapon(Ord(Event.Key) - Ord(key1)), True);    
+    WeaponClick(NHeroWeapon(Ord(Event.Key) - Ord(key1)), True);
     Exit(True); // key was handled
   end;
 
   if Event.Key in [keyNumpad1, keyNumpad2, keyNumpad3, keyNumpad4] then
   begin
-    WeaponClick(NHeroWeapon(Ord(Event.Key) - Ord(keyNumpad1)), True);    
+    WeaponClick(NHeroWeapon(Ord(Event.Key) - Ord(keyNumpad1)), True);
     Exit(True); // key was handled
   end;
 
@@ -369,11 +366,11 @@ begin
   begin
     FPreviousRoom.LabelLeft.Caption := '';
     FPreviousRoom.ImageLeft.Url := '';
-    FPreviousRoom.ImageHeroWeapon.Url := '';    
+    FPreviousRoom.ImageHeroWeapon.Url := '';
   end;
   
   // Show image on currently clicked button
-  FPreviousRoom := LRoom;  
+  FPreviousRoom := LRoom;
   LRoom.ImageLeft.Url := Map.Hero.AssetId;
   LRoom.LabelLeft.Caption := Map.Hero.Visual;
   SwitchHeroWeaponImage();
@@ -414,9 +411,8 @@ begin
 
   SwitchHeroWeaponImage(True);
   FSkip := True;
-  //TimerBlood.Exists := True;
   FBloodTime := 1;
-  FRoomFight := ARoom;   
+  FRoomFight := ARoom;
 end;
 
 function TViewGame.RandomBloodSplash(): TCastleScene;
@@ -426,7 +422,7 @@ begin
     1: Result := BloodSplash1;
     2: Result := BloodSplash2;
   end;
-end;  
+end;
 
 procedure TViewGame.RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
 var
@@ -450,12 +446,10 @@ begin
   AScene.Exists := False;
 end;
 
-procedure TViewGame.TimerBloodTick(ASender: TObject);
+procedure TViewGame.TimerBloodTrigger();
 var
   LWeapon: NHeroWeapon;
 begin
-  TimerBlood.Exists := False;
-
   if Map.Hero.Dead then
     Container.View := ViewDefeat
   else
@@ -485,7 +479,7 @@ begin
       Container.View := ViewWin;
     end;
   end;
-  FSkip := False;  
+  FSkip := False;
 end;
 
 procedure TViewGame.TimerHintTick(ASender: TObject);
