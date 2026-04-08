@@ -102,23 +102,22 @@ procedure TViewWin.SubmitScores();
 var
   LLeader: TSubmitLeader;
   LName: string;
-  I: Integer;
+  Ch: Char;
   LNameCorrected: Boolean;
 begin
   if not TCastleRest.IsRunning() then
   begin
     LNameCorrected := False;
     LName := '';
-    for I := 1 to Length(EditName.Text) do
-      if EditName.Text[I] in [':', '/'] then
+    EditName.Text := EditName.Text.Trim().ToLower();
+    for Ch in EditName.Text do
+      if Ch in [':', '/'] then
         LNameCorrected := True
       else
-        LName := LName + EditName.Text[I];
+        LName := LName + Ch;
+    EditName.Text := LName;
     if LNameCorrected then
-    begin
-      EditName.Text := LName;
       PanelNotifications.Show('Name Corrected. ":/" symbols are not allowed');
-    end;
     PanelNotifications.Show('Sending Score to server...');
     LLeader := TSubmitLeader.Create(LName, Score, Difficulty());
     TCastleRest.ServerRequest(ServerApiUrl, SubmitScoresFinished, LLeader.Serialize());
