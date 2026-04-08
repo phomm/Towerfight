@@ -72,7 +72,7 @@ uses
 
 function TProblemDetails.ToString(): string; 
 begin
-  Result := Title + ': ' + Detail;
+  Result := Status.ToString + Title + ': ' + Detail;
 end;
 
 constructor TSubmitLeader.Create(const AName: string; AScore: Integer; ADifficulty: NDifficulty);

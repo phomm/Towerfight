@@ -46,6 +46,7 @@ type
     FPosFrom, FPosTo: TVector2;
     FAnimateWeaponTicks, FGameTicks: Integer;
     FRoomFight: TRoomComponent;
+    FBloodTime: Single;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
@@ -239,6 +240,7 @@ begin
   inherited;
   TMap.Die();
   FPreviousRoom := nil;  
+  FPause := True;
 end;
 
 procedure TViewGame.ButtonDefeatClick(Sender: TObject);
@@ -274,6 +276,15 @@ begin
   if not FPause and (Map.Hero.Weapon <> hwNo) then
     with FPreviousRoom.ImageHeroWeapon do
       Rotation := Rotation + 4 * SecondsPassed;
+  if not FPause and (FBloodTime > 0) then
+  begin
+    FBloodTime := FBloodTime - SecondsPassed;
+    if FBloodTime <= 0 then
+    begin
+      TimerBloodTick(nil);
+      FBloodTime := 0;
+    end;
+  end;
 end;
 
 function TViewGame.Press(const Event: TInputPressRelease): Boolean;
@@ -403,7 +414,8 @@ begin
 
   SwitchHeroWeaponImage(True);
   FSkip := True;
-  TimerBlood.Exists := True;
+  //TimerBlood.Exists := True;
+  FBloodTime := 1;
   FRoomFight := ARoom;   
 end;
 
