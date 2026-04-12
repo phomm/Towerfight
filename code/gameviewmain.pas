@@ -23,7 +23,7 @@ type
     GroupOptions: TCastleUserInterface;
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
-    ImageRoomRoof3: TCastleImageControl;
+    ImageRoomRoof2, ImageRoomRoof3: TCastleImageControl;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -92,6 +92,12 @@ begin
   ButtonExit.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
   ImageRoomRoof3.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
   SliderFullScreen.Exists := ApplicationProperties.ShowUserInterfaceToQuit;
+  // TODO : remove this when WEB platform supports http requests
+  {$IFDEF WASI}
+  ImageRoomRoof2.Exists := False;
+  ButtonLeaders.Exists := False;
+  {$ENDIF WASI}
+
   for LButton in Buttons do
     LButton.OnMotion := ButtonMotion;
   
