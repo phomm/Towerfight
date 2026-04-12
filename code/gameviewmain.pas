@@ -96,6 +96,7 @@ begin
   {$IFDEF WASI}
   ImageRoomRoof2.Exists := False;
   ButtonLeaders.Exists := False;
+  SliderMusic.Exists := False;
   {$ENDIF WASI}
 
   for LButton in Buttons do
