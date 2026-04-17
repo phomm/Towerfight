@@ -21,6 +21,8 @@ type
       These fields will be automatically initialized at Start. }
     ButtonGo: TCastleButton;
     GroupElements: TCastleHorizontalGroup;
+    ImageEnemy: TCastleImageControl;
+    LabelHeroLevel: TCastleLabel;
   public
     RoomComponent: TRoomComponent;
     constructor Create(AOwner: TComponent); override;
@@ -102,6 +104,8 @@ begin
   inherited;
   Weapon := TMap.Map.Hero.Weapon;
   LActor := TMap.Map.GetRoomByIndex(RoomComponent.Tag).Actors[0];
+  ImageEnemy.Url := LActor.AssetId;
+  LabelHeroLevel.Caption := TMap.Map.Hero.Visual;
   Formula := LActor.Visual;
   GroupElements.ClearControls();
   SetLength(FPositions, Length(Formula) + 1);
