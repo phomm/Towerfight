@@ -261,7 +261,7 @@
           "Name" : "ImageWeaponsBack",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.2200000000000000E+002
+            "Y" : -1.2200000762939453E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
@@ -336,7 +336,7 @@
                   "Name" : "Group2",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 1.5800000000000000E+002
+                    "X" : 1.5799998474121094E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -399,7 +399,7 @@
                   "Name" : "Group3",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 3.0472000122070312E+002
+                    "X" : 3.0471997070312500E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -463,7 +463,7 @@
                   "Name" : "Group4",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 4.7444000244140625E+002
+                    "X" : 4.7443997192382812E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -535,6 +535,11 @@
       "Name" : "ImageWeapon",
       "Stretch" : true,
       "Width" : 6.4000000000000000E+001
+    },
+    {
+      "$$ClassName" : "TCastleTimer",
+      "IntervalSeconds" : 5.0000000000000000E-001,
+      "Name" : "TimerBlood"
     },
     {
       "$$ClassName" : "TCastleTimer",
