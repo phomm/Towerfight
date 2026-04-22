@@ -92,6 +92,7 @@ const
 begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
   //WriteLnLog('ForHash ' + FHash);
+  // TODO : remove this when WEB platform supports http requests
   FHash := TSHA2_256.Create().ComputeString(FHash, TEncoding.UTF8).ToString(); 
 end;
 

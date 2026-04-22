@@ -17,6 +17,7 @@ type
     LabelScore: TCastleLabel;
     EditName: TCastleEdit;
     PanelNotifications: TCastleNotifications;
+    ImageControl1: TCastleImageControl;
   public
     Score: Integer;    
     constructor Create(AOwner: TComponent); override;
