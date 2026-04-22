@@ -64,9 +64,7 @@ uses
 // System
   SysUtils,
 // Thirdparty
-  {$IFNDEF WASI}
   HlpSHA2_256, HlpIHash, HlpIHashResult,
-  {$ENDIF WASI}
 // Castle
   castlelog,
 // Own
@@ -95,9 +93,7 @@ begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
   //WriteLnLog('ForHash ' + FHash);
   // TODO : remove this when WEB platform supports http requests
-  {$IFNDEF WASI}
   FHash := TSHA2_256.Create().ComputeString(FHash, TEncoding.UTF8).ToString(); 
-  {$ENDIF WASI}
 end;
 
 function TSubmitLeader.Serialize(): string;
