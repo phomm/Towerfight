@@ -57,10 +57,6 @@ begin
   ButtonSubmit.OnClick := ButtonSubmitClick;
   SoundEngine.LoopingChannel[0].Sound := Audio.RandomWinTheme;
   SoundEngine.LoopingChannel[0].Sound.Volume := 5 * MusicLevel() / 100;
-  // TODO : remove this when WEB platform supports http requests
-  {$IFDEF WASI}
-  ImageControl1.Exists := False;
-  {$ENDIF WASI}
 end;
 
 procedure TViewWin.Resume;
