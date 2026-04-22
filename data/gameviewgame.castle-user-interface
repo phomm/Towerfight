@@ -538,7 +538,7 @@
     },
     {
       "$$ClassName" : "TCastleTimer",
-      "IntervalSeconds" : 5.0000000000000000E-001,
+      "IntervalSeconds" : 1.0000000000000000E+000,
       "Name" : "TimerBlood"
     },
     {
