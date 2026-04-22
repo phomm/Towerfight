@@ -85,7 +85,7 @@ var
     if AMarked then
     begin
       LButton.ImageScale := 0.2;
-      LButton.Image.Url := 'castle-data:/resources/' + WeaponFileNames[Weapon];      
+      LButton.Image.Url := 'castle-data:/resources/' + WeaponFileNames[Weapon];
     end
     else
     begin

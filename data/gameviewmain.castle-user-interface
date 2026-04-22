@@ -112,7 +112,7 @@
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
-          "Caption" : "Options",
+          "Caption" : "What a?",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
@@ -136,7 +136,7 @@
             "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
-          "Name" : "ButtonOptions",
+          "Name" : "ButtonCredits",
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
@@ -224,7 +224,7 @@
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
-          "Caption" : "About",
+          "Caption" : "Options",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
@@ -248,7 +248,7 @@
             "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
-          "Name" : "ButtonCredits",
+          "Name" : "ButtonOptions",
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",

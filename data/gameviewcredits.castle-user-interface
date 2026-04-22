@@ -26,139 +26,6 @@
       "VerticalAnchorSelf" : "vpTop"
     },
     {
-      "$$ClassName" : "TCastleLabel",
-      "Alignment" : "hpMiddle",
-      "ColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 1.0000000000000000E+000,
-        "Green" : 9.0196079015731812E-001
-      },
-      "FontSize" : 5.5000000000000000E+001,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Name" : "LabelRules",
-      "Outline" : 1,
-      "Text" : [
-        "Japan is captured by Dragon and Demons",
-        "Fight them in the Towers, Brave Samurai!",
-        "WASD/Arrows/Mouse: move into Room ",
-        "Leave: Esc/Backspace, Enter(menu): start",
-        "",
-        "Calculate enemy Level to Fight in Room",
-        "You Win if your Level >= Enemy Level  ",
-        "and gain more Levels, otherwise Lose",
-        "In First tower Fight gives you +Level ",
-        "same as Enemy Level, each next gives ",
-        "you 1/(2N - 2) fraction of enemy Level",
-        "",
-        "1234/E/Mouse before Fight: select weapon",
-        "Shuriken(+) Kunai(-) Star(*), E/Mouse in ",
-        "Formula dialog to re-math enemy formula",
-        "Weapons less-to-none effective on bosses"
-      ]
-    },
-    {
-      "$$ClassName" : "TCastleButton",
-      "Border" : {
-        "$$ClassName" : "TBorder",
-        "Bottom" : 4.0000000000000000E+000
-      },
-      "BorderColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Alpha" : 1.0000000000000000E+000,
-        "Blue" : 7.0196080207824707E-001
-      },
-      "Caption" : "author : phomm",
-      "Cursor" : "mcHand",
-      "CustomBackground" : true,
-      "CustomBackgroundDisabled" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundFocused" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundNormal" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundPressed" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomTextColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 7.0196080207824707E-001
-      },
-      "CustomTextColorUse" : true,
-      "FontSize" : 1.0000000000000000E+002,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Html" : true,
-      "Image" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "Name" : "ButtonAuthor",
-      "Outline" : 1,
-      "OutlineColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 1.0000000000000000E+000,
-        "Green" : 4.3921568989753723E-001
-      },
-      "VerticalAnchorParent" : "vpTop",
-      "VerticalAnchorSelf" : "vpTop"
-    },
-    {
-      "$$ClassName" : "TCastleButton",
-      "Border" : {
-        "$$ClassName" : "TBorder",
-        "Bottom" : 4.0000000000000000E+000
-      },
-      "BorderColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Alpha" : 1.0000000000000000E+000,
-        "Blue" : 7.0196080207824707E-001
-      },
-      "Caption" : "made with castle-engine",
-      "Cursor" : "mcHand",
-      "CustomBackground" : true,
-      "CustomBackgroundDisabled" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundFocused" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundNormal" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomBackgroundPressed" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "CustomTextColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 1.0000000000000000E+000,
-        "Green" : 4.9019607901573181E-001
-      },
-      "CustomTextColorUse" : true,
-      "FontSize" : 1.0000000000000000E+002,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Html" : true,
-      "Image" : {
-        "$$ClassName" : "TCastleImagePersistent"
-      },
-      "Name" : "ButtonCastle",
-      "Outline" : 1,
-      "OutlineColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Blue" : 1.0000000000000000E+000,
-        "Green" : 8.4313726425170898E-001
-      },
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : -1.0000000000000000E+002
-      },
-      "VerticalAnchorParent" : "vpTop",
-      "VerticalAnchorSelf" : "vpTop"
-    },
-    {
       "$$ClassName" : "TCastleButton",
       "Caption" : "Menu",
       "CustomBackground" : true,
@@ -184,6 +51,726 @@
       "PaddingVertical" : 2.0000000000000000E+001,
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/formulaback.png"
+      },
+      "HeightFraction" : 8.5000002384185791E-001,
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
+      "Name" : "ImageControl1",
+      "Stretch" : true,
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "WidthFraction" : 8.3999997377395630E-001,
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleVerticalGroup",
+          "Alignment" : "hpMiddle",
+          "Exists" : false,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupCredits",
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleButton",
+              "Border" : {
+                "$$ClassName" : "TBorder",
+                "Bottom" : 4.0000000000000000E+000
+              },
+              "BorderColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Alpha" : 1.0000000000000000E+000,
+                "Blue" : 7.0196080207824707E-001
+              },
+              "Caption" : "github: towerfight",
+              "Cursor" : "mcHand",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomTextColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 7.0196080207824707E-001
+              },
+              "CustomTextColorUse" : true,
+              "FontSize" : 6.0000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Html" : true,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonAuthor",
+              "Outline" : 1,
+              "OutlineColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 4.3921568989753723E-001
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleButton",
+              "Border" : {
+                "$$ClassName" : "TBorder",
+                "Bottom" : 4.0000000000000000E+000
+              },
+              "BorderColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Alpha" : 1.0000000000000000E+000,
+                "Blue" : 7.0196080207824707E-001
+              },
+              "Caption" : "Itch: ephyre-towerfight",
+              "Cursor" : "mcHand",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomTextColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 7.0196080207824707E-001
+              },
+              "CustomTextColorUse" : true,
+              "FontSize" : 6.0000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Html" : true,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonItch",
+              "Outline" : 1,
+              "OutlineColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 4.3921568989753723E-001
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "Y" : -7.3948730468750000E+001
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleButton",
+              "Border" : {
+                "$$ClassName" : "TBorder",
+                "Bottom" : 4.0000000000000000E+000
+              },
+              "BorderColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Alpha" : 1.0000000000000000E+000,
+                "Blue" : 7.0196080207824707E-001
+              },
+              "Caption" : "www: ephyre team",
+              "Cursor" : "mcHand",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomTextColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 7.0196080207824707E-001
+              },
+              "CustomTextColorUse" : true,
+              "FontSize" : 6.0000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Html" : true,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonWeb",
+              "Outline" : 1,
+              "OutlineColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 4.3921568989753723E-001
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "Y" : -1.4789746093750000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleButton",
+              "Border" : {
+                "$$ClassName" : "TBorder",
+                "Bottom" : 4.0000000000000000E+000
+              },
+              "BorderColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Alpha" : 1.0000000000000000E+000,
+                "Blue" : 7.0196080207824707E-001
+              },
+              "Caption" : "discord: ephyre",
+              "Cursor" : "mcHand",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomTextColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 7.0196080207824707E-001
+              },
+              "CustomTextColorUse" : true,
+              "FontSize" : 6.0000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Html" : true,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonDiscord",
+              "Outline" : 1,
+              "OutlineColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 4.3921568989753723E-001
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "Y" : -2.2184619140625000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleButton",
+              "Border" : {
+                "$$ClassName" : "TBorder",
+                "Bottom" : 4.0000000000000000E+000
+              },
+              "BorderColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Alpha" : 1.0000000000000000E+000,
+                "Blue" : 7.0196080207824707E-001
+              },
+              "Caption" : "made with castle",
+              "Cursor" : "mcHand",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomTextColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 4.9019607901573181E-001
+              },
+              "CustomTextColorUse" : true,
+              "FontSize" : 6.0000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Html" : true,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/cge_logo.png"
+              },
+              "ImageLayout" : "ilTop",
+              "ImageScale" : 5.0000000000000000E-001,
+              "Name" : "ButtonCastle",
+              "Outline" : 1,
+              "OutlineColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 8.4313726425170898E-001
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "Y" : -2.9579492187500000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            }
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleHorizontalGroup",
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupRules",
+          "Padding" : 1.0000000000000000E+002,
+          "Spacing" : 1.0000000000000000E+001,
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleLabel",
+              "Alignment" : "hpMiddle",
+              "ColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 9.0196079015731812E-001
+              },
+              "FontSize" : 5.5000000000000000E+001,
+              "Html" : true,
+              "Name" : "LabelRules",
+              "Outline" : 1,
+              "Text" : [
+                "Edo is captured by <font color=\"#000000\">Evil forces</font>",
+                "Fight them, Brave Samurai !",
+                "Tap open Rooms to attack them",
+                "Each win opens new ways to you",
+                "Kill the Dragon and regain peace",
+                "",
+                "Enemy Level (EL) is a formula,",
+                "Solve and Win if Your Level >= EL  ",
+                "and gain Levelups, otherwise <font color=\"#FF0000\">Lose</font>",
+                "In First tower you gain +Level ",
+                "same as EL, with every next tower",
+                "you get 1/(2T - 2) fraction of EL"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.0000000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            },
+            {
+              "$$ClassName" : "TCastleVerticalGroup",
+              "Name" : "VerticalGroup2",
+              "Spacing" : 7.0000000000000000E+001,
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 1.0422080078125000E+003
+              },
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle",
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleHorizontalGroup",
+                  "Name" : "HorizontalGroup1",
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop",
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleImageControl",
+                      "Content" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/hero-samurai.png"
+                      },
+                      "Name" : "ImageControl2",
+                      "Stretch" : true,
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    },
+                    {
+                      "$$ClassName" : "TCastleImageControl",
+                      "Content" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/dragon.png"
+                      },
+                      "Name" : "ImageControl4",
+                      "Stretch" : true,
+                      "TranslationPersistent" : {
+                        "$$ClassName" : "TCastleVector2Persistent",
+                        "X" : 1.0000000000000000E+002
+                      },
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                },
+                {
+                  "$$ClassName" : "TCastleImageControl",
+                  "Content" : {
+                    "$$ClassName" : "TCastleImagePersistent",
+                    "Url" : "castle-data:/resources/tf-levels.png"
+                  },
+                  "Name" : "ImageControl3",
+                  "TranslationPersistent" : {
+                    "$$ClassName" : "TCastleVector2Persistent",
+                    "Y" : -1.7000000000000000E+002
+                  },
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleVerticalGroup",
+          "Alignment" : "hpMiddle",
+          "Exists" : false,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupWeapon",
+          "Spacing" : 1.0000000000000000E+001,
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleUserInterface",
+              "AutoSizeToChildren" : true,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Name" : "Group2",
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleImageControl",
+                  "Content" : {
+                    "$$ClassName" : "TCastleImagePersistent",
+                    "Url" : "castle-data:/resources/tf-weapons.png"
+                  },
+                  "HorizontalAnchorParent" : "hpMiddle",
+                  "HorizontalAnchorSelf" : "hpMiddle",
+                  "Name" : "ImageControl8",
+                  "VerticalAnchorParent" : "vpTop",
+                  "VerticalAnchorSelf" : "vpTop"
+                }
+              ]
+            },
+            {
+              "$$ClassName" : "TCastleLabel",
+              "Alignment" : "hpMiddle",
+              "ColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 9.0196079015731812E-001
+              },
+              "FontSize" : 5.5000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Html" : true,
+              "Name" : "LabelWeapon",
+              "Outline" : 1,
+              "Text" : [
+                "You're weak? pick a weapon before Fight",
+                "Shuriken(+) Kunai(-) Star(*), Enter Room,",
+                "You'll see Enemy formula and your weapon",
+                "Select underlined Sign or Digit to override",
+                "Press go - New Formula makes Enemy level ",
+                "weaker or stronger, and your levelup also",
+                "Bosses on Towertops - only sign can be hit",
+                "Dragon can't be hit by weapon at all"
+              ],
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "Y" : -1.3000000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop"
+            },
+            {
+              "$$ClassName" : "TCastleUserInterface",
+              "AutoSizeToChildren" : true,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "Name" : "Group1",
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "Y" : -5.0806481933593750E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleHorizontalGroup",
+                  "HorizontalAnchorParent" : "hpMiddle",
+                  "HorizontalAnchorSelf" : "hpMiddle",
+                  "Name" : "HorizontalGroup2",
+                  "Spacing" : 2.0000000000000000E+001,
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle",
+                  "$Children" : [
+                    {
+                      "$$ClassName" : "TCastleImageControl",
+                      "Content" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/tf-levels.png"
+                      },
+                      "Height" : 1.5000000000000000E+002,
+                      "Name" : "ImageControl5",
+                      "Stretch" : true,
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle",
+                      "Width" : 1.5000000000000000E+002
+                    },
+                    {
+                      "$$ClassName" : "TCastleImageControl",
+                      "Content" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/tf-enter-room.png"
+                      },
+                      "Name" : "ImageControl9",
+                      "TranslationPersistent" : {
+                        "$$ClassName" : "TCastleVector2Persistent",
+                        "X" : 1.7000000000000000E+002
+                      },
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    },
+                    {
+                      "$$ClassName" : "TCastleImageControl",
+                      "Content" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/tf-battle.png"
+                      },
+                      "Name" : "ImageControl7",
+                      "TranslationPersistent" : {
+                        "$$ClassName" : "TCastleVector2Persistent",
+                        "X" : 3.3900000000000000E+002
+                      },
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    },
+                    {
+                      "$$ClassName" : "TCastleImageControl",
+                      "Content" : {
+                        "$$ClassName" : "TCastleImagePersistent",
+                        "Url" : "castle-data:/resources/tf-after-battle.png"
+                      },
+                      "Name" : "ImageControl6",
+                      "TranslationPersistent" : {
+                        "$$ClassName" : "TCastleVector2Persistent",
+                        "X" : 5.7100000000000000E+002
+                      },
+                      "VerticalAnchorParent" : "vpMiddle",
+                      "VerticalAnchorSelf" : "vpMiddle"
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleUserInterface",
+          "AutoSizeToChildren" : true,
+          "Exists" : false,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupKeys",
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleLabel",
+              "Alignment" : "hpMiddle",
+              "ColorPersistent" : {
+                "$$ClassName" : "TCastleColorPersistent",
+                "Blue" : 1.0000000000000000E+000,
+                "Green" : 9.0196079015731812E-001
+              },
+              "FontSize" : 5.5000000000000000E+001,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "LineSpacing" : 6.0000000000000000E+000,
+              "Name" : "LabelKeys",
+              "Outline" : 1,
+              "Text" : [
+                "Keyboard controls available:",
+                "Enter (in menu) - start fight",
+                "Esc/Backspace - close any menu or scene",
+                "Enter or Esc/Backspace - answer dialog",
+                "Arrow keys or WASD - move in game",
+                "1-4 or E (before fight) - select weapon",
+                "E (in Formula dialog) - pick weapon slot",
+                "Press Enter 4 times - fast battle restart"
+              ],
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$$ClassName" : "TCastleVerticalGroup",
+      "Name" : "VerticalGroup1",
+      "Spacing" : 1.0000000000000000E+001,
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleButton",
+          "Caption" : "Rules",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old-disabled.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old.png"
+          },
+          "FontSize" : 7.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Name" : "ButtonRules",
+          "PaddingHorizontal" : 2.0000000000000000E+001,
+          "PaddingVertical" : 2.0000000000000000E+001,
+          "Pressed" : true,
+          "Toggle" : true,
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop"
+        },
+        {
+          "$$ClassName" : "TCastleButton",
+          "Caption" : "Weapon",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old-disabled.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old.png"
+          },
+          "FontSize" : 7.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Name" : "ButtonWeapon",
+          "PaddingHorizontal" : 2.0000000000000000E+001,
+          "PaddingVertical" : 2.0000000000000000E+001,
+          "Toggle" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -1.0214999389648438E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop"
+        },
+        {
+          "$$ClassName" : "TCastleButton",
+          "Caption" : "Keys",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old-disabled.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old.png"
+          },
+          "FontSize" : 7.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Name" : "ButtonKeys",
+          "PaddingHorizontal" : 2.0000000000000000E+001,
+          "PaddingVertical" : 2.0000000000000000E+001,
+          "Toggle" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -2.0429998779296875E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop"
+        },
+        {
+          "$$ClassName" : "TCastleButton",
+          "Caption" : "Credits",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old-disabled.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old.png"
+          },
+          "FontSize" : 7.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Name" : "ButtonCredits",
+          "PaddingHorizontal" : 2.0000000000000000E+001,
+          "PaddingVertical" : 2.0000000000000000E+001,
+          "Toggle" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -3.0644998168945312E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop"
+        }
+      ]
     }
   ]
 }

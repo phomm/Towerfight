@@ -65,10 +65,14 @@
       "AutoSizeToChildren" : true,
       "Content" : {
         "$$ClassName" : "TCastleImagePersistent",
+        "ColorPersistent" : {
+          "$$ClassName" : "TCastleColorPersistent",
+          "Alpha" : 6.2745100259780884E-001
+        },
         "Url" : "castle-data:/resources/formulaback.png"
       },
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
       "Name" : "ImageControl1",
       "Stretch" : true,
       "VerticalAnchorParent" : "vpMiddle",

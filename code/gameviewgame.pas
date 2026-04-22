@@ -299,7 +299,7 @@ begin
   if Result then Exit; // allow the ancestor to handle keys
   if FPause then Exit;
 
-  if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) then
+  if Event.IsKey(keyEscape) or Event.IsKey(keyBackSpace) or Event.IsKey(keyEnter) then
   begin
     ButtonDefeat.DoClick();
     Exit(True); // key was handled
