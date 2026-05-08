@@ -43,7 +43,7 @@ begin
   ViewDialog.Text := string.Join(NL, SplitString(AText, '|'));
   ViewDialog.OnYes := AOnYes;
   ViewDialog.OnNo := AOnNo;
-  if AContainer.FrontView = ViewDialog then
+  if AContainer.CurrentFrontView = ViewDialog then
     AContainer.PopView();
   AContainer.PushView(ViewDialog);
 end;
