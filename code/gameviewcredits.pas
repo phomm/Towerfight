@@ -13,7 +13,7 @@ uses
 type
   TViewCredits = class(TCastleView)
   published
-    ButtonMenu, ButtonCredits, ButtonRules, ButtonKeys, ButtonWeapon,
+    ButtonMenu, ButtonSchool, ButtonCredits, ButtonRules, ButtonKeys, ButtonWeapon,
       ButtonCastle, ButtonAuthor, ButtonItch, ButtonDiscord, ButtonWeb: TCastleButton;
     GroupCredits, GroupRules, GroupKeys, GroupWeapon: TCastleUserInterface;
   public
@@ -22,6 +22,7 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     procedure ButtonMenuClick(Sender: TObject);
+    procedure ButtonSchoolClick(Sender: TObject);
     procedure ButtonPanelClick(Sender: TObject);
     procedure ButtonCastleClick(Sender: TObject);
     procedure ButtonAuthorClick(Sender: TObject);
@@ -41,7 +42,7 @@ uses
 // Castle  
   castlewindow, CastleOpenDocument, CastleApplicationProperties,
 // Own  
-  gameviewmain;
+  gameviewmain, gameviewgame, gameoptions;
 
 constructor TViewCredits.Create(AOwner: TComponent);
 begin
@@ -53,6 +54,7 @@ procedure TViewCredits.Start;
 begin
   inherited;
   ButtonMenu.OnClick := ButtonMenuClick;
+  ButtonSchool.OnClick := ButtonSchoolClick;
   ButtonCredits.OnClick := ButtonPanelClick;
   ButtonRules.OnClick := ButtonPanelClick;
   ButtonKeys.OnClick := ButtonPanelClick;
@@ -81,6 +83,12 @@ end;
 procedure TViewCredits.ButtonMenuClick(Sender: TObject);
 begin
   Container.View := ViewMain;
+end;
+
+procedure TViewCredits.ButtonSchoolClick(Sender: TObject);
+begin
+  SetIsSchool(True);
+  Container.View := ViewGame;
 end;
 
 procedure TViewCredits.ButtonCastleClick(Sender: TObject);

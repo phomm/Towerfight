@@ -25,8 +25,8 @@
         "$$ClassName" : "TCastleImagePersistent",
         "Url" : "castle-data:/resources/logo.png"
       },
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
       "Name" : "ImageTitle",
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"
@@ -62,11 +62,15 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
+            "ColorPersistent" : {
+              "$$ClassName" : "TCastleColorPersistent",
+              "Blue" : 7.4509805440902710E-001,
+              "Green" : 7.4901962280273438E-001
+            },
             "Url" : "castle-data:/resources/cell.png"
           },
           "CustomBackgroundPressed" : {
@@ -118,8 +122,7 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
@@ -168,14 +171,13 @@
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
-          "Caption" : "Leaders",
+          "Caption" : "Options",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
@@ -192,7 +194,7 @@
             "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
-          "Name" : "ButtonLeaders",
+          "Name" : "ButtonOptions",
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
@@ -224,17 +226,21 @@
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
-          "Caption" : "Options",
+          "Caption" : "Leaders",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
+            "ColorPersistent" : {
+              "$$ClassName" : "TCastleColorPersistent",
+              "Green" : 7.2156864404678345E-001,
+              "Red" : 5.6078433990478516E-001
+            },
             "Url" : "castle-data:/resources/cell.png"
           },
           "CustomBackgroundPressed" : {
@@ -248,7 +254,7 @@
             "Url" : "castle-data:/resources/samurai-mask.png"
           },
           "ImageScale" : 0.0000000000000000E+000,
-          "Name" : "ButtonOptions",
+          "Name" : "ButtonLeaders",
           "TextAlignment" : "hpRight",
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
@@ -286,8 +292,7 @@
             "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell.png"
+            "$$ClassName" : "TCastleImagePersistent"
           },
           "CustomBackgroundNormal" : {
             "$$ClassName" : "TCastleImagePersistent",
@@ -428,10 +433,11 @@
         "$$ClassName" : "TCastleImagePersistent",
         "Url" : "castle-data:/resources/samurai.png"
       },
-      "HeightFraction" : 8.0000001192092896E-001,
+      "HeightFraction" : 1.0000000000000000E+000,
       "Name" : "ImageSamuraiLeft",
+      "ProportionalScaling" : "psFit",
       "Stretch" : true,
-      "WidthFraction" : 3.0000001192092896E-001
+      "WidthFraction" : 4.0000000596046448E-001
     },
     {
       "$$ClassName" : "TCastleImageControl",
