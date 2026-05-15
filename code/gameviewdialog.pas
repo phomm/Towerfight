@@ -1,5 +1,7 @@
 unit GameViewDialog;
 
+{$mode delphi}
+
 interface
 
 uses Classes,
@@ -17,12 +19,14 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     Text: string;
+    YesNoMode: Boolean;
     procedure ButtonClick(Sender: TObject);
     procedure Yes();
     procedure No();
   end;
 
 procedure DialogYesNo(AContainer: TCastleContainer; const AText: string; AOnYes, AOnNo: TNotifyEvent);
+procedure DialogYes(AContainer: TCastleContainer; const AText: string; AOnYes: TNotifyEvent);
 
 var
   ViewDialog: TViewDialog;
@@ -43,9 +47,16 @@ begin
   ViewDialog.Text := string.Join(NL, SplitString(AText, '|'));
   ViewDialog.OnYes := AOnYes;
   ViewDialog.OnNo := AOnNo;
+  ViewDialog.YesNoMode := True;
   if AContainer.CurrentFrontView = ViewDialog then
     AContainer.PopView();
   AContainer.PushView(ViewDialog);
+end;
+
+procedure DialogYes(AContainer: TCastleContainer; const AText: string; AOnYes: TNotifyEvent);
+begin
+  DialogYesNo(AContainer, AText, AOnYes, nil);
+  ViewDialog.YesNoMode := False;
 end;
 
 constructor TViewDialog.Create(AOwner: TComponent);
@@ -58,9 +69,10 @@ procedure TViewDialog.Start;
 begin
   inherited;
   InterceptInput := true;
-  ButtonYes.OnClick := @ButtonClick;
-  ButtonNo.OnClick := @ButtonClick;
-  ViewDialog.LabelText.Text.Text := Text;
+  ButtonYes.OnClick := ButtonClick;
+  ButtonNo.OnClick := ButtonClick;
+  LabelText.Text.Text := Text;
+  ButtonNo.Exists := YesNoMode;
 end;
 
 procedure TViewDialog.ButtonClick(Sender: TObject);

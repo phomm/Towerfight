@@ -35,6 +35,12 @@ procedure SetUserName(const AValue: string);
 function UserGuid(): string;
 procedure SetUserGuid(const AValue: string);
 
+function IsSchool(): Boolean;
+procedure SetIsSchool(AValue: Boolean);
+
+function IsSchoolDone(): Boolean;
+procedure SetIsSchoolDone();
+
 implementation
 
 uses 
@@ -56,6 +62,10 @@ const
   UseTimerDefault = False;
   UserNameKey = 'UserName';
   UserGuidKey = 'UserGuid';
+  IsSchoolKey = 'IsSchool';
+  IsSchoolDefault = False;
+  IsSchoolDoneKey = 'IsSchoolDone';
+  IsSchoolDoneDefault = False;
 
 procedure SetValue<T>(const AKey: string; AValue: T);
 begin
@@ -132,6 +142,26 @@ end;
 procedure SetUserGuid(const AValue: string);
 begin
   SetValue<string>(UserGuidKey, AValue);
+end;
+
+function IsSchool(): Boolean;
+begin
+  Result := UserConfig.GetValue(IsSchoolKey, IsSchoolDefault);
+end;
+
+procedure SetIsSchool(AValue: Boolean);
+begin
+  SetValue<Boolean>(IsSchoolKey, AValue);
+end;
+
+function IsSchoolDone(): Boolean;
+begin
+  Result := UserConfig.GetValue(IsSchoolDoneKey, IsSchoolDoneDefault);
+end;
+
+procedure SetIsSchoolDone();
+begin
+  SetValue<Boolean>(IsSchoolDoneKey, True);
 end;
 
 end.
