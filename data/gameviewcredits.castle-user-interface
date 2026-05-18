@@ -78,7 +78,7 @@
       "PaddingVertical" : 2.0000000000000000E+001,
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : -2.0000000000000000E+002
+        "Y" : -1.5000000000000000E+002
       },
       "VerticalAnchorParent" : "vpTop",
       "VerticalAnchorSelf" : "vpTop"

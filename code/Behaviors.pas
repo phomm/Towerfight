@@ -12,9 +12,9 @@ uses
 
 type
 
-  TMoveCycleVerticalBehavior = class(TCastleBehavior)
+  TMoveCycleBehavior = class(TCastleBehavior)
   strict private
-    FSpeed, FSavedTranslationY, FAmplitude, FSeconds: Single;
+    FSpeedX, FSavedTranslationX, FAmplitudeX, FSpeedY, FSavedTranslationY, FAmplitudeY, FSeconds: Single;
     FActiveInEditor: Boolean;
   public
     constructor Create(AOwner: TComponent); override;
@@ -22,9 +22,11 @@ type
     procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
     procedure ParentAfterAttach(); override;
   published
-    property Speed: Single read FSpeed write FSpeed default 1;
+    property SpeedX: Single read FSpeedX write FSpeedX default 0;
+    property SpeedY: Single read FSpeedY write FSpeedY default 0;
     property ActiveInEditor: Boolean read FActiveInEditor write FActiveInEditor default False;
-    property Amplitude: Single read FAmplitude write FAmplitude default 1;
+    property AmplitudeX: Single read FAmplitudeX write FAmplitudeX default 0;
+    property AmplitudeY: Single read FAmplitudeY write FAmplitudeY default 0;
   end;
 
 implementation
@@ -38,22 +40,24 @@ uses
   
   ;
 
-constructor TMoveCycleVerticalBehavior.Create(AOwner: TComponent);
+constructor TMoveCycleBehavior.Create(AOwner: TComponent);
 begin
   inherited;
-  FSpeed := 1;
-  FAmplitude := 1;
+  FSpeedX := 0;
+  FSpeedY := 0;
+  FAmplitudeX := 0;
+  FAmplitudeY := 0;
 end;
 
-function TMoveCycleVerticalBehavior.PropertySections(const APropertyName: String): TPropertySections;
+function TMoveCycleBehavior.PropertySections(const APropertyName: String): TPropertySections;
 begin
-  if ArrayContainsString(APropertyName, ['Speed', 'Amplitude', 'ActiveInEditor']) then
+  if ArrayContainsString(APropertyName, ['SpeedX', 'SpeedY', 'AmplitudeX', 'AmplitudeY', 'ActiveInEditor']) then
     Result := [psBasic]
   else
     Result := inherited PropertySections(APropertyName);
 end;
 
-procedure TMoveCycleVerticalBehavior.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
+procedure TMoveCycleBehavior.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
 begin
   inherited;
   if Assigned(Parent) and Parent.Exists then
@@ -61,16 +65,18 @@ begin
     if FActiveInEditor then
 {$ENDIF}
     begin
-      Parent.Translation := Vector3(Parent.Translation.X, FSavedTranslationY + Sin(FSpeed * FSeconds) * FAmplitude, Parent.Translation.Z);
+      Parent.Translation := Vector3(FSavedTranslationX + Sin(FSpeedX * FSeconds) * FAmplitudeX,
+        FSavedTranslationY + Sin(FSpeedY * FSeconds) * FAmplitudeY, Parent.Translation.Z);
       FSeconds := FSeconds + SecondsPassed;
     end;
   if Assigned(Parent) and not Parent.Exists then
     FSeconds := 0;
 end;
 
-procedure TMoveCycleVerticalBehavior.ParentAfterAttach();
+procedure TMoveCycleBehavior.ParentAfterAttach();
 begin
   inherited;
+  FSavedTranslationX := Parent.Translation.X;
   FSavedTranslationY := Parent.Translation.Y;
 end;
 
