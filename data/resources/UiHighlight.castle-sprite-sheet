@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas width="512" height="512" imagePath="UiHighlight.png">
+  <SubTexture x="0" y="419" fps="8" name="Default_1" width="92" height="93"/>
+  <SubTexture x="92" y="419" name="Default_2" width="92" height="93"/>
+  <SubTexture x="184" y="419" name="Default_3" width="92" height="93"/>
+  <SubTexture x="276" y="419" name="Default_4" width="92" height="93"/>
+  <SubTexture x="368" y="419" name="Default_5" width="92" height="93"/>
+  <SubTexture x="0" y="326" name="Default_6" width="92" height="93"/>
+  <SubTexture x="92" y="326" name="Default_7" width="92" height="93"/>
+  <SubTexture x="184" y="326" name="Default_8" width="92" height="93"/>
+  <SubTexture x="276" y="326" name="Default_9" width="92" height="93"/>
+</TextureAtlas>

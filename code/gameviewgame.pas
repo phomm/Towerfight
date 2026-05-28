@@ -52,6 +52,7 @@ type
     procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     function RandomBloodSplash(): TCastleScene;
+    function GetTower(ATowerIndex: Integer): TCastleUserInterface;
     procedure DefeatQuestionYes(Sender: TObject);
     procedure TimerBloodTick(ASender: TObject);
     procedure TimerGameTick(ASender: TObject);
@@ -164,7 +165,7 @@ begin
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
     LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
-    LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+    LGroupTower := GetTower(LTowerIndex);
     GroupTowers.InsertFront(LVisualTower);
     LStockIndex := 0;
     for LRoom in Map.Towers[LTowerIndex].Rooms do 
@@ -194,6 +195,11 @@ begin
     LGroupTower.InsertFront(LRoof);
   end;
   UpdateRooms();
+end;
+
+function TViewGame.GetTower(ATowerIndex: Integer): TCastleUserInterface;
+begin
+  Result := GroupTowers.FindRequiredComponent('GroupTower' + ATowerIndex.ToString) as TCastleUserInterface;
 end;
 
 procedure TViewGame.ButtonWeaponClick(Sender: TObject);
@@ -331,7 +337,7 @@ begin
       LStockIndex := Map.HeroStockIndex + KeyToDelta[LKey].Y;
       if Map.GetRoomIndex(LTowerIndex, LStockIndex) = -1 then
         Exit(True); // key was handled, even if hero didn't move
-      LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+      LGroupTower := GetTower(LTowerIndex);
       (LGroupTower.Controls[LStockIndex] as TRoomComponent).ControlRoom.DoClick();
       Exit(True); // key was handled
     end;
@@ -521,7 +527,7 @@ var
 begin
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
-    LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
+    LGroupTower := GetTower(LTowerIndex);
     for LStockIndex := 0 to Pred(Map.Towers[LTowerIndex].Rooms.Count) do 
       (LGroupTower.Controls[LStockIndex] as TRoomComponent).ControlRoom.Enabled := Map.IsRoomReachable(LTowerIndex, LStockIndex);
   end;
@@ -529,15 +535,13 @@ end;
 
 procedure TViewGame.UpdateMiniBossRooms();
 var
-  LGroupTower: TCastleUserInterface;
   LTowerIndex: Integer;
   LRoomComponent: TRoomComponent;
   LRoom: TRoom;
 begin
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
   begin
-    LGroupTower := GroupTowers.FindRequiredComponent('GroupTower' + LTowerIndex.ToString) as TCastleUserInterface;
-    LRoomComponent := LGroupTower.Controls[Pred(Map.Towers[LTowerIndex].Rooms.Count)] as TRoomComponent;
+    LRoomComponent := GetTower(LTowerIndex).Controls[Pred(Map.Towers[LTowerIndex].Rooms.Count)] as TRoomComponent;
     LRoom := Map.GetRoomByIndex(LRoomComponent.Tag);
     if (LRoom.Actors.Count > 0) and (LRoom.Actors[0] is TMiniBoss) then
       LRoomComponent.SetEnemy(LRoom.Actors[0]);
