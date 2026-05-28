@@ -98,6 +98,7 @@ constructor TViewGame.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewgame.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewGame.Pause();
@@ -177,18 +178,13 @@ begin
       LRoomComponent.ControlRoom.Enabled := False;
       LRoomComponent.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
       if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
-      begin
-        LRoomComponent.LabelRight.Caption := HighlightCaption(LRoom.Actors[0].Visual);
-        LRoomComponent.ImageRight.Url := LRoom.Actors[0].AssetId;
-        if LRoom.Actors[0] is TBoss then
-          LRoomComponent.LabelRight.Border.AllSides := 4;
-      end;
+        LRoomComponent.SetEnemy(LRoom.Actors[0]);
       LRoomComponent.LabelLeft.Caption := '';
       if Map.IsHeroRoom(LRoomComponent.Tag) then
       begin
         LRoomComponent.LabelLeft.Caption := Map.Hero.Visual;
         LRoomComponent.ImageLeft.Url := Map.Hero.AssetId;
-        LRoomComponent.LabelRight.Caption := '';
+        LRoomComponent.SetEnemy(nil);
         FPreviousRoom := LRoomComponent;
       end;
       Inc(LStockIndex);
@@ -388,7 +384,7 @@ begin
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
   LActor.Reveal();
-  ARoom.LabelRight.Caption := HighlightCaption(LActor.Visual);
+  ARoom.SetEnemy(LActor);
   if Map.HeroRoom.Fight() then
   begin
     LScene := RandomBloodSplash();
@@ -460,7 +456,7 @@ begin
         FPosTo := LocalToContainerPosition(Vector2(Width / 2, Height / 2), False);
     end;
     FRoomFight.ImageRight.Url := '';
-    FRoomFight.LabelRight.Caption := '';
+    FRoomFight.SetEnemy(nil);
     FRoomFight.LabelLeft.Caption := Map.Hero.Visual;
 
     if LWeapon = hwNo then
@@ -544,7 +540,7 @@ begin
     LRoomComponent := LGroupTower.Controls[Pred(Map.Towers[LTowerIndex].Rooms.Count)] as TRoomComponent;
     LRoom := Map.GetRoomByIndex(LRoomComponent.Tag);
     if (LRoom.Actors.Count > 0) and (LRoom.Actors[0] is TMiniBoss) then
-      LRoomComponent.LabelRight.Caption := HighlightCaption(LRoom.Actors[0].Visual);
+      LRoomComponent.SetEnemy(LRoom.Actors[0]);
   end;
 end;
 
