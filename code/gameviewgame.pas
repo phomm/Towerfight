@@ -21,8 +21,8 @@ type
     ButtonDefeat, ButtonGameTime, WeaponPlus, WeaponMinus, WeaponNo, WeaponMultiply: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
-    BloodSplash0, BloodSplash1, BloodSplash2: TCastleScene;
-    Viewport1: TCastleViewport;
+    BloodSplash0, BloodSplash1, BloodSplash2, SceneLessonArrow: TCastleScene;
+    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply: TCastleViewport;
     ImageWeapon: TCastleImageControl;
     TimerBlood, TimerGame, TimerHint: TCastleTimer;
     function GetMap(): TMap;
@@ -42,6 +42,7 @@ type
   private
     FPreviousRoom: TRoomComponent;
     FWeapons: array[0..3] of TCastleButton;
+    FWeaponButtonHighlights: array[1..3] of TCastleViewport;
     FSkip, FPause, FInternalWeaponSwitch: Boolean;
     FPosFrom, FPosTo: TVector2;
     FAnimateWeaponTicks, FGameTicks: Integer;
@@ -149,6 +150,9 @@ begin
   FWeapons[1] := WeaponPlus;
   FWeapons[2] := WeaponMinus;
   FWeapons[3] := WeaponMultiply;
+  FWeaponButtonHighlights[1] := HighlightPlus;
+  FWeaponButtonHighlights[2] := HighlightMinus;
+  FWeaponButtonHighlights[3] := HighlightMultiply;
   WeaponNo.DoClick(); 
   TimerBlood.Exists := False;
   TimerBlood.OnTimer := TimerBloodTick;
