@@ -48,6 +48,7 @@ constructor TViewCredits.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewcredits.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewCredits.Start;

@@ -49,6 +49,7 @@ constructor TViewWin.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewwin.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewWin.Start;

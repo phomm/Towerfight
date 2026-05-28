@@ -64,6 +64,7 @@ constructor TViewMain.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewmain.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewMain.WindowCloseQuery(Container: TCastleContainer);

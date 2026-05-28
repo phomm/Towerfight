@@ -12,7 +12,7 @@ See https://castle-engine.io/manual_castle_settings.php for documentation of thi
     reference_height="900"
   />
   <default_font
-      url="castle-data:/resources/Keshiki.otf"
+      url="castle-data:/resources/Keshiki-MathSigns-from-Zenjirou.otf"
       size_at_load="200"
       size="32"
     />

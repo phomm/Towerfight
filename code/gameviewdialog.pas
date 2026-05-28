@@ -63,6 +63,7 @@ constructor TViewDialog.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewdialog.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewDialog.Start;

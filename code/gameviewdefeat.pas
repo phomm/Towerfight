@@ -35,6 +35,7 @@ constructor TViewDefeat.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewdefeat.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewDefeat.Start;
