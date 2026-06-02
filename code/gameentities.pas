@@ -89,7 +89,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    function Fight(): Boolean;
+    function Fight(out ALevelUp: Integer): Boolean;
     property Actors: TObjectList<TActor> read FActors;
     function HasEnemy(): Boolean;
     function PickWeapon(): NHeroWeapon;
@@ -183,7 +183,7 @@ begin
   inherited Destroy();
 end;
 
-function TRoom.Fight(): Boolean;
+function TRoom.Fight(out ALevelUp: Integer): Boolean;
 var
   LHeroArmed: Boolean;
   LLootWeapon, LLootChanceModifier: Integer;
@@ -195,7 +195,10 @@ begin
   Result := TMap.Map.Hero.Level >= FActors[0].Level;
   if Result then
   begin
-    TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
+    //WritelnLog(Format('Hero level %d defeated enemy level %d in tower %d stock %d', 
+    //  [TMap.Map.Hero.Level, FActors[0].Level, TMap.Map.HeroTowerIndex, TMap.Map.HeroStockIndex]));
+    ALevelUp := FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
+    TMap.Map.Hero.Level := TMap.Map.Hero.Level + ALevelUp;
     LLootChanceModifier := IIF(FActors[0] is TBoss, 0, IIF(LIsMiniBoss, 100, 1));
     FActors.Delete(0);
     LHeroArmed := TMap.Map.Hero.Weapon <> hwNo;

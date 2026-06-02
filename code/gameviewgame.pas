@@ -22,9 +22,10 @@ type
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     BloodSplash0, BloodSplash1, BloodSplash2, SceneLessonArrow: TCastleScene;
-    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply: TCastleViewport;
+    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply, ViewportLevelUp: TCastleViewport;
     ImageWeapon: TCastleImageControl;
-    TimerBlood, TimerGame, TimerHint: TCastleTimer;
+    TimerBlood, TimerGame, TimerHint, TimerLesson: TCastleTimer;
+    TextLevelUp: TCastleText;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -52,6 +53,7 @@ type
     procedure ButtonWeaponClick(Sender: TObject);
     procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
+    procedure RunLevelUpAnim();
     function RandomBloodSplash(): TCastleScene;
     function GetTower(ATowerIndex: Integer): TCastleUserInterface;
     procedure DefeatQuestionYes(Sender: TObject);
@@ -135,35 +137,16 @@ end;
 
 procedure TViewGame.Start();
 var 
+  LMoveBehavior: TMoveUpBehavior;
+  LLifetimeBehavior: TLifeTimeBehavior;
+  LTextColor: TCastleColor;
+  procedure SetupTowers();
+  var
+    LRoomComponent: TRoomComponent;
+    LTowerIndex, LStockIndex: Integer;
+    LGroupTower, LVisualTower, LRoof, LRoomUI: TCastleUserInterface;
   LRoom: TRoom;
-  LGroupTower, LVisualTower, LRoof, LRoomUI: TCastleUserInterface;
-  LRoomComponent: TRoomComponent;
-  LStockIndex, LTowerIndex: Integer;
 begin
-  inherited;
-  ButtonDefeat.OnClick := ButtonDefeatClick;
-  WeaponNo.OnClick := ButtonWeaponClick;
-  WeaponPlus.OnClick := ButtonWeaponClick;
-  WeaponMinus.OnClick := ButtonWeaponClick;
-  WeaponMultiply.OnClick := ButtonWeaponClick;
-  FWeapons[0] := WeaponNo;
-  FWeapons[1] := WeaponPlus;
-  FWeapons[2] := WeaponMinus;
-  FWeapons[3] := WeaponMultiply;
-  FWeaponButtonHighlights[1] := HighlightPlus;
-  FWeaponButtonHighlights[2] := HighlightMinus;
-  FWeaponButtonHighlights[3] := HighlightMultiply;
-  WeaponNo.DoClick(); 
-  TimerBlood.Exists := False;
-  TimerBlood.OnTimer := TimerBloodTick;
-  TimerHint.OnTimer := TimerHintTick;
-  TimerGame.OnTimer := TimerGameTick;
-  TimerGame.IntervalSeconds := 1;
-  TimerGame.Exists := UseTimer();
-  FPause := True;
-  FGameTicks := GameSeconds[Difficulty()];
-  VisualizeTime();
-
   GroupTowers.ClearControls();
   GroupTowers.Spacing := (Ord(High(NDifficulty)) - Ord(Difficulty()) - 1) * 40; 
   for LTowerIndex := 0 to Pred(Map.Towers.Count) do
@@ -198,6 +181,42 @@ begin
     LGroupTower.RemoveControl(LRoof);
     LGroupTower.InsertFront(LRoof);
   end;
+  end;
+begin
+  inherited;
+  ButtonDefeat.OnClick := ButtonDefeatClick;
+  WeaponNo.OnClick := ButtonWeaponClick;
+  WeaponPlus.OnClick := ButtonWeaponClick;
+  WeaponMinus.OnClick := ButtonWeaponClick;
+  WeaponMultiply.OnClick := ButtonWeaponClick;
+  FWeapons[0] := WeaponNo;
+  FWeapons[1] := WeaponPlus;
+  FWeapons[2] := WeaponMinus;
+  FWeapons[3] := WeaponMultiply;
+  FWeaponButtonHighlights[1] := HighlightPlus;
+  FWeaponButtonHighlights[2] := HighlightMinus;
+  FWeaponButtonHighlights[3] := HighlightMultiply;
+  WeaponNo.DoClick(); 
+  TimerBlood.Exists := False;
+  TimerBlood.OnTimer := TimerBloodTick;
+  TimerHint.OnTimer := TimerHintTick;
+  TimerGame.OnTimer := TimerGameTick;
+  TimerGame.IntervalSeconds := 1;
+  TimerGame.Exists := UseTimer() and not IsSchool();
+  LMoveBehavior := TMoveUpBehavior.Create(ViewportLevelUp);
+  LMoveBehavior.SpeedX := 200;
+  LMoveBehavior.SpeedY := 500;
+  LLifetimeBehavior := TLifeTimeBehavior.Create(ViewportLevelUp);
+  TextLevelUp.AddBehavior(LMoveBehavior);
+  TextLevelUp.AddBehavior(LLifetimeBehavior);
+  TextLevelUp.Exists := False;
+  LTextColor := TextLevelUp.Color;
+  TextLevelUp.CustomFont := Container.DefaultFont as TCastleFont;
+  TextLevelUp.Color := LTextColor;
+  FPause := True;
+  FGameTicks := GameSeconds[Difficulty()];
+  VisualizeTime();
+  SetupTowers();
   UpdateRooms();
 end;
 
@@ -390,12 +409,13 @@ var
   LActor: TActor;
   LScene: TCastleScene;
   LRoom: TRoom;
+  LLevelUp: Integer;
 begin
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
   LActor.Reveal();
   ARoom.SetEnemy(LActor);
-  if Map.HeroRoom.Fight() then
+  if Map.HeroRoom.Fight(LLevelUp) then
   begin
     LScene := RandomBloodSplash();
     RunAnimation(LScene, ARoom);
@@ -412,6 +432,7 @@ begin
   FSkip := True;
   TimerBlood.Exists := True;
   FRoomFight := ARoom;
+  FRoomFight.ImageLeft.Tag := LLevelUp;
 end;
 
 function TViewGame.RandomBloodSplash(): TCastleScene;
@@ -445,6 +466,15 @@ begin
   AScene.Exists := False;
 end;
 
+procedure TViewGame.RunLevelUpAnim();
+begin
+  ViewportLevelUp.Translation := FRoomFight.LocalToContainerPosition(Vector2(FRoomFight.Width / 4, -FRoomFight.Height), False);
+  TextLevelUp.Translation := Vector3(0, 0, 0);
+  TextLevelUp.Caption := '+' + FRoomFight.ImageLeft.Tag.ToString();
+  (TextLevelUp.FindBehavior(TLifeTimeBehavior) as TLifeTimeBehavior).Reset();
+  TextLevelUp.Exists := True;
+end;
+
 procedure TViewGame.TimerBloodTick(ASender: TObject);
 var
   LWeapon: NHeroWeapon;
@@ -465,6 +495,7 @@ begin
       with FWeapons[Ord(LWeapon)] do
         FPosTo := LocalToContainerPosition(Vector2(Width / 2, Height / 2), False);
     end;
+    RunLevelUpAnim();
     FRoomFight.ImageRight.Url := '';
     FRoomFight.SetEnemy(nil);
     FRoomFight.LabelLeft.Caption := Map.Hero.Visual;

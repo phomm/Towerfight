@@ -40,9 +40,9 @@ uses
 // System
   SysUtils,
 // Castle  
-  castlewindow, CastleOpenDocument, CastleApplicationProperties,
+  castlewindow, CastleOpenDocument, CastleApplicationProperties, castlesoundengine,
 // Own  
-  gameviewmain, gameviewgame, gameoptions;
+  gameviewmain, gameviewgame, gameoptions, audiocomponent;
 
 constructor TViewCredits.Create(AOwner: TComponent);
 begin
@@ -67,6 +67,13 @@ begin
   ButtonWeb.OnClick := ButtonWebClick;
 
   ButtonKeys.Exists := ApplicationProperties.ShowUserInterfaceToQuit {$IFDEF WASI} or True {$ENDIF};
+
+  if not Assigned(SoundEngine.LoopingChannel[0].Sound) or 
+    (Pos('Menu', SoundEngine.LoopingChannel[0].Sound.Name) <= 0) then 
+  begin
+    SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
+    SoundEngine.LoopingChannel[0].Sound.Volume := MusicLevel() / 100;
+  end;
 end;
 
 function TViewCredits.Press(const Event: TInputPressRelease): Boolean;
