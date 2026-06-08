@@ -13,7 +13,7 @@ uses
 type
   TViewCredits = class(TCastleView)
   published
-    ButtonMenu, ButtonCredits, ButtonRules, ButtonKeys, ButtonWeapon,
+    ButtonMenu, ButtonSchool, ButtonCredits, ButtonRules, ButtonKeys, ButtonWeapon,
       ButtonCastle, ButtonAuthor, ButtonItch, ButtonDiscord, ButtonWeb: TCastleButton;
     GroupCredits, GroupRules, GroupKeys, GroupWeapon: TCastleUserInterface;
   public
@@ -22,6 +22,7 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     procedure ButtonMenuClick(Sender: TObject);
+    procedure ButtonSchoolClick(Sender: TObject);
     procedure ButtonPanelClick(Sender: TObject);
     procedure ButtonCastleClick(Sender: TObject);
     procedure ButtonAuthorClick(Sender: TObject);
@@ -39,20 +40,22 @@ uses
 // System
   SysUtils,
 // Castle  
-  castlewindow, CastleOpenDocument, CastleApplicationProperties,
+  castlewindow, CastleOpenDocument, CastleApplicationProperties, castlesoundengine,
 // Own  
-  gameviewmain;
+  gameviewmain, gameviewgame, gameoptions, audiocomponent;
 
 constructor TViewCredits.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewcredits.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewCredits.Start;
 begin
   inherited;
   ButtonMenu.OnClick := ButtonMenuClick;
+  ButtonSchool.OnClick := ButtonSchoolClick;
   ButtonCredits.OnClick := ButtonPanelClick;
   ButtonRules.OnClick := ButtonPanelClick;
   ButtonKeys.OnClick := ButtonPanelClick;
@@ -64,6 +67,13 @@ begin
   ButtonWeb.OnClick := ButtonWebClick;
 
   ButtonKeys.Exists := ApplicationProperties.ShowUserInterfaceToQuit {$IFDEF WASI} or True {$ENDIF};
+
+  if not Assigned(SoundEngine.LoopingChannel[0].Sound) or 
+    (Pos('Menu', SoundEngine.LoopingChannel[0].Sound.Name) <= 0) then 
+  begin
+    SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
+    SoundEngine.LoopingChannel[0].Sound.Volume := MusicLevel() / 100;
+  end;
 end;
 
 function TViewCredits.Press(const Event: TInputPressRelease): Boolean;
@@ -81,6 +91,12 @@ end;
 procedure TViewCredits.ButtonMenuClick(Sender: TObject);
 begin
   Container.View := ViewMain;
+end;
+
+procedure TViewCredits.ButtonSchoolClick(Sender: TObject);
+begin
+  SetIsSchool(True);
+  Container.View := ViewGame;
 end;
 
 procedure TViewCredits.ButtonCastleClick(Sender: TObject);

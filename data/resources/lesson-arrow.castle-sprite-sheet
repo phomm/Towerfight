@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas width="256" height="256" imagePath="lesson-arrow.png">
+  <SubTexture x="0" y="0" fps="8" name="default_1" width="256" height="256"/>
+</TextureAtlas>

@@ -64,6 +64,7 @@ constructor TViewMain.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewmain.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewMain.WindowCloseQuery(Container: TCastleContainer);
@@ -132,6 +133,7 @@ begin
     SoundEngine.LoopingChannel[0].Sound := Audio.RandomMenuTheme;
     SoundEngine.LoopingChannel[0].Sound.Volume := MusicLevel() / 100;
   end;
+  SetIsSchool(False);
 end;
 
 procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
@@ -205,7 +207,13 @@ end;
 
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
-  Container.View := ViewCredits;
+  if not IsSchoolDone() then
+  begin
+    SetIsSchool(True);
+    Container.View := ViewGame;
+  end
+  else  
+    Container.View := ViewCredits;
 end;
 
 function TViewMain.Press(const Event: TInputPressRelease): Boolean;

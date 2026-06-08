@@ -4,3 +4,5 @@ samurai-mask https://www.vecteezy.com/vector-art/42361570-isolated-samurai-warri
 weapons https://opengameart.org/content/2d-ninja-sub-weapons-pack
 samurai https://www.vecteezy.com/vector-art/5131249-japanese-samurai-warrior-vector-illustration
 blood splashes https://opengameart.org/content/animations-blood-hit-and-both-d
+Keshiki font: license: Freeware, Non-Commercial, https://www.fontspace.com/keshiki-font-f103713
+Zenjirou font, used for replacement of Math signs of Keshiki, license: Freeware, Non-Commercial, https://www.fontspace.com/zenjirou-font-f146151

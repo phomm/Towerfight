@@ -1,5 +1,7 @@
 unit GameViewDialog;
 
+{$mode delphi}
+
 interface
 
 uses Classes,
@@ -10,6 +12,7 @@ type
   published
     ButtonYes, ButtonNo: TCastleButton;
     LabelText: TCastleLabel;
+    ImageBack: TCastleImageControl;
   public
     OnYes, OnNo: TNotifyEvent;
     constructor Create(AOwner: TComponent); override;
@@ -17,12 +20,14 @@ type
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     Text: string;
+    YesNoMode: Boolean;
     procedure ButtonClick(Sender: TObject);
     procedure Yes();
     procedure No();
   end;
 
 procedure DialogYesNo(AContainer: TCastleContainer; const AText: string; AOnYes, AOnNo: TNotifyEvent);
+procedure DialogYes(AContainer: TCastleContainer; const AText: string; AOnYes: TNotifyEvent);
 
 var
   ViewDialog: TViewDialog;
@@ -33,7 +38,7 @@ uses
 // System
   SysUtils,
 // Castle
-  castleutils, castlelog,
+  castleutils, castlelog, castlerectangles,
 // Own
   Common  
   ;
@@ -43,24 +48,36 @@ begin
   ViewDialog.Text := string.Join(NL, SplitString(AText, '|'));
   ViewDialog.OnYes := AOnYes;
   ViewDialog.OnNo := AOnNo;
-  if AContainer.FrontView = ViewDialog then
+  ViewDialog.YesNoMode := True;
+  if AContainer.CurrentFrontView = ViewDialog then
     AContainer.PopView();
   AContainer.PushView(ViewDialog);
+end;
+
+procedure DialogYes(AContainer: TCastleContainer; const AText: string; AOnYes: TNotifyEvent);
+begin
+  DialogYesNo(AContainer, AText, AOnYes, nil);
+  ViewDialog.YesNoMode := False;
 end;
 
 constructor TViewDialog.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewdialog.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewDialog.Start;
+const
+  Anchors: array [Boolean] of THorizontalPosition = (hpLeft, hpMiddle);
 begin
   inherited;
-  InterceptInput := true;
-  ButtonYes.OnClick := @ButtonClick;
-  ButtonNo.OnClick := @ButtonClick;
-  ViewDialog.LabelText.Text.Text := Text;
+  InterceptInput := YesNoMode;
+  ButtonYes.OnClick := ButtonClick;
+  ButtonNo.OnClick := ButtonClick;
+  LabelText.Text.Text := Text;
+  ButtonNo.Exists := YesNoMode;
+  ImageBack.HorizontalAnchorSelf := Anchors[YesNoMode];
 end;
 
 procedure TViewDialog.ButtonClick(Sender: TObject);

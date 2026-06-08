@@ -62,14 +62,12 @@ implementation
 
 uses
 // System
-  SysUtils,
-// Thirdparty
-  HlpSHA2_256, HlpIHash, HlpIHashResult,
+  SysUtils, 
 // Castle
   castlelog,
 // Own
-  Common;
-
+  Common, hasher;
+  
 function TProblemDetails.ToString(): string; 
 begin
   Result := Status.ToString + Title + ': ' + Detail;
@@ -92,8 +90,7 @@ const
 begin
   FHash := Format(HashTemplate, [Difficulty, IIF(Guid = '', '', ':Guid='+ Guid), Name, Salt, Score]);
   //WriteLnLog('ForHash ' + FHash);
-  // TODO : remove this when WEB platform supports http requests
-  FHash := TSHA2_256.Create().ComputeString(FHash, TEncoding.UTF8).ToString(); 
+  FHash := GetSHA256(FHash);
 end;
 
 function TSubmitLeader.Serialize(): string;

@@ -29,6 +29,7 @@ type
     procedure ButtonSubmitClick(Sender: TObject);
     procedure SubmitScores();
     procedure SubmitScoresFinished(const AContent: string; ASuccess: Boolean);
+    procedure BackToMenu();
   end;
 
 var
@@ -42,12 +43,13 @@ uses
 // Castle
   CastleSoundEngine, castlelog,
 // Own
-  gameviewmain, audiocomponent, gameoptions, gameviewleaders, castleRest, gameentities, models, Common;
+  gameviewmain, audiocomponent, gameoptions, gameviewleaders, gameviewcredits, castleRest, gameentities, models, Common;
 
 constructor TViewWin.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewwin.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewWin.Start;
@@ -57,6 +59,7 @@ begin
   ButtonSubmit.OnClick := ButtonSubmitClick;
   SoundEngine.LoopingChannel[0].Sound := Audio.RandomWinTheme;
   SoundEngine.LoopingChannel[0].Sound.Volume := 5 * MusicLevel() / 100;
+  ImageControl1.Exists := not IsSchool();
 end;
 
 procedure TViewWin.Resume;
@@ -69,7 +72,15 @@ end;
 
 procedure TViewWin.ButtonMenuClick(Sender: TObject);
 begin
-  Container.View := ViewMain;
+  BackToMenu();
+end;
+
+procedure TViewWin.BackToMenu();
+begin
+  if IsSchool() then
+    Container.View := ViewCredits
+  else
+    Container.View := ViewMain;
 end;
 
 procedure TViewWin.ButtonSubmitClick(Sender: TObject);
@@ -94,7 +105,7 @@ begin
 
   if Event.IsKey(keyEscape) then
   begin
-    Container.View := ViewMain;
+    BackToMenu();
     Exit(true); // key was handled
   end;
 end;

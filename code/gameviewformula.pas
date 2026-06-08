@@ -58,6 +58,7 @@ constructor TViewFormula.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewformula.castle-user-interface';
+  DesignPreload := True;
 end;
 
 procedure TViewFormula.Start;

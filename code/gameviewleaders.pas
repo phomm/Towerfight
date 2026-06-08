@@ -55,6 +55,7 @@ constructor TViewLeaders.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewleaders.castle-user-interface';
+  DesignPreload := True;
   FLeaders := TObjectList<TLeader>.Create(True);
 end;
 

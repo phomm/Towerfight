@@ -89,7 +89,7 @@ type
   public
     constructor Create(AOwner: TComponent); override;
     destructor Destroy(); override;
-    function Fight(): Boolean;
+    function Fight(out ALevelUp: Integer): Boolean;
     property Actors: TObjectList<TActor> read FActors;
     function HasEnemy(): Boolean;
     function PickWeapon(): NHeroWeapon;
@@ -156,6 +156,14 @@ uses
 // Own  
   Common, gameviewgame, imagescomponent;
 
+const
+  SchoolLevel = 8;
+  SchoolBossLevel = 100;
+  SchoolBossVisual = '10?';
+  SchoolRooms: array[1..2, 1..4] of record L, F: Integer; W: NHeroWeapon; end = 
+  (((L: 0; F: 0; W: hwNo), (L: 7; F: 0; W: hwNo), (L: 12; F: 1; W: hwMinus), (L: 40; F: 4; W: hwPlus)), 
+  ((L: 14; F: 0; W: hwNo), (L: 35; F: 0; W: hwMultiply), (L: 54; F: 2; W: hwNo), (L: 50; F: 1; W: hwNo)));
+
 procedure TActor.SetLevel(AValue: Integer);
 begin
   FLevel := AValue;
@@ -163,7 +171,7 @@ end;
 
 function TActor.GetVisual(): string;
 begin
-  Result := IntToStr(FLevel);
+  Result := FLevel.ToString();
 end;
 
 procedure TActor.Reveal();
@@ -183,7 +191,7 @@ begin
   inherited Destroy();
 end;
 
-function TRoom.Fight(): Boolean;
+function TRoom.Fight(out ALevelUp: Integer): Boolean;
 var
   LHeroArmed: Boolean;
   LLootWeapon, LLootChanceModifier: Integer;
@@ -195,16 +203,22 @@ begin
   Result := TMap.Map.Hero.Level >= FActors[0].Level;
   if Result then
   begin
-    TMap.Map.Hero.Level := TMap.Map.Hero.Level + FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
+    //WritelnLog(Format('Hero level %d defeated enemy level %d in tower %d stock %d', 
+    //  [TMap.Map.Hero.Level, FActors[0].Level, TMap.Map.HeroTowerIndex, TMap.Map.HeroStockIndex]));
+    ALevelUp := FActors[0].Level div Max(1, TMap.Map.HeroTowerIndex * 2);
+    TMap.Map.Hero.Level := TMap.Map.Hero.Level + ALevelUp;
     LLootChanceModifier := IIF(FActors[0] is TBoss, 0, IIF(LIsMiniBoss, 100, 1));
     FActors.Delete(0);
     LHeroArmed := TMap.Map.Hero.Weapon <> hwNo;
     // 25% chance to spawn random weapon loot if not armed, 50% to spawn same weapon if armed
-    if Random(100) < (25 + 25 * Ord(LHeroArmed)) * LLootChanceModifier then
+    if (Random(100) < (25 + 25 * Ord(LHeroArmed)) * LLootChanceModifier) and not IsSchool() then
     begin    
       LLootWeapon := IIF(LHeroArmed, Ord(TMap.Map.Hero.Weapon), Random(3) + 1);
       FActors.Add(TWeaponLoot.Create(nil, NHeroWeapon(LLootWeapon)));
     end;
+    if IsSchool() and not TMap.Map.IsFinalRoom(TMap.Map.HeroTowerIndex + 1, TMap.Map.HeroStockIndex + 1)
+      and (SchoolRooms[TMap.Map.HeroTowerIndex + 1, TMap.Map.HeroStockIndex + 1].W <> hwNo) then
+      FActors.Add(TWeaponLoot.Create(nil, SchoolRooms[TMap.Map.HeroTowerIndex + 1, TMap.Map.HeroStockIndex + 1].W));
     if LIsMiniBoss then
       TMap.Map.EnemiesWeakened();
   end
@@ -254,7 +268,7 @@ begin
   FHero := THero.Create(nil);
   FTowers := TObjectList<TTower>.Create(True);
   FDifficulty := Difficulty();
-  FLastTower := 3 + Ord(FDifficulty);
+  FLastTower := IIF(IsSchool(), 2, 3 + Ord(FDifficulty));
   FLastStock := Min(LastTower + 3, 8);
   FBoss := TBoss.Create(nil, LastTower, FLastStock);
   for T := 1 to LastTower do
@@ -268,7 +282,7 @@ begin
       LTower.FRooms.Add(LRoom);
       if IsFinalRoom(T, R) then
         LRoom.Actors.Add(FBoss)
-      else if (T <> LastTower) and (T <> 1) and (R = FLastStock) then
+      else if (T <> LastTower) and ((T <> 1) or IsSchool) and (R = FLastStock) then
         LRoom.Actors.Add(TMiniBoss.Create(nil, T, R))
       else if (T <> 1) or (R <> 1) then
         LRoom.Actors.Add(TEnemy.Create(nil, T, R))     
@@ -425,6 +439,8 @@ begin
     Result := TMap.Map.Hero.Level * (AStock - 1) - Random(AStock)
   else
     Result := Min(TMap.Map.BossCap(), Result);
+  if IsSchool() then
+    Result := SchoolRooms[ATower, AStock].L;
 end;
 
 constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
@@ -456,16 +472,21 @@ begin
     LOp := a1 
   else
     LOp := Random(2);
-  
+  if IsSchool() and (ATower <= High(SchoolRooms)) and (AStock <= High(SchoolRooms[ATower])) then
+  begin  
+    WriteLnLog(Atower.ToString() + AStock.ToString()); 
+    LOp := SchoolRooms[ATower, AStock].F;
+  end;
+
   if LOp = 0 then
   begin
-    a1 := Max(Min(1, FLevel div 10), Min(Random(FLevel * 2 div 3), FLevel div 2));
+    a1 := IIF(IsSchool(), 5, Max(Min(1, FLevel div 10), Min(Random(FLevel * 2 div 3), FLevel div 2)));
     a2 := FLevel - a1;
-    FFormula := Format('%d+%d', [a1, a2]);
+    FFormula := Format('%d+%d', [a2, a1]);
   end
   else if LOp = 1 then
   begin
-    a1 := Max(1, Random(FLevel div 2));
+    a1 := IIF(IsSchool(), 5, Max(1, Random(FLevel div 2)));
     a2 := FLevel + a1;
     FFormula := Format('%d-%d', [a2, a1]);
   end
@@ -483,6 +504,8 @@ end;
 
 function TBoss.CalcLevel(ATower, AStock: Integer): Integer;
 begin
+  if IsSchool() then
+    Exit(SchoolBossLevel);
   case Difficulty of
     gdEasy: Result := 444;
     gdNormal: Result := 1000 + Random(5) * 100 + 40 + ValueOrZero(4); 
@@ -493,6 +516,8 @@ end;
 
 function TBoss.GetVisual(): string;
 begin
+  if IsSchool() then
+    Exit(IIF(FRevealed, FLevel.ToString, SchoolBossVisual));
   if FRevealed then
     Exit(FLevel.ToString);
   Result := IIF(Level div 1000 = 0, '', (Level div 1000).ToString);
@@ -512,12 +537,17 @@ var
   LAntiDifficulty: Integer;
 begin
   inherited Create(AOwner);
-  LAntiDifficulty := Ord(High(NDifficulty)) - Ord(Difficulty());
-  FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
   FAssetId := Images.ImageUrl(apHero);
-  FWeapons[hwPlus] := 2 + Random(2 + LAntiDifficulty div 2);
-  FWeapons[hwMinus] := 1 + Random(2 + LAntiDifficulty div 2);
-  FWeapons[hwMultiply] := 1 + Random(2 + LAntiDifficulty div 2);
+  if IsSchool() then
+    FLevel := SchoolLevel
+  else
+  begin
+    LAntiDifficulty := Ord(High(NDifficulty)) - Ord(Difficulty());
+    FLevel := 4 + Random(4) + Random(4) + Random(4 + LAntiDifficulty);
+    FWeapons[hwPlus] := 2 + Random(2 + LAntiDifficulty div 2);
+    FWeapons[hwMinus] := 1 + Random(2 + LAntiDifficulty div 2);
+    FWeapons[hwMultiply] := 1 + Random(2 + LAntiDifficulty div 2);
+  end;
 end;
 
 procedure THero.Die();
@@ -550,6 +580,7 @@ begin
   FAssetId := Images.ImageUrl(NActorPicture(Ord(apMiniBoss1) + Random(2)));
   FVisualFormula := Formula;
   LReroll := 0;
+  if not IsSchool() then
   for I := 2 to Length(FVisualFormula) do
     if (Formula[I] in ['0'..'9']) then
     begin
@@ -575,7 +606,9 @@ end;
 
 function TMiniBoss.CalcLevel(ATower, AStock: Integer): Integer;
 begin
-  Result := inherited CalcLevel(ATower, AStock) + (100 + Random(50)) * ATower;
+  Result := inherited CalcLevel(ATower, AStock);
+  if not IsSchool() then
+    Inc(Result, (100 + Random(50)) * ATower);
   Result := Min(TMap.Map.BossCap(), Result);
 end;
 
