@@ -977,6 +977,7 @@
     },
     {
       "$$ClassName" : "TCastleTimer",
+      "CounteractDelays" : true,
       "IntervalSeconds" : 1.0000000000000000E+000,
       "Name" : "TimerBlood"
     },
@@ -990,6 +991,128 @@
       "CounteractDelays" : true,
       "IntervalSeconds" : 2.0000000000000000E+000,
       "Name" : "TimerHint"
+    },
+    {
+      "$$ClassName" : "TCastleTimer",
+      "CounteractDelays" : true,
+      "Exists" : false,
+      "IntervalSeconds" : 1.5000000000000000E+000,
+      "Name" : "TimerLesson"
+    },
+    {
+      "$$ClassName" : "TCastleUserInterface",
+      "Exists" : false,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "GroupLessons",
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson11",
+          "Text" : [
+            "You are brave <font color=\"#FF0000\">Samurai</font>",
+            "Who fights evil forces",
+            "Captured entire Edo",
+            "Fight them without fear",
+            "Use skills and weapons"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson12",
+          "Text" : [
+            "Your first enemy, level 7",
+            "your level 8 is stronger",
+            "just click on his chamber",
+            "you win and gain <font color=\"#0090FF\">+7 levels</font>"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson13",
+          "Text" : [
+            "Each fight reveals more chambers",
+            "real enemies are pretty random",
+            "but grow with every step and tower",
+            "And here they are fixed and guided",
+            "also weapon loot is known, try it!"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson14",
+          "Text" : [
+            "Top chambers could be more dangerous",
+            "have stronger bosses with hidden digits",
+            "And protections from weapons on numbers",
+            "Fortunately, everytime you kill one,",
+            "others lose some of these shenanigans"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson21",
+          "Text" : [
+            "you win even if levels are equal",
+            "but in each next tower you get",
+            "2 times less levels than enemy",
+            "then x4, 6, 8 less and so on"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson22",
+          "Text" : [
+            "If Enemy is stronger than you",
+            "try weapon to make him weaker",
+            "click kunai on the weapon panel!",
+            "It works as minus in formula view",
+            "Replace multiply sign with it!"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson23",
+          "Text" : [
+            "You may also put any weapon",
+            "Between digits of a number",
+            "Use star to multiply 2 by 7",
+            "enemy formula is recalculated"            
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson24",
+          "Text" : [
+            "You can use weapon anyhow to fight",
+            "not only to make enemies weaker,",
+            "replace minus to plus to make him",
+            "stronger and gain more levels"
+          ]
+        },
+        {
+          "$$ClassName" : "TCastleLabel",
+          "Html" : true,
+          "Name" : "Lesson25",
+          "Text" : [
+            "Now you are ready for",
+            "fight with the <font color=\"#FF0000\">Dragon</font>",
+            "He fools you, hides a digit",
+            "no risk now, but remember",
+            "he is protected from weapons"
+          ]
+        }
+      ]
     }
   ]
 }

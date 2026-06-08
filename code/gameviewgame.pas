@@ -48,6 +48,8 @@ type
     FPosFrom, FPosTo: TVector2;
     FAnimateWeaponTicks, FGameTicks: Integer;
     FRoomFight: TRoomComponent;
+    FLesson: Integer;
+    Lessons: array[1..2, 1..5] of record L: string; Done: Boolean; end;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
@@ -57,6 +59,11 @@ type
     function RandomBloodSplash(): TCastleScene;
     function GetTower(ATowerIndex: Integer): TCastleUserInterface;
     procedure DefeatQuestionYes(Sender: TObject);
+    procedure SchoolDefeatYes(Sender: TObject);
+    procedure SchoolDefeatNo(Sender: TObject);
+    procedure DialogLessonYes(Sender: TObject);
+    procedure ShowLesson();
+    procedure TimerLessonTick(ASender: TObject);
     procedure TimerBloodTick(ASender: TObject);
     procedure TimerGameTick(ASender: TObject);
     procedure TimerHintTick(ASender: TObject);
@@ -67,7 +74,7 @@ type
     procedure WeaponClick(AWeapon: NHeroWeapon; AFromUser: Boolean = False);
     procedure SwitchHeroWeaponImage(AForce: Boolean = False);
   private const
-    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)    
+    TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
   end;
 
 var
@@ -79,24 +86,13 @@ uses
 // System
   SysUtils, 
 // Castle  
-  CastleLog, 
+  CastleLog, castlefonts, castleColors,
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, imagescomponent;
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, imagescomponent, gameviewcredits, Behaviors;
 
-function HighlightCaption(const ACaption: string): string;
-var
-  I: Integer;
-begin
-  Result := '';
-  if Pos('?', ACaption) <= 0 then  
-    Result := ACaption
-  else
-    for I := 1 to Length(ACaption) do
-      if ACaption[I] = '?' then
-        Result := Result + '<font color="#FF0000">?</font>'
-      else 
-        Result := Result + ACaption[I];
-end;
+const 
+  LessonOrder: array[1..9] of record T, S: Integer; end = 
+    ((T: 1; S: 1), (T: 1; S: 2), (T: 2; S: 1), (T: 1; S: 3), (T: 2; S: 2), (T: 2; S: 3), (T: 1; S: 4), (T: 2; S: 4), (T: 2; S: 5));
 
 constructor TViewGame.Create(AOwner: TComponent);
 begin
@@ -145,42 +141,70 @@ var
     LRoomComponent: TRoomComponent;
     LTowerIndex, LStockIndex: Integer;
     LGroupTower, LVisualTower, LRoof, LRoomUI: TCastleUserInterface;
-  LRoom: TRoom;
-begin
-  GroupTowers.ClearControls();
-  GroupTowers.Spacing := (Ord(High(NDifficulty)) - Ord(Difficulty()) - 1) * 40; 
-  for LTowerIndex := 0 to Pred(Map.Towers.Count) do
+    LRoom: TRoom;
   begin
-    LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
-    LGroupTower := GetTower(LTowerIndex);
-    GroupTowers.InsertFront(LVisualTower);
-    LStockIndex := 0;
-    for LRoom in Map.Towers[LTowerIndex].Rooms do 
+    GroupTowers.ClearControls();
+    GroupTowers.Spacing := IIF(IsSchool(), 100, (Ord(High(NDifficulty)) - Ord(Difficulty()) - 1) * 40); 
+    for LTowerIndex := 0 to Pred(Map.Towers.Count) do
     begin
-      LRoomComponent := TRoomComponent.Create(LGroupTower);
-      LRoomUI := FactoryRoom.ComponentLoad(LGroupTower, LRoomComponent) as TCastleUserInterface; 
-      LRoomComponent.InsertFront(LRoomUI);
-      LRoomComponent.Name := 'Room' + LTowerIndex.ToString + '_' + LStockIndex.ToString;
-      LGroupTower.InsertFront(LRoomComponent);
-      LRoomComponent.ControlRoom.OnClick := ButtonRoomClick;
-      LRoomComponent.ControlRoom.Enabled := False;
-      LRoomComponent.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
-      if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
-        LRoomComponent.SetEnemy(LRoom.Actors[0]);
-      LRoomComponent.LabelLeft.Caption := '';
-      if Map.IsHeroRoom(LRoomComponent.Tag) then
+      LVisualTower := FactoryTower.ComponentLoad(GroupTowers) as TCastleUserInterface;
+      LGroupTower := GetTower(LTowerIndex);
+      GroupTowers.InsertFront(LVisualTower);
+      LStockIndex := 0;
+      for LRoom in Map.Towers[LTowerIndex].Rooms do 
       begin
-        LRoomComponent.LabelLeft.Caption := Map.Hero.Visual;
-        LRoomComponent.ImageLeft.Url := Map.Hero.AssetId;
-        LRoomComponent.SetEnemy(nil);
-        FPreviousRoom := LRoomComponent;
+        LRoomComponent := TRoomComponent.Create(LGroupTower);
+        LRoomUI := FactoryRoom.ComponentLoad(LGroupTower, LRoomComponent) as TCastleUserInterface; 
+        LRoomComponent.InsertFront(LRoomUI);
+        LRoomComponent.Name := 'Room' + LTowerIndex.ToString + '_' + LStockIndex.ToString;
+        LGroupTower.InsertFront(LRoomComponent);
+        LRoomComponent.ControlRoom.OnClick := ButtonRoomClick;
+        LRoomComponent.ControlRoom.Enabled := False;
+        LRoomComponent.Tag := Map.GetRoomIndex(LTowerIndex, LStockIndex);
+        if (LRoom.Actors.Count > 0) and Assigned(LRoom.Actors[0]) then
+          LRoomComponent.SetEnemy(LRoom.Actors[0]);
+        LRoomComponent.LabelLeft.Caption := '';
+        if Map.IsHeroRoom(LRoomComponent.Tag) then
+        begin
+          LRoomComponent.LabelLeft.Caption := Map.Hero.Visual;
+          LRoomComponent.ImageLeft.Url := Map.Hero.AssetId;
+          LRoomComponent.SetEnemy(nil);
+          FPreviousRoom := LRoomComponent;
+        end;
+        Inc(LStockIndex);
       end;
-      Inc(LStockIndex);
+      LRoof := LGroupTower.Controls[0];
+      LGroupTower.RemoveControl(LRoof);
+      LGroupTower.InsertFront(LRoof);
     end;
-    LRoof := LGroupTower.Controls[0];
-    LGroupTower.RemoveControl(LRoof);
-    LGroupTower.InsertFront(LRoof);
   end;
+
+  procedure SetupSchool();
+  var
+    LTowerIndex, LStockIndex, LIndex: Integer;
+    LLessonLabel: TCastleLabel;
+    LCycleBehavior: TMoveCycleBehavior;
+  begin
+    for LTowerIndex := 1 to High(Lessons) do
+      for LStockindex := 1 to High(Lessons[1]) do
+      begin
+        LLessonLabel := DesignedComponent(Format('Lesson%d%d', [LTowerIndex, LStockIndex]), False) as TCastleLabel;
+        if Assigned(LLessonLabel) then
+          Lessons[LTowerIndex, LStockindex].L := LLessonLabel.Text.Text;
+      end;
+    LCycleBehavior := TMoveCycleBehavior(SceneLessonArrow.FindBehavior(TMoveCycleBehavior));
+    if not Assigned(LCycleBehavior) then
+    begin
+      LCycleBehavior := TMoveCycleBehavior.Create(SceneLessonArrow);
+      LCycleBehavior.AmplitudeY := 40;
+      LCycleBehavior.SpeedY:= 10;
+      SceneLessonArrow.AddBehavior(LCycleBehavior);
+    end;
+    FLesson := 1;
+    for LIndex := Low(LessonOrder) to High(LessonOrder) do
+      Lessons[LessonOrder[LIndex].T, LessonOrder[LIndex].S].Done := False;
+    TimerLesson.Exists := True;
+    TimerLesson.OnTimer := TimerLessonTick;
   end;
 begin
   inherited;
@@ -218,6 +242,8 @@ begin
   VisualizeTime();
   SetupTowers();
   UpdateRooms();
+  if IsSchool() then
+    SetupSchool();
 end;
 
 function TViewGame.GetTower(ATowerIndex: Integer): TCastleUserInterface;
@@ -250,6 +276,8 @@ begin
     begin
       FWeapons[i].Enabled := Map.Hero.Weapons[NHeroWeapon(i)] > 0;
       FWeapons[i].Caption := Map.Hero.Weapons[NHeroWeapon(i)].ToString;
+      if IsSchool() then
+        FWeaponButtonHighlights[i].Exists := FWeapons[i].Enabled and not FWeapons[i].Pressed;
     end;
   end;
 end;
@@ -370,12 +398,22 @@ end;
 procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LRoom: TRoomComponent;
+  LT, LS: Integer;
 begin
   if FSkip then Exit;
   if FPause and UseTimer() then
     FPause := False;
 
   LRoom := (Sender as TCastleButton).Parent as TRoomComponent;
+  if IsSchool() then
+  begin
+    LT := LRoom.Tag div 10 + 1;
+    LS := LRoom.Tag mod 10 + 1;
+    if Map.IsRoomReachable(LT - 1, LS - 1) and not Lessons[LT, LS].Done and (Lessons[LT, LS].L <> '') 
+      and not (LessonOrder[FLesson].T = LT) and not (LessonOrder[FLesson].S = LS) then
+      Exit; // block clicking on other rooms until current lesson is done
+  end;
+  
   if not Map.SetHeroRoom(LRoom.Tag) then
     Exit;
   
@@ -384,7 +422,7 @@ begin
   begin
     FPreviousRoom.LabelLeft.Caption := '';
     FPreviousRoom.ImageLeft.Url := '';
-    FPreviousRoom.ImageHeroWeapon.Url := '';    
+    FPreviousRoom.ImageHeroWeapon.Url := '';
   end;
   
   // Show image on currently clicked button
@@ -411,6 +449,7 @@ var
   LRoom: TRoom;
   LLevelUp: Integer;
 begin
+  SceneLessonArrow.Exists := False;
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
   LActor.Reveal();
@@ -478,11 +517,31 @@ end;
 procedure TViewGame.TimerBloodTick(ASender: TObject);
 var
   LWeapon: NHeroWeapon;
+  function FindLesson(ATower, AStock: Integer; var ALesson: Integer): Boolean;
+  var
+    LIndex: Integer;
+    function LT: Integer; begin Result := LessonOrder[LIndex].T; end;
+    function LS: Integer; begin Result := LessonOrder[LIndex].S; end;
+  begin
+    Result := False;
+    ALesson := -1;
+    if not IsSchool() or (ALesson >= High(LessonOrder)) then
+      Exit;
+    for LIndex := Low(LessonOrder) to High(LessonOrder) do
+      if (LT = ATower) and (LS = AStock) then
+        Lessons[LT, LS].Done := True;
+    for LIndex := Low(LessonOrder) to High(LessonOrder) do
+      if not Lessons[LT, LS].Done and (Lessons[LT, LS].L <> '') then
+        begin
+          ALesson := LIndex;
+          Exit(True);
+        end;
+  end;
 begin
   TimerBlood.Exists := False;
 
   if Map.Hero.Dead then
-    Container.View := ViewDefeat
+      Container.View := ViewDefeat
   else
   begin
     LWeapon := Map.GetRoomByIndex(FRoomFight.Tag).PickWeapon();
@@ -508,10 +567,13 @@ begin
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
       ViewWin.Score := Map.Score(FGameTicks);
+      SetIsSchoolDone();
       Container.View := ViewWin;
     end;
+    if FindLesson(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1, FLesson) then  
+      ShowLesson();
   end;
-  FSkip := False;  
+  FSkip := False;
 end;
 
 procedure TViewGame.TimerHintTick(ASender: TObject);
@@ -549,7 +611,7 @@ end;
 
 procedure TViewGame.VisualizeTime();
 begin
-  if UseTimer() then
+  if UseTimer() and not IsSchool() then
     ButtonGameTime.Caption := Format('%.2d:%.2d', [FGameTicks div 60, FGameTicks mod 60])
   else
     ButtonGameTime.Caption := '';
@@ -594,6 +656,58 @@ procedure TViewGame.SwitchHeroWeaponImage(AForce: Boolean = False);
 begin
   if Assigned(FPreviousRoom) then
     FPreviousRoom.ImageHeroWeapon.Url := IIF((Map.Hero.Weapon = hwNo) or AForce, '', FWeapons[Ord(Map.Hero.Weapon)].Image.Url);
+end;
+
+procedure TViewGame.TimerLessonTick(ASender: TObject);
+begin
+  WriteLnLog(Format('TimerLessonTick with lesson %d', [FLesson]));
+  if FLesson > 0 then 
+    ShowLesson();
+end;
+
+procedure TViewGame.SchoolDefeatYes(Sender: TObject);
+begin
+  Container.View := nil;
+  Container.View := Self; // restart school
+end;
+
+procedure TViewGame.SchoolDefeatNo(Sender: TObject);
+begin
+  Container.View := ViewCredits;
+end;
+
+procedure TViewGame.ShowLesson();
+var
+  LTower, LStock: Integer;
+  LRoom: TRoomComponent;
+begin
+  if SceneLessonArrow.Exists then
+    Exit;
+  WriteLnLog(Format('ShowLesson with lesson %d', [FLesson]));
+  if not (FLesson in [Low(LessonOrder)..High(LessonOrder)]) then
+    Exit;
+  LTower := LessonOrder[FLesson].T;
+  LStock := LessonOrder[FLesson].S;
+  if Lessons[LTower, LStock].L = '' then
+    Exit;
+  LRoom := GetTower(LTower - 1).Controls[LStock - 1] as TRoomComponent;
+  // Show Arrow onto Room in coords LTower, LStock 
+  Viewport1.Translation := LRoom.LocalToContainerPosition(Vector2(-LRoom.Width * 0.3, -LRoom.Height * 0.3), False);
+  SceneLessonArrow.Exists := True;
+  TimerLesson.Exists := True;
+  DialogYes(Container, Lessons[LTower, LStock].L, DialogLessonYes);
+end;
+
+procedure TViewGame.DialogLessonYes(Sender: TObject);
+begin
+  WriteLnLog(Format('DialogLessonYes with lesson %d', [FLesson]));
+  TimerLesson.Exists := FLesson = 1;
+  if FLesson = 1 then
+  begin
+    Lessons[LessonOrder[FLesson].T, LessonOrder[FLesson].S].Done := True;
+    SceneLessonArrow.Exists := False;
+    Inc(FLesson);  
+  end;
 end;
 
 end.
