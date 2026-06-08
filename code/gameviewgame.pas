@@ -313,7 +313,7 @@ end;
 procedure TViewGame.Update(const SecondsPassed: Single; var HandleInput: boolean);
 begin
   inherited;
-  if not FPause and (FAnimateWeaponTicks > 0) then
+  if (FAnimateWeaponTicks > 0) then
   begin
     Dec(FAnimateWeaponTicks);
     ImageWeapon.Translation := TVector2.Lerp(1 - FAnimateWeaponTicks / TicksToFlyWeapon, FPosFrom, FPosTo);
@@ -401,6 +401,11 @@ var
   LT, LS: Integer;
 begin
   if FSkip then Exit;
+  if Container.CurrentFrontView <> Self then
+  begin
+    Container.PopView(); // close lesson meesage
+    DialogLessonYes(nil);
+  end;  
   if FPause and UseTimer() then
     FPause := False;
 
@@ -541,7 +546,12 @@ begin
   TimerBlood.Exists := False;
 
   if Map.Hero.Dead then
+  begin
+    if IsSchool() then 
+      DialogYesNo(Container, 'You lost, you''d better|follow the guide|try shool again ?', SchoolDefeatYes, SchoolDefeatNo)
+    else
       Container.View := ViewDefeat
+  end
   else
   begin
     LWeapon := Map.GetRoomByIndex(FRoomFight.Tag).PickWeapon();

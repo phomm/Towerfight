@@ -12,6 +12,7 @@ type
   published
     ButtonYes, ButtonNo: TCastleButton;
     LabelText: TCastleLabel;
+    ImageBack: TCastleImageControl;
   public
     OnYes, OnNo: TNotifyEvent;
     constructor Create(AOwner: TComponent); override;
@@ -37,7 +38,7 @@ uses
 // System
   SysUtils,
 // Castle
-  castleutils, castlelog,
+  castleutils, castlelog, castlerectangles,
 // Own
   Common  
   ;
@@ -67,13 +68,16 @@ begin
 end;
 
 procedure TViewDialog.Start;
+const
+  Anchors: array [Boolean] of THorizontalPosition = (hpLeft, hpMiddle);
 begin
   inherited;
-  InterceptInput := true;
+  InterceptInput := YesNoMode;
   ButtonYes.OnClick := ButtonClick;
   ButtonNo.OnClick := ButtonClick;
   LabelText.Text.Text := Text;
   ButtonNo.Exists := YesNoMode;
+  ImageBack.HorizontalAnchorSelf := Anchors[YesNoMode];
 end;
 
 procedure TViewDialog.ButtonClick(Sender: TObject);
