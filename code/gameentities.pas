@@ -162,7 +162,7 @@ const
   SchoolBossVisual = '10?';
   SchoolRooms: array[1..2, 1..4] of record L, F: Integer; W: NHeroWeapon; end = 
   (((L: 0; F: 0; W: hwNo), (L: 7; F: 0; W: hwNo), (L: 12; F: 1; W: hwMinus), (L: 40; F: 4; W: hwPlus)), 
-  ((L: 14; F: 0; W: hwNo), (L: 35; F: 0; W: hwMultiply), (L: 54; F: 2; W: hwNo), (L: 50; F: 1; W: hwNo)));
+  ((L: 15; F: 0; W: hwNo), (L: 35; F: 0; W: hwMultiply), (L: 54; F: 2; W: hwNo), (L: 50; F: 1; W: hwNo)));
 
 procedure TActor.SetLevel(AValue: Integer);
 begin

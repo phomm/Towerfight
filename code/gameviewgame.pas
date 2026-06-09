@@ -209,6 +209,7 @@ var
 begin
   inherited;
   ButtonDefeat.OnClick := ButtonDefeatClick;
+  ButtonDefeat.Caption := IIF(IsSchool(), 'Menu', 'SEPPUKU');
   WeaponNo.OnClick := ButtonWeaponClick;
   WeaponPlus.OnClick := ButtonWeaponClick;
   WeaponMinus.OnClick := ButtonWeaponClick;
@@ -302,7 +303,10 @@ end;
 
 procedure TViewGame.DefeatQuestionYes(Sender: TObject);
 begin
-  Container.View := ViewDefeat;
+  if IsSchool() then 
+    Container.View := ViewCredits
+  else
+    Container.View := ViewDefeat;
 end;
 
 function TViewGame.GetWeapon(AIndex: NHeroWeapon): TCastleButton;
@@ -414,8 +418,7 @@ begin
   begin
     LT := LRoom.Tag div 10 + 1;
     LS := LRoom.Tag mod 10 + 1;
-    if Map.IsRoomReachable(LT - 1, LS - 1) and not Lessons[LT, LS].Done and (Lessons[LT, LS].L <> '') 
-      and not (LessonOrder[FLesson].T = LT) and not (LessonOrder[FLesson].S = LS) then
+    if (LessonOrder[FLesson].T <> LT) or (LessonOrder[FLesson].S <> LS) then
       Exit; // block clicking on other rooms until current lesson is done
   end;
   

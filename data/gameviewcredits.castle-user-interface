@@ -54,7 +54,7 @@
     },
     {
       "$$ClassName" : "TCastleButton",
-      "Caption" : "School",
+      "Caption" : "Tutorial",
       "CustomBackground" : true,
       "CustomBackgroundDisabled" : {
         "$$ClassName" : "TCastleImagePersistent"
@@ -64,6 +64,10 @@
       },
       "CustomBackgroundNormal" : {
         "$$ClassName" : "TCastleImagePersistent",
+        "ColorPersistent" : {
+          "$$ClassName" : "TCastleColorPersistent",
+          "Red" : 5.8823531866073608E-001
+        },
         "Url" : "castle-data:/resources/cell-old.png"
       },
       "CustomBackgroundPressed" : {
@@ -419,7 +423,7 @@
               "Spacing" : 7.0000000000000000E+001,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0362463378906250E+003
+                "X" : 1.0090648193359375E+003
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle",
