@@ -46,28 +46,6 @@
       "Width" : 6.4000000000000000E+001
     },
     {
-      "$$ClassName" : "TCastleLabel",
-      "Alignment" : "hpMiddle",
-      "BorderColorPersistent" : {
-        "$$ClassName" : "TCastleColorPersistent",
-        "Alpha" : 1.0000000000000000E+000
-      },
-      "Exists" : false,
-      "FontSize" : 3.5000000000000000E+001,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Html" : true,
-      "Name" : "LabelRight",
-      "Text" : [
-        "R"
-      ],
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "Y" : 5.0000000000000000E+000
-      },
-      "WidthFraction" : 1.0000000000000000E+000
-    },
-    {
       "$$ClassName" : "TCastleHorizontalGroup",
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
@@ -191,7 +169,7 @@
               "Stretch" : true,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -2.9999998092651367E+001
+                "Y" : -3.0000000000000000E+001
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop",

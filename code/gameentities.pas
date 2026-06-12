@@ -143,8 +143,6 @@ type
 const
   GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
   WeaponToOperation: array[NHeroWeapon] of string = ('', '+', '-', '*');
-  WeaponFileNames: array[Succ(Low(NHeroWeapon))..High(NHeroWeapon)] of string = 
-    ('weapon-shuriken.png', 'weapon-kunai.png', 'weapon-star.png');
 
 implementation
 
@@ -447,7 +445,7 @@ constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
 begin
   inherited Create(AOwner);
   FWeapon := AWeapon;
-  FAssetId := 'castle-data:/resources/' + WeaponFileNames[AWeapon];
+  FAssetId := Images.WeaponUrl(Ord(AWeapon));
 end;
 
 function TWeaponLoot.GetVisual(): string;

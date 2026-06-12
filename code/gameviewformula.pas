@@ -52,7 +52,7 @@ uses
 // Castle  
   castlewindow, castlelog, castleglimages, castlecolors,
   // Own
-  gameviewgame, Common;
+  gameviewgame, Common, imagescomponent;
 
 constructor TViewFormula.Create(AOwner: TComponent);
 begin
@@ -86,7 +86,7 @@ var
     if AMarked then
     begin
       LButton.ImageScale := 0.2;
-      LButton.Image.Url := 'castle-data:/resources/' + WeaponFileNames[Weapon];
+      LButton.Image.Url := Images.WeaponUrl(Ord(Weapon));
     end
     else
     begin

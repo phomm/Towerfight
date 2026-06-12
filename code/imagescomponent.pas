@@ -8,7 +8,7 @@ uses
 // System
   Classes, Generics.Collections,
 // Castle
-  CastleTerrain;
+  Castlefonts;
 
 type
 
@@ -20,11 +20,12 @@ type
   private class var
     FInstance: TImagesComponent;
   private
-    FImages: TArray<TCastleTerrainImage>;
+    FActorImages: TArray<TCastleBitmapFont>;
+    FWeaponImages: TArray<TCastleBitmapFont>;
   public
     constructor Create(AOwner: TComponent); override;
-    destructor Destroy(); override;
     function ImageUrl(APicture: NActorPicture): string;
+    function WeaponUrl(AWeaponIndex: Integer): string;
   end;
 
 function Images(): TImagesComponent;
@@ -37,7 +38,7 @@ uses
 // Castle
   CastleComponentSerialize, castlelog,
 // Own
-  Common, gameoptions
+  Common, gameoptions, gameentities
   ;
 
 function Images(): TImagesComponent;
@@ -50,17 +51,25 @@ end;
 constructor TImagesComponent.Create(AOwner: TComponent);
   procedure FetchImages();
   var
-    LIndex: NActorPicture;
-    LImage: TCastleTerrainImage;
+    LIndex: Integer;
+    LImage: TCastleBitmapFont;
   begin
-    Setlength(FImages, Ord(High(NActorPicture)) + 1);
-    for LIndex := Low(NActorPicture) to High(NActorPicture) do
+    Setlength(FActorImages, Ord(High(NActorPicture)) + 1);
+    Setlength(FWeaponImages, Ord(High(NHeroWeapon)) + 1);
+    for LIndex := Ord(Low(NActorPicture)) to Ord(High(NActorPicture)) do
     begin
-      LImage := FindComponent(EnumName(TypeInfo(NActorPicture), Ord(LIndex))) as TCastleTerrainImage;
+      LImage := FindComponent(EnumName(TypeInfo(NActorPicture), Ord(LIndex))) as TCastleBitmapFont;
       if not Assigned(LImage) then
         Continue;
-      FImages[Ord(LIndex)] := LImage;
+      FActorImages[LIndex] := LImage;
     end;
+    for LIndex := Ord(Low(NHeroWeapon)) to Ord(High(NHeroWeapon)) do
+    begin
+      LImage := FindComponent('Weapon' + EnumName(TypeInfo(NHeroWeapon), Ord(LIndex))) as TCastleBitmapFont;
+      if not Assigned(LImage) then
+        Continue;
+      FWeaponImages[LIndex] := LImage;
+    end;    
   end;
 begin
   inherited Create(AOwner);
@@ -68,18 +77,14 @@ begin
   FetchImages();
 end;
 
-destructor TImagesComponent.Destroy();
-var
-  I: Integer;
-begin
-  for I := Low(FImages) to High(FImages) do
-    FreeAndNil(FImages[I]);
-  inherited Destroy();
-end;
-
 function TImagesComponent.ImageUrl(APicture: NActorPicture): string;
 begin
-  Result := FImages[Ord(APicture)].Url;
+  Result := FActorImages[Ord(APicture)].ImageUrl;
+end;
+
+function TImagesComponent.WeaponUrl(AWeaponIndex: Integer): string;
+begin
+  Result := FWeaponImages[AWeaponIndex].ImageUrl;
 end;
 
 initialization
