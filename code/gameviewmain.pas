@@ -23,6 +23,7 @@ type
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
     ImageRoomRoof2, ImageRoomRoof3, ImageOptions, ImageDifficulty: TCastleImageControl;
+    LabelFullscreen, LabelUseTimer: TCastleLabel;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -109,9 +110,11 @@ begin
 
   SliderFullscreen.Value := Ord(Fullscreen());
   SliderFullscreen.OnChange := SliderFullscreenChange;
+  SliderFullscreenChange(SliderFullscreen);
 
   SliderUseTimer.Value := Ord(UseTimer());
   SliderUseTimer.OnChange := SliderUseTimerChange;
+  SliderUseTimerChange(SliderUseTimer);
 
   for LDifficulty in NDifficulty do
   begin
@@ -166,11 +169,13 @@ end;
 procedure TViewMain.SliderFullscreenChange(Sender: TObject);
 begin
   SetFullscreen((Sender as TCastleIntegerSlider).Value = 1);
+  LabelFullScreen.Caption := 'FullScreen: ' + IIF(FullScreen(), 'On', 'Off');
 end;
 
 procedure TViewMain.SliderUseTimerChange(Sender: TObject);
 begin
   SetUseTimer((Sender as TCastleIntegerSlider).Value = 1);
+  LabelUseTimer.Caption := 'Timer: ' + IIF(UseTimer(), 'On', 'Off');
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);

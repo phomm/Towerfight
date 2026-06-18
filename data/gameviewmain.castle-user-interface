@@ -375,9 +375,11 @@
             {
               "$$ClassName" : "TCastleIntegerSlider",
               "Background" : {
-                "$$ClassName" : "TCastleImagePersistent"
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/cell-old.png"
               },
               "Caption" : "FullScreen",
+              "DisplayValue" : false,
               "Height" : 5.0000000000000000E+001,
               "Max" : 1,
               "Name" : "SliderFullScreen",
@@ -391,14 +393,29 @@
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop",
-              "Width" : 3.0000000000000000E+002
+              "Width" : 3.0000000000000000E+002,
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "HorizontalAnchorParent" : "hpMiddle",
+                  "HorizontalAnchorSelf" : "hpMiddle",
+                  "Name" : "LabelFullScreen",
+                  "Text" : [
+                    "FullScreen"
+                  ],
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle"
+                }
+              ]
             },
             {
               "$$ClassName" : "TCastleIntegerSlider",
               "Background" : {
-                "$$ClassName" : "TCastleImagePersistent"
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/cell-old.png"
               },
               "Caption" : "GameTimer",
+              "DisplayValue" : false,
               "Height" : 5.0000000000000000E+001,
               "Max" : 1,
               "Name" : "SliderUseTimer",
@@ -412,12 +429,26 @@
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop",
-              "Width" : 3.0000000000000000E+002
+              "Width" : 3.0000000000000000E+002,
+              "$Children" : [
+                {
+                  "$$ClassName" : "TCastleLabel",
+                  "HorizontalAnchorParent" : "hpMiddle",
+                  "HorizontalAnchorSelf" : "hpMiddle",
+                  "Name" : "LabelUseTimer",
+                  "Text" : [
+                    "Timer"
+                  ],
+                  "VerticalAnchorParent" : "vpMiddle",
+                  "VerticalAnchorSelf" : "vpMiddle"
+                }
+              ]
             },
             {
               "$$ClassName" : "TCastleIntegerSlider",
               "Background" : {
-                "$$ClassName" : "TCastleImagePersistent"
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/cell-old.png"
               },
               "Caption" : "Music",
               "Height" : 5.0000000000000000E+001,
@@ -461,7 +492,44 @@
           "Padding" : 5.0000000000000000E+001,
           "Spacing" : 4.0000000000000000E+000,
           "VerticalAnchorParent" : "vpMiddle",
-          "VerticalAnchorSelf" : "vpMiddle"
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleButton",
+              "AutoSize" : false,
+              "Caption" : "Difficulty",
+              "CustomBackground" : true,
+              "CustomBackgroundDisabled" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundFocused" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "CustomBackgroundNormal" : {
+                "$$ClassName" : "TCastleImagePersistent",
+                "Url" : "castle-data:/resources/cell-old.png"
+              },
+              "CustomBackgroundPressed" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Exists" : false,
+              "FontSize" : 5.0000000000000000E+001,
+              "Height" : 8.0000000000000000E+001,
+              "Image" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Name" : "ButtonDifficulty",
+              "TextAlignment" : "hpRight",
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 5.0000000000000000E+001,
+                "Y" : -5.0000000000000000E+001
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "Width" : 3.0000000000000000E+002
+            }
+          ]
         }
       ]
     }
