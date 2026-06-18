@@ -73,6 +73,7 @@
       "CustomBackgroundPressed" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
+      "Exists" : false,
       "FontSize" : 7.0000000000000000E+001,
       "Image" : {
         "$$ClassName" : "TCastleImagePersistent"
@@ -423,7 +424,7 @@
               "Spacing" : 7.0000000000000000E+001,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0090648193359375E+003
+                "X" : 1.1242473144531250E+003
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle",

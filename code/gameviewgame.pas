@@ -155,7 +155,7 @@ var
       begin
         LRoomComponent := TRoomComponent.Create(LGroupTower);
         LRoomUI := FactoryRoom.ComponentLoad(LGroupTower, LRoomComponent) as TCastleUserInterface; 
-        LRoomComponent.InsertFront(LRoomUI);
+        LRoomComponent.InsertFront(LRoomUI); 
         LRoomComponent.Name := 'Room' + LTowerIndex.ToString + '_' + LStockIndex.ToString;
         LGroupTower.InsertFront(LRoomComponent);
         LRoomComponent.ControlRoom.OnClick := ButtonRoomClick;
@@ -304,7 +304,7 @@ end;
 procedure TViewGame.DefeatQuestionYes(Sender: TObject);
 begin
   if IsSchool() then 
-    Container.View := ViewCredits
+    Container.View := ViewMain
   else
     Container.View := ViewDefeat;
 end;
@@ -551,7 +551,7 @@ begin
   if Map.Hero.Dead then
   begin
     if IsSchool() then 
-      DialogYesNo(Container, 'You lost, you''d better|follow the guide|try shool again ?', SchoolDefeatYes, SchoolDefeatNo)
+      DialogYesNo(Container, 'You lost, you''d better|follow the guide|try tutorial again ?', SchoolDefeatYes, SchoolDefeatNo)
     else
       Container.View := ViewDefeat
   end

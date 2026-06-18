@@ -391,7 +391,23 @@
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop",
           "Width" : 3.0000000000000000E+002
-        },
+        }
+      ]
+    },
+    {
+      "$$ClassName" : "TCastleVerticalGroup",
+      "Exists" : false,
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "GroupDifficulty",
+      "Spacing" : 4.0000000000000000E+000,
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "X" : 1.0000000000000000E+002
+      },
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "$Children" : [
         {
           "$$ClassName" : "TCastleButton",
           "AutoSize" : false,
@@ -410,6 +426,7 @@
           "CustomBackgroundPressed" : {
             "$$ClassName" : "TCastleImagePersistent"
           },
+          "Exists" : false,
           "FontSize" : 5.0000000000000000E+001,
           "Height" : 8.0000000000000000E+001,
           "Image" : {
