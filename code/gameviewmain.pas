@@ -22,7 +22,7 @@ type
     GroupOptions, GroupDifficulty: TCastleUserInterface;
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
-    ImageRoomRoof2, ImageRoomRoof3: TCastleImageControl;
+    ImageRoomRoof2, ImageRoomRoof3, ImageOptions, ImageDifficulty: TCastleImageControl;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -56,7 +56,7 @@ uses
   castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties, castlelog,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, 
-  audiocomponent, gameviewdialog
+  audiocomponent, gameviewdialog, difficultybutton
   ;
 
 constructor TViewMain.Create(AOwner: TComponent);
@@ -80,6 +80,7 @@ procedure TViewMain.Start();
 var  
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
+  LDifficultyButton: TDifficultyButton;
 begin
   inherited;
   SetLength(Buttons, 5);
@@ -94,6 +95,8 @@ begin
   
   for LButton in Buttons do
     LButton.OnMotion := ButtonMotion;
+  ImageOptions.OnMotion := ButtonMotion;
+  ImageDifficulty.OnMotion := ButtonMotion;
   
   ButtonExit.OnClick := ButtonExitClick;
   ButtonStart.OnClick := ButtonStartClick;
@@ -112,12 +115,11 @@ begin
 
   for LDifficulty in NDifficulty do
   begin
-    LButton := FactoryButton.ComponentLoad(GroupOptions) as TCastleButton;
-    LButton.Caption := DifficultyName(LDifficulty);
-    LButton.Pressed := LButton.Caption = DifficultyName(Difficulty());
-    LButton.Tag := Ord(LDifficulty);
-    LButton.OnClick := ButtonDifficultyClick;
+    LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
+    LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
+    WriteLnLog(LButton.ComponentCount.toString);
     GroupDifficulty.InsertFront(LButton);
+    LDifficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
   end;
 end;
 
@@ -147,7 +149,6 @@ begin
           SetIsSchool(True) 
         else 
           SetDifficulty(NDifficulty(TCastleButton(LButton).Tag));
-        GroupOptions.Exists := not GroupOptions.Exists;
         Container.View := ViewGame;
       end;
     end;
@@ -178,6 +179,13 @@ var
 begin
   for LButton in Buttons do 
     LButton.ImageScale := 0;
+  if not (Sender is TCastleButton) then
+  begin
+    Handled := True;
+    Exit;
+  end;
+  
+  (Sender as TCastleButton).ImageScale := 0.08;
   (Sender as TCastleButton).ImageScale := 0.08;
   if Sender <> ButtonOptions then
     GroupOptions.Exists := False;

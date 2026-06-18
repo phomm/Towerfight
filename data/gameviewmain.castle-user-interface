@@ -322,129 +322,6 @@
       ]
     },
     {
-      "$$ClassName" : "TCastleVerticalGroup",
-      "Exists" : false,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Name" : "GroupOptions",
-      "Spacing" : 4.0000000000000000E+000,
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "X" : 3.5000000000000000E+002,
-        "Y" : -1.6000000000000000E+002
-      },
-      "VerticalAnchorParent" : "vpMiddle",
-      "VerticalAnchorSelf" : "vpMiddle",
-      "$Children" : [
-        {
-          "$$ClassName" : "TCastleIntegerSlider",
-          "Background" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Caption" : "FullScreen",
-          "Height" : 5.0000000000000000E+001,
-          "Max" : 1,
-          "Name" : "SliderFullScreen",
-          "Thumb" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop",
-          "Width" : 3.0000000000000000E+002
-        },
-        {
-          "$$ClassName" : "TCastleIntegerSlider",
-          "Background" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Caption" : "GameTimer",
-          "Height" : 5.0000000000000000E+001,
-          "Max" : 1,
-          "Name" : "SliderUseTimer",
-          "Thumb" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -5.4000000000000000E+001
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop",
-          "Width" : 3.0000000000000000E+002
-        },
-        {
-          "$$ClassName" : "TCastleIntegerSlider",
-          "Background" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Caption" : "Music",
-          "Height" : 5.0000000000000000E+001,
-          "Max" : 100,
-          "Name" : "SliderMusic",
-          "Thumb" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.0800000000000000E+002
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop",
-          "Width" : 3.0000000000000000E+002
-        }
-      ]
-    },
-    {
-      "$$ClassName" : "TCastleVerticalGroup",
-      "Exists" : false,
-      "HorizontalAnchorParent" : "hpMiddle",
-      "HorizontalAnchorSelf" : "hpMiddle",
-      "Name" : "GroupDifficulty",
-      "Spacing" : 4.0000000000000000E+000,
-      "TranslationPersistent" : {
-        "$$ClassName" : "TCastleVector2Persistent",
-        "X" : 1.0000000000000000E+002
-      },
-      "VerticalAnchorParent" : "vpMiddle",
-      "VerticalAnchorSelf" : "vpMiddle",
-      "$Children" : [
-        {
-          "$$ClassName" : "TCastleButton",
-          "AutoSize" : false,
-          "Caption" : "Difficulty",
-          "CustomBackground" : true,
-          "CustomBackgroundDisabled" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundFocused" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "CustomBackgroundNormal" : {
-            "$$ClassName" : "TCastleImagePersistent",
-            "Url" : "castle-data:/resources/cell-old.png"
-          },
-          "CustomBackgroundPressed" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Exists" : false,
-          "FontSize" : 5.0000000000000000E+001,
-          "Height" : 8.0000000000000000E+001,
-          "Image" : {
-            "$$ClassName" : "TCastleImagePersistent"
-          },
-          "Name" : "ButtonDifficulty",
-          "TextAlignment" : "hpRight",
-          "TranslationPersistent" : {
-            "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -1.6200000000000000E+002
-          },
-          "VerticalAnchorParent" : "vpTop",
-          "VerticalAnchorSelf" : "vpTop",
-          "Width" : 3.0000000000000000E+002
-        }
-      ]
-    },
-    {
       "$$ClassName" : "TCastleImageControl",
       "Content" : {
         "$$ClassName" : "TCastleImagePersistent",
@@ -470,6 +347,123 @@
       "Name" : "ImageSamuraiRight",
       "Stretch" : true,
       "WidthFraction" : 3.0000001192092896E-001
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "AutoSizeToChildren" : true,
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/formulaback.png"
+      },
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "ImageOptions",
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleVerticalGroup",
+          "Exists" : false,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupOptions",
+          "Padding" : 5.0000000000000000E+001,
+          "Spacing" : 4.0000000000000000E+000,
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleIntegerSlider",
+              "Background" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Caption" : "FullScreen",
+              "Height" : 5.0000000000000000E+001,
+              "Max" : 1,
+              "Name" : "SliderFullScreen",
+              "Thumb" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 5.0000000000000000E+001,
+                "Y" : -5.0000000000000000E+001
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "Width" : 3.0000000000000000E+002
+            },
+            {
+              "$$ClassName" : "TCastleIntegerSlider",
+              "Background" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Caption" : "GameTimer",
+              "Height" : 5.0000000000000000E+001,
+              "Max" : 1,
+              "Name" : "SliderUseTimer",
+              "Thumb" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 5.0000000000000000E+001,
+                "Y" : -1.0400000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "Width" : 3.0000000000000000E+002
+            },
+            {
+              "$$ClassName" : "TCastleIntegerSlider",
+              "Background" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "Caption" : "Music",
+              "Height" : 5.0000000000000000E+001,
+              "Max" : 100,
+              "Name" : "SliderMusic",
+              "Thumb" : {
+                "$$ClassName" : "TCastleImagePersistent"
+              },
+              "TranslationPersistent" : {
+                "$$ClassName" : "TCastleVector2Persistent",
+                "X" : 5.0000000000000000E+001,
+                "Y" : -1.5800000000000000E+002
+              },
+              "VerticalAnchorParent" : "vpTop",
+              "VerticalAnchorSelf" : "vpTop",
+              "Width" : 3.0000000000000000E+002
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "AutoSizeToChildren" : true,
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/formulaback.png"
+      },
+      "HorizontalAnchorParent" : "hpMiddle",
+      "HorizontalAnchorSelf" : "hpMiddle",
+      "Name" : "ImageDifficulty",
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "$Children" : [
+        {
+          "$$ClassName" : "TCastleVerticalGroup",
+          "Exists" : false,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupDifficulty",
+          "Padding" : 5.0000000000000000E+001,
+          "Spacing" : 4.0000000000000000E+000,
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle"
+        }
+      ]
     }
   ]
 }

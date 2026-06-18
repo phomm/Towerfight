@@ -30,11 +30,97 @@
   },
   "Name" : "ButtonDifficultyTemplate",
   "Toggle" : true,
-  "TranslationPersistent" : {
-    "$$ClassName" : "TCastleVector2Persistent",
-    "Y" : -1.5800000000000000E+002
-  },
-  "VerticalAnchorParent" : "vpTop",
-  "VerticalAnchorSelf" : "vpTop",
-  "Width" : 3.0000000000000000E+002
+  "Width" : 3.0000000000000000E+002,
+  "$NonVisualComponents" : [
+    {
+      "$$ClassName" : "TCastleFog",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorRGBPersistent",
+        "Blue" : 0.0000000000000000E+000,
+        "Green" : 1.0000000000000000E+000,
+        "Red" : 0.0000000000000000E+000
+      },
+      "Name" : "Tutorial"
+    },
+    {
+      "$$ClassName" : "TCastleFog",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorRGBPersistent",
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 1.0000000000000000E+000,
+        "Red" : 0.0000000000000000E+000
+      },
+      "Name" : "Easy"
+    },
+    {
+      "$$ClassName" : "TCastleFog",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorRGBPersistent",
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 0.0000000000000000E+000,
+        "Red" : 0.0000000000000000E+000
+      },
+      "Name" : "Normal"
+    },
+    {
+      "$$ClassName" : "TCastleFog",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorRGBPersistent",
+        "Blue" : 1.0000000000000000E+000,
+        "Green" : 0.0000000000000000E+000,
+        "Red" : 1.0000000000000000E+000
+      },
+      "Name" : "Hard"
+    },
+    {
+      "$$ClassName" : "TCastleFog",
+      "ColorPersistent" : {
+        "$$ClassName" : "TCastleColorRGBPersistent",
+        "Blue" : 0.0000000000000000E+000,
+        "Green" : 0.0000000000000000E+000,
+        "Red" : 1.0000000000000000E+000
+      },
+      "Name" : "Insane"
+    }
+  ],
+  "$Children" : [
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/marker.png"
+      },
+      "Height" : 2.0000000000000000E+001,
+      "Name" : "ImageMarkerLeft",
+      "Stretch" : true,
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "X" : 8.0000000000000000E+000,
+        "Y" : 2.0000000000000000E+000
+      },
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "Width" : 2.0000000000000000E+001
+    },
+    {
+      "$$ClassName" : "TCastleImageControl",
+      "Content" : {
+        "$$ClassName" : "TCastleImagePersistent",
+        "Url" : "castle-data:/resources/marker.png"
+      },
+      "Height" : 2.0000000000000000E+001,
+      "HorizontalAnchorParent" : "hpRight",
+      "HorizontalAnchorSelf" : "hpRight",
+      "Name" : "ImageMarkerRight",
+      "Stretch" : true,
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "X" : -1.0000000000000000E+001,
+        "Y" : 2.0000000000000000E+000
+      },
+      "VerticalAnchorParent" : "vpMiddle",
+      "VerticalAnchorSelf" : "vpMiddle",
+      "Width" : 2.0000000000000000E+001
+    }
+  ]
 }
