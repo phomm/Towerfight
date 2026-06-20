@@ -77,9 +77,11 @@ end;
 
 procedure TViewWin.BackToMenu();
 begin
+  {
   if IsSchool() then
     Container.View := ViewCredits
   else
+  }
     Container.View := ViewMain;
 end;
 
@@ -106,7 +108,7 @@ begin
   if Event.IsKey(keyEscape) then
   begin
     BackToMenu();
-    Exit(true); // key was handled
+    Exit(True); // key was handled
   end;
 end;
 

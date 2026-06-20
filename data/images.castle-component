@@ -3,44 +3,59 @@
   "Name" : "Component1",
   "$NonVisualComponents" : [
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "Hero",
-      "Url" : "castle-data:/resources/hero-samurai.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/hero-samurai.png",
+      "Name" : "Hero"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "Boss",
-      "Url" : "castle-data:/resources/dragon.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/dragon.png",
+      "Name" : "Boss"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "Enemy1",
-      "Url" : "castle-data:/resources/enemy-yokai.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/enemy-yokai.png",
+      "Name" : "Enemy1"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "Enemy2",
-      "Url" : "castle-data:/resources/enemy-yurei.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/enemy-yurei.png",
+      "Name" : "Enemy2"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "Enemy3",
-      "Url" : "castle-data:/resources/enemy-ninja.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/enemy-ninja.png",
+      "Name" : "Enemy3"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "Blood",
-      "Url" : "castle-data:/resources/blood_splat.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/blood_splat.png",
+      "Name" : "Blood"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "MiniBoss1",
-      "Url" : "castle-data:/resources/mini-boss-oni.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/mini-boss-oni.png",
+      "Name" : "MiniBoss1"
     },
     {
-      "$$ClassName" : "TCastleTerrainImage",
-      "Name" : "MiniBoss2",
-      "Url" : "castle-data:/resources/mini-boss-shinigami.png"
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/mini-boss-shinigami.png",
+      "Name" : "MiniBoss2"
+    },
+    {
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/weapon-shuriken.png",
+      "Name" : "WeaponPlus"
+    },
+    {
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/weapon-kunai.png",
+      "Name" : "WeaponMinus"
+    },
+    {
+      "$$ClassName" : "TCastleBitmapFont",
+      "ImageUrl" : "castle-data:/resources/weapon-star.png",
+      "Name" : "WeaponMultiply"
     }
   ]
 }

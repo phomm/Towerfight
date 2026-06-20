@@ -7,7 +7,7 @@ interface
 uses Classes, generics.collections;  
 
 type
-  NDifficulty = (gdEasy, gdNormal, gdHard, gdInsane);
+  NDifficulty = (gdTutorial, gdEasy, gdNormal, gdHard, gdInsane);
 
 /// <summary>
 /// Current Difficulty, default is Easy

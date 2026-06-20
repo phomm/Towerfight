@@ -48,7 +48,7 @@ uses
 // Castle  
   castlewindow, castlelog,
 // Own
-  gameoptions, castlerest, gameviewmain
+  gameoptions, castlerest, gameviewmain, difficultybutton
 ;
 
 constructor TViewLeaders.Create(AOwner: TComponent);
@@ -69,22 +69,19 @@ procedure TViewLeaders.Start;
 var
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
-  LCurrentDifficultyName: string;
+  LDifficultyButton: TDifficultyButton;
 begin
   inherited;
   ButtonMenu.OnClick := ButtonMenuClick;
   ButtonSync.OnClick := ButtonSyncClick;
-  LCurrentDifficultyName := DifficultyName(Difficulty());
-  for LDifficulty in NDifficulty do
+  for LDifficulty := Succ(Low(NDifficulty)) to High(NDifficulty) do
   begin
-    LButton := FactoryButton.ComponentLoad(GroupDifficulty) as TCastleButton;
-    LButton.Caption := DifficultyName(LDifficulty);
-    LButton.Pressed := LButton.Caption = LCurrentDifficultyName;
+    LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
+    LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
+    GroupDifficulty.InsertFront(LButton);
+    LDIfficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
     if LButton.Pressed then
       FCurrentDifficultyButton := LButton;
-    LButton.Tag := Ord(LDifficulty);
-    LButton.OnClick := ButtonDifficultyClick;
-    GroupDifficulty.InsertFront(LButton);
   end;
   GroupLeaders.ClearControls();
 end;
@@ -137,7 +134,6 @@ end;
 procedure TViewLeaders.SwitchDifficulty(AButton: TCastleButton);
 var
   LButton: TCastleUserInterface;
-  LDifficulty: NDifficulty;
   LLeader: TLeader;
   LLabel: TCastleLabel;
 begin
@@ -148,9 +144,8 @@ begin
 
 //  populate the list of leaders for the selected difficulty. 
   GroupLeaders.ClearControls();
-  LDifficulty := NDifficulty(FCurrentDifficultyButton.Tag);
   for LLeader in FLeaders do
-    if LLeader.Difficulty = Ord(LDifficulty) then
+    if LLeader.Difficulty = Ord(NDifficulty(FCurrentDifficultyButton.Tag)) - 1 then
     begin
       LLabel := TCastleLabel.Create(GroupLeaders);
       LLabel.Caption := Format('%d             %d         %s', [LLeader.Number, LLeader.Score, LLeader.Name]);

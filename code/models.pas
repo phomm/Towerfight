@@ -79,7 +79,7 @@ begin
   Name := AName;
   Guid := UserGuid;
   Score := AScore;
-  Difficulty := Ord(ADifficulty);
+  Difficulty := Ord(ADifficulty) - 1;
   CalcHash();
 end;
 

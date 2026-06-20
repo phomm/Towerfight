@@ -107,7 +107,7 @@ type
   TMap = class(TComponent)
   private
     FTowers: TObjectList<TTower>;
-    FDifficulty: NDifficulty;
+    FDifficulty: Integer;
     FLastTower, FLastStock, FHeroTowerIndex, FHeroStockIndex, FTargetTower, FTargetStock: Integer;
     FHero: THero;
     FHeroRoom: TRoom;
@@ -141,10 +141,8 @@ type
   end;
 
 const
-  GameSeconds: array[NDifficulty] of Integer = (240, 360, 480, 600);
+  GameSeconds: array[NDifficulty] of Integer = (0, 240, 360, 480, 600);
   WeaponToOperation: array[NHeroWeapon] of string = ('', '+', '-', '*');
-  WeaponFileNames: array[Succ(Low(NHeroWeapon))..High(NHeroWeapon)] of string = 
-    ('weapon-shuriken.png', 'weapon-kunai.png', 'weapon-star.png');
 
 implementation
 
@@ -267,8 +265,8 @@ begin
   FMap := Self;
   FHero := THero.Create(nil);
   FTowers := TObjectList<TTower>.Create(True);
-  FDifficulty := Difficulty();
-  FLastTower := IIF(IsSchool(), 2, 3 + Ord(FDifficulty));
+  FDifficulty := Ord(Difficulty()) - 1;
+  FLastTower := IIF(IsSchool(), 2, 3 + FDifficulty);
   FLastStock := Min(LastTower + 3, 8);
   FBoss := TBoss.Create(nil, LastTower, FLastStock);
   for T := 1 to LastTower do
@@ -419,7 +417,7 @@ end;
 
 function TMap.BossCap(): Integer;
 begin
-  Result := FBoss.Level * 95 div 100 - (Random(5) + 5) * (Ord(Difficulty) + 1)
+  Result := FBoss.Level * 95 div 100 - (Random(5) + 5) * (FDifficulty + 1)
 end;
 
 constructor TEnemy.Create(AOwner: TComponent; ATower, AStock: Integer);
@@ -447,7 +445,7 @@ constructor TWeaponLoot.Create(AOwner: TComponent; AWeapon: NHeroWeapon);
 begin
   inherited Create(AOwner);
   FWeapon := AWeapon;
-  FAssetId := 'castle-data:/resources/' + WeaponFileNames[AWeapon];
+  FAssetId := Images.WeaponUrl(Ord(AWeapon));
 end;
 
 function TWeaponLoot.GetVisual(): string;
@@ -506,7 +504,7 @@ function TBoss.CalcLevel(ATower, AStock: Integer): Integer;
 begin
   if IsSchool() then
     Exit(SchoolBossLevel);
-  case Difficulty of
+  case Difficulty() of
     gdEasy: Result := 444;
     gdNormal: Result := 1000 + Random(5) * 100 + 40 + ValueOrZero(4); 
     gdHard: Result := 2400 + Random(5) * 10 + ValueOrZero(4); 

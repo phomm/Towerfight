@@ -73,6 +73,7 @@
       "CustomBackgroundPressed" : {
         "$$ClassName" : "TCastleImagePersistent"
       },
+      "Exists" : false,
       "FontSize" : 7.0000000000000000E+001,
       "Image" : {
         "$$ClassName" : "TCastleImagePersistent"
@@ -423,7 +424,7 @@
               "Spacing" : 7.0000000000000000E+001,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.0090648193359375E+003
+                "X" : 1.1242473144531250E+003
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle",
@@ -659,8 +660,8 @@
                 "Enter or Esc/Backspace - answer dialog",
                 "Arrow keys or WASD - move in game",
                 "1-4 or E (before fight) - select weapon",
-                "E (in Formula dialog) - pick weapon slot",
-                "Press Enter 4 times - fast battle restart"
+                "E (Formula dialog) - pick weapon target",
+                "Press Enter 5 times - fast battle restart"
               ],
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle"

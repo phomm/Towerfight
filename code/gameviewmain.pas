@@ -16,14 +16,14 @@ uses
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize;
 
 type
-  { Main view, where most of the application logic takes place. }
   TViewMain = class(TCastleView)
   published
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
-    GroupOptions: TCastleUserInterface;
+    GroupOptions, GroupDifficulty: TCastleUserInterface;
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
-    ImageRoomRoof2, ImageRoomRoof3: TCastleImageControl;
+    ImageRoomRoof2, ImageRoomRoof3, ImageOptions, ImageDifficulty: TCastleImageControl;
+    LabelFullscreen, LabelUseTimer: TCastleLabel;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -57,7 +57,7 @@ uses
   castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties, castlelog,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, 
-  audiocomponent, gameviewdialog
+  audiocomponent, gameviewdialog, difficultybutton
   ;
 
 constructor TViewMain.Create(AOwner: TComponent);
@@ -81,7 +81,7 @@ procedure TViewMain.Start();
 var  
   LDifficulty: NDifficulty;
   LButton: TCastleButton;
-  LCurrentDifficultyName: string;
+  LDifficultyButton: TDifficultyButton;
 begin
   inherited;
   SetLength(Buttons, 5);
@@ -96,6 +96,8 @@ begin
   
   for LButton in Buttons do
     LButton.OnMotion := ButtonMotion;
+  ImageOptions.OnMotion := ButtonMotion;
+  ImageDifficulty.OnMotion := ButtonMotion;
   
   ButtonExit.OnClick := ButtonExitClick;
   ButtonStart.OnClick := ButtonStartClick;
@@ -108,19 +110,19 @@ begin
 
   SliderFullscreen.Value := Ord(Fullscreen());
   SliderFullscreen.OnChange := SliderFullscreenChange;
+  SliderFullscreenChange(SliderFullscreen);
 
   SliderUseTimer.Value := Ord(UseTimer());
   SliderUseTimer.OnChange := SliderUseTimerChange;
+  SliderUseTimerChange(SliderUseTimer);
 
-  LCurrentDifficultyName := DifficultyName(Difficulty());
   for LDifficulty in NDifficulty do
   begin
-    LButton := FactoryButton.ComponentLoad(GroupOptions) as TCastleButton;
-    LButton.Caption := DifficultyName(LDifficulty);
-    LButton.Pressed := LButton.Caption = LCurrentDifficultyName;
-    LButton.Tag := Ord(LDifficulty);
-    LButton.OnClick := ButtonDifficultyClick;
-    GroupOptions.InsertFront(LButton);
+    LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
+    LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
+    WriteLnLog(LButton.ComponentCount.toString);
+    GroupDifficulty.InsertFront(LButton);
+    LDifficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
   end;
 end;
 
@@ -140,12 +142,18 @@ procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
 var
   LButton: TCastleUserInterface;
 begin
-  for LButton in GroupOptions do
+  for LButton in GroupDifficulty do
     if LButton is TCastleButton then
     begin
       TCastleButton(LButton).Pressed := LButton = Sender;
       if TCastleButton(LButton).Pressed then
-        SetDifficulty(NDifficulty(TCastleButton(LButton).Tag));
+      begin
+        if LButton.Tag = Ord(gdTutorial) then
+          SetIsSchool(True) 
+        else 
+          SetDifficulty(NDifficulty(TCastleButton(LButton).Tag));
+        Container.View := ViewGame;
+      end;
     end;
 end;
 
@@ -159,19 +167,15 @@ begin
 end;
 
 procedure TViewMain.SliderFullscreenChange(Sender: TObject);
-var
-  LFullscreenValue: Integer;
 begin
-  LFullscreenValue := (Sender as TCastleIntegerSlider).Value;
-  SetFullscreen(LFullscreenValue = 1);
+  SetFullscreen((Sender as TCastleIntegerSlider).Value = 1);
+  LabelFullScreen.Caption := 'FullScreen: ' + IIF(FullScreen(), 'On', 'Off');
 end;
 
 procedure TViewMain.SliderUseTimerChange(Sender: TObject);
-var
-  LUseTimerValue: Integer;
 begin
-  LUseTimerValue := (Sender as TCastleIntegerSlider).Value;
-  SetUseTimer(LUseTimerValue = 1);
+  SetUseTimer((Sender as TCastleIntegerSlider).Value = 1);
+  LabelUseTimer.Caption := 'Timer: ' + IIF(UseTimer(), 'On', 'Off');
 end;
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
@@ -180,9 +184,18 @@ var
 begin
   for LButton in Buttons do 
     LButton.ImageScale := 0;
+  if not (Sender is TCastleButton) then
+  begin
+    Handled := True;
+    Exit;
+  end;
+  
+  (Sender as TCastleButton).ImageScale := 0.08;
   (Sender as TCastleButton).ImageScale := 0.08;
   if Sender <> ButtonOptions then
     GroupOptions.Exists := False;
+  if Sender <> ButtonStart then
+    GroupDifficulty.Exists := False;
 end;
 
 procedure TViewMain.ButtonExitClick(Sender: TObject);
@@ -192,7 +205,9 @@ end;
 
 procedure TViewMain.ButtonStartClick(Sender: TObject);
 begin
-  Container.View := ViewGame;
+  GroupDifficulty.Exists := not GroupDifficulty.Exists;
+  if not GroupDifficulty.Exists then
+    Container.View := ViewGame;
 end;
 
 procedure TViewMain.ButtonLeadersClick(Sender: TObject);
@@ -207,13 +222,7 @@ end;
 
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
-  if not IsSchoolDone() then
-  begin
-    SetIsSchool(True);
-    Container.View := ViewGame;
-  end
-  else  
-    Container.View := ViewCredits;
+  Container.View := ViewCredits;
 end;
 
 function TViewMain.Press(const Event: TInputPressRelease): Boolean;
@@ -224,12 +233,12 @@ begin
   if Event.IsKey(keyEscape) then
   begin
     ButtonExit.DoClick();
-    Exit(true); // key was handled
+    Exit(True); // key was handled
   end;
   if Event.IsKey(keyEnter) then
   begin
     ButtonStart.DoClick();
-    Exit(true); // key was handled
+    Exit(True); // key was handled
   end;
 end;
 

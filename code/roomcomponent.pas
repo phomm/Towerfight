@@ -17,7 +17,7 @@ type
   published
     ControlRoom: TCastleButton;
     ImageRight, ImageLeft, ImageHeroWeapon: TCastleImageControl;
-    {LabelRight,} LabelLeft, LabelRight1, LabelRight2, LabelRight3: TCastleLabel;
+    LabelLeft, LabelRight1, LabelRight2, LabelRight3: TCastleLabel;
   public
     constructor Create(AOwner: TComponent); override;
     procedure SetEnemy(AEnemy: TActor);
