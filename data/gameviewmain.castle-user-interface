@@ -384,7 +384,14 @@
               "Max" : 1,
               "Name" : "SliderFullScreen",
               "Thumb" : {
-                "$$ClassName" : "TCastleImagePersistent"
+                "$$ClassName" : "TCastleImagePersistent",
+                "ColorPersistent" : {
+                  "$$ClassName" : "TCastleColorPersistent",
+                  "Blue" : 4.8627451062202454E-001,
+                  "Green" : 6.9019609689712524E-001,
+                  "Red" : 8.3529412746429443E-001
+                },
+                "Url" : "castle-data:/resources/marker.png"
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
@@ -420,7 +427,14 @@
               "Max" : 1,
               "Name" : "SliderUseTimer",
               "Thumb" : {
-                "$$ClassName" : "TCastleImagePersistent"
+                "$$ClassName" : "TCastleImagePersistent",
+                "ColorPersistent" : {
+                  "$$ClassName" : "TCastleColorPersistent",
+                  "Blue" : 4.8627451062202454E-001,
+                  "Green" : 6.9019609689712524E-001,
+                  "Red" : 8.3529412746429443E-001
+                },
+                "Url" : "castle-data:/resources/marker.png"
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
@@ -455,7 +469,14 @@
               "Max" : 100,
               "Name" : "SliderMusic",
               "Thumb" : {
-                "$$ClassName" : "TCastleImagePersistent"
+                "$$ClassName" : "TCastleImagePersistent",
+                "ColorPersistent" : {
+                  "$$ClassName" : "TCastleColorPersistent",
+                  "Blue" : 4.8627451062202454E-001,
+                  "Green" : 6.9019609689712524E-001,
+                  "Red" : 8.3529412746429443E-001
+                },
+                "Url" : "castle-data:/resources/marker.png"
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",

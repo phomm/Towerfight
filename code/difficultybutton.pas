@@ -50,7 +50,7 @@ var
   LButton: TCastleUserInterface;
 begin
   for LButton in Sender.Parent do
-    if LButton is TCastleButton and (LButton.ControlsCount > 0) then
+    if (LButton is TCastleButton) and (LButton.ControlsCount > 0) then
     begin
       LButton.Controls[0].Exists := Sender = LButton;
       LButton.Controls[1].Exists := Sender = LButton;

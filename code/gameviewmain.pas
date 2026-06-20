@@ -222,15 +222,7 @@ end;
 
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
-  {
-  if not IsSchoolDone() then
-  begin
-    SetIsSchool(True);
-    Container.View := ViewGame;
-  end
-  else
-  }  
-    Container.View := ViewCredits;
+  Container.View := ViewCredits;
 end;
 
 function TViewMain.Press(const Event: TInputPressRelease): Boolean;
@@ -241,12 +233,12 @@ begin
   if Event.IsKey(keyEscape) then
   begin
     ButtonExit.DoClick();
-    Exit(true); // key was handled
+    Exit(True); // key was handled
   end;
   if Event.IsKey(keyEnter) then
   begin
     ButtonStart.DoClick();
-    Exit(true); // key was handled
+    Exit(True); // key was handled
   end;
 end;
 
