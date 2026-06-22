@@ -580,7 +580,6 @@ begin
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
     begin
       ViewWin.Score := Map.Score(FGameTicks);
-      SetIsSchoolDone();
       Container.View := ViewWin;
     end;
     if FindLesson(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1, FLesson) then  

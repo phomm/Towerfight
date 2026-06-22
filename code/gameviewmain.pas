@@ -120,7 +120,6 @@ begin
   begin
     LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
     LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
-    WriteLnLog(LButton.ComponentCount.toString);
     GroupDifficulty.InsertFront(LButton);
     LDifficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
   end;
