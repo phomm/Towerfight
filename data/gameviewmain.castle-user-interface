@@ -358,8 +358,10 @@
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "ImageOptions",
-      "VerticalAnchorParent" : "vpMiddle",
-      "VerticalAnchorSelf" : "vpMiddle",
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "Y" : 2.5000000000000000E+002
+      },
       "$Children" : [
         {
           "$$ClassName" : "TCastleVerticalGroup",
@@ -501,8 +503,10 @@
       "HorizontalAnchorParent" : "hpMiddle",
       "HorizontalAnchorSelf" : "hpMiddle",
       "Name" : "ImageDifficulty",
-      "VerticalAnchorParent" : "vpMiddle",
-      "VerticalAnchorSelf" : "vpMiddle",
+      "TranslationPersistent" : {
+        "$$ClassName" : "TCastleVector2Persistent",
+        "Y" : 3.0000000000000000E+002
+      },
       "$Children" : [
         {
           "$$ClassName" : "TCastleVerticalGroup",
