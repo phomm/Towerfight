@@ -13,12 +13,11 @@ uses
   gameoptions;
 
 type
-  TDifficultyButton = class(TCastleUserInterface)
+  TDifficultyButton = class(TCastleButton)
   published
     ImageMarkerRight, ImageMarkerLeft: TCastleImageControl;
-    Tutorial, Easy, Normal, Hard, Insane: TCastleFog;
   public
-    procedure Init(ADifficulty: NDifficulty; AButton: TCastleButton; AOnClick: TNotifyEvent);
+    procedure Init(ADifficulty: NDifficulty);
     procedure ButtonDifficultyMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);  
   end;
 
@@ -32,17 +31,16 @@ uses
 // Own
   gameviewmain, Common;
 
-procedure TDifficultyButton.Init(ADifficulty: NDifficulty; AButton: TCastleButton; AOnClick: TNotifyEvent);
+procedure TDifficultyButton.Init(ADifficulty: NDifficulty);
 begin
-  AButton.Caption := DifficultyName(ADifficulty);
-  AButton.Tag := Ord(ADifficulty);
-  AButton.Pressed := AButton.Caption = DifficultyName(Difficulty());
-  ImageMarkerLeft.Color := Vector4((AButton.Parent.FindComponent(AButton.Caption) as TCastleFog).Color, 1);
+  Caption := DifficultyName(ADifficulty);
+  Tag := Ord(ADifficulty);
+  Pressed := Caption = DifficultyName(Difficulty());
+  ImageMarkerLeft.Color := Vector4((NonVisualComponents[Tag] as TCastleFog).Color, 1);
   ImageMarkerRight.Color := ImageMarkerLeft.Color;
   ImageMarkerRight.Exists := False;
   ImageMarkerLeft.Exists := False;
-  AButton.OnMotion := ButtonDifficultyMotion;
-  AButton.OnClick := AOnClick;
+  OnMotion := ButtonDifficultyMotion;
 end;
 
 procedure TDifficultyButton.ButtonDifficultyMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
@@ -50,10 +48,11 @@ var
   LButton: TCastleUserInterface;
 begin
   for LButton in Sender.Parent do
-    if LButton is TCastleButton and (LButton.ControlsCount > 0) then
+    if LButton is TDifficultyButton then
+    with (LButton as TDifficultyButton) do
     begin
-      LButton.Controls[0].Exists := Sender = LButton;
-      LButton.Controls[1].Exists := Sender = LButton;
+      ImageMarkerLeft.Exists := Sender = LButton;
+      ImageMarkerRight.Exists := Sender = LButton;
     end;
 end;
 

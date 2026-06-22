@@ -13,7 +13,10 @@ uses
 // System
   Classes, generics.collections,
 // Castle  
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize;
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize,
+// Own
+  difficultybutton  
+  ;
 
 type
   TViewMain = class(TCastleView)
@@ -21,7 +24,7 @@ type
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions, GroupDifficulty: TCastleUserInterface;
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
-    FactoryButton: TCastleComponentFactory;
+    FactoryButton: {$IFDEF FPC_OBJFPC} specialize {$ENDIF} TCastleComponentFactoryNew<TDifficultyButton>;
     ImageRoomRoof2, ImageRoomRoof3, ImageOptions, ImageDifficulty: TCastleImageControl;
     LabelFullscreen, LabelUseTimer: TCastleLabel;
   public
@@ -57,7 +60,7 @@ uses
   castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties, castlelog,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, 
-  audiocomponent, gameviewdialog, difficultybutton
+  audiocomponent, gameviewdialog
   ;
 
 constructor TViewMain.Create(AOwner: TComponent);
@@ -118,11 +121,10 @@ begin
 
   for LDifficulty in NDifficulty do
   begin
-    LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
-    LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
-    WriteLnLog(LButton.ComponentCount.toString);
-    GroupDifficulty.InsertFront(LButton);
-    LDifficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
+    LDifficultyButton := FactoryButton.ComponentLoadNew(GroupDifficulty);
+    GroupDifficulty.InsertFront(LDifficultyButton);
+    LDifficultyButton.Init(LDifficulty);
+    LDifficultyButton.OnClick := ButtonDifficultyClick;
   end;
 end;
 

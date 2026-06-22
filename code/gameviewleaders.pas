@@ -10,14 +10,14 @@ uses
 // Castle  
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, CastleNotifications,
 // Own
-  models  
+  models, difficultybutton
   ;
 
 type
   TViewLeaders = class(TCastleView)
   published
     ButtonMenu, ButtonSync: TCastleButton;
-    FactoryButton: TCastleComponentFactory;
+    FactoryButton: {$IFDEF FPC_OBJFPC} specialize {$ENDIF} TCastleComponentFactoryNew<TDifficultyButton>;
     GroupDifficulty, GroupLeaders: TCastleUserInterface;
     PanelNotifications: TCastleNotifications;
   public
@@ -48,7 +48,7 @@ uses
 // Castle  
   castlewindow, castlelog,
 // Own
-  gameoptions, castlerest, gameviewmain, difficultybutton
+  gameoptions, castlerest, gameviewmain
 ;
 
 constructor TViewLeaders.Create(AOwner: TComponent);
@@ -68,7 +68,6 @@ end;
 procedure TViewLeaders.Start;
 var
   LDifficulty: NDifficulty;
-  LButton: TCastleButton;
   LDifficultyButton: TDifficultyButton;
 begin
   inherited;
@@ -76,12 +75,12 @@ begin
   ButtonSync.OnClick := ButtonSyncClick;
   for LDifficulty := Succ(Low(NDifficulty)) to High(NDifficulty) do
   begin
-    LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
-    LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
-    GroupDifficulty.InsertFront(LButton);
-    LDIfficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
-    if LButton.Pressed then
-      FCurrentDifficultyButton := LButton;
+    LDifficultyButton := FactoryButton.ComponentLoadNew(GroupDifficulty);
+    GroupDifficulty.InsertFront(LDifficultyButton);
+    LDifficultyButton.Init(LDifficulty);
+    LDifficultyButton.OnClick := ButtonDifficultyClick;
+    if LDifficultyButton.Pressed then
+      FCurrentDifficultyButton := LDifficultyButton;
   end;
   GroupLeaders.ClearControls();
 end;
