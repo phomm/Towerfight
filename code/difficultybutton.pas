@@ -10,7 +10,7 @@ uses
 // Castle
   CastleUIControls, CastleControls, CastleKeysMouse, castlescene,
 // Own
-  gameoptions;
+  gameoptions, castlecomponentfactorygeneric;
 
 type
   TDifficultyButton = class(TCastleButton)
@@ -20,6 +20,8 @@ type
     procedure Init(ADifficulty: NDifficulty);
     procedure ButtonDifficultyMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);  
   end;
+
+  TDifficultyButtonFactory = {$IFDEF FPC_OBJFPC} specialize {$ENDIF} TCastleComponentFactoryNew<TDifficultyButton>;
 
 implementation
 

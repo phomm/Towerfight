@@ -17,7 +17,7 @@ type
   TViewLeaders = class(TCastleView)
   published
     ButtonMenu, ButtonSync: TCastleButton;
-    FactoryButton: {$IFDEF FPC_OBJFPC} specialize {$ENDIF} TCastleComponentFactoryNew<TDifficultyButton>;
+    FactoryButton: TDifficultyButtonFactory;
     GroupDifficulty, GroupLeaders: TCastleUserInterface;
     PanelNotifications: TCastleNotifications;
   public

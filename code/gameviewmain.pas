@@ -24,7 +24,7 @@ type
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions, GroupDifficulty: TCastleUserInterface;
     SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
-    FactoryButton: {$IFDEF FPC_OBJFPC} specialize {$ENDIF} TCastleComponentFactoryNew<TDifficultyButton>;
+    FactoryButton: TDifficultyButtonFactory;
     ImageRoomRoof2, ImageRoomRoof3, ImageOptions, ImageDifficulty: TCastleImageControl;
     LabelFullscreen, LabelUseTimer: TCastleLabel;
   public
