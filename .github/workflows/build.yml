@@ -37,7 +37,9 @@ jobs:
           fetch-depth: 0            # fetch full history (required for some submodule setups)
 
       - name: Install xmlstarlet
-        run: sudo apt-get install -y xmlstarlet
+        run: |
+          apt-get update
+          apt-get install -y xmlstarlet
 
       - name: Update Version in CastleEngineManifest.xml
         run: |
