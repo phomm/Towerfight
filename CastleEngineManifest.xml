@@ -13,6 +13,7 @@ See https://castle-engine.io/project_manifest for documentation of this file.
   caption="Tower Fight"
   screen_orientation="landscape"
 >
+  <version value="0.9.0" code="1" />
   <compiler_options>
     <search_paths>
       <path value="code/" />
@@ -23,7 +24,7 @@ See https://castle-engine.io/project_manifest for documentation of this file.
       <path value="code/HashLib4Pascal/HashLib/src/KDF" />
       <path value="code/HashLib4Pascal/HashLib/src/Include" />
     </search_paths>
-	<defines>
+    <defines>
       <define>CASTLE_GEO_SUPPORT_DISABLE</define>
       <define>CASTLE_OBJ_SUPPORT_DISABLE</define>
       <define>CASTLE_COLLADA_SUPPORT_DISABLE</define>

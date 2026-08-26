@@ -9,7 +9,7 @@ uses
   Classes,
 // Castle
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleComponentSerialize, 
-  CastleScene, CastleScenecore, castleviewport, x3dnodes,
+  CastleScene, CastleScenecore, castleviewport, x3dnodes, castlesoundengine,
 // Own
   gameentities, roomcomponent, gameoptions;
 
@@ -22,10 +22,12 @@ type
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     BloodSplash0, BloodSplash1, BloodSplash2, SceneLessonArrow: TCastleScene;
-    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply, ViewportLevelUp: TCastleViewport;
+    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply, ViewportLevelUp, ViewportBattleCry: TCastleViewport;
     ImageWeapon: TCastleImageControl;
     TimerBlood, TimerGame, TimerHint, TimerLesson: TCastleTimer;
     TextLevelUp: TCastleText;
+    ImageBattleCry: TCastleImageTransform;
+    SoundBanzai: TCastleSound;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -56,6 +58,7 @@ type
     procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     procedure RunLevelUpAnim();
+    procedure RunBattleCryAnim();
     function RandomBloodSplash(): TCastleScene;
     function GetTower(ATowerIndex: Integer): TCastleUserInterface;
     procedure DefeatQuestionYes(Sender: TObject);
@@ -135,6 +138,7 @@ procedure TViewGame.Start();
 var 
   LMoveBehavior: TMoveUpBehavior;
   LLifetimeBehavior: TLifeTimeBehavior;
+  LScalingBehavior: TScalingBehavior;
   LTextColor: TCastleColor;
   procedure SetupTowers();
   var
@@ -228,6 +232,7 @@ begin
   TimerGame.OnTimer := TimerGameTick;
   TimerGame.IntervalSeconds := 1;
   TimerGame.Exists := UseTimer() and not IsSchool();
+  
   LMoveBehavior := TMoveUpBehavior.Create(ViewportLevelUp);
   LMoveBehavior.SpeedX := 200;
   LMoveBehavior.SpeedY := 500;
@@ -238,6 +243,14 @@ begin
   LTextColor := TextLevelUp.Color;
   TextLevelUp.CustomFont := Container.DefaultFont as TCastleFont;
   TextLevelUp.Color := LTextColor;
+
+  LScalingBehavior := TScalingBehavior.Create(ViewportBattleCry);
+  LScalingBehavior.ScaleAdd := Vector3(3, 3, 3);
+  LLifetimeBehavior := TLifeTimeBehavior.Create(ViewportBattleCry);
+  ImageBattleCry.AddBehavior(LScalingBehavior);
+  ImageBattleCry.AddBehavior(LLifetimeBehavior);
+  ImageBattleCry.Exists := False;
+
   FPause := True;
   FGameTicks := GameSeconds[Difficulty()];
   VisualizeTime();
@@ -460,6 +473,8 @@ begin
   SceneLessonArrow.Exists := False;
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
+  if not IsSchool() and ((LActor is TBoss) or ((LActor is TMiniBoss) and (Map.Hero.Weapon = hwNo))) then
+    RunBattleCryAnim();
   LActor.Reveal();
   ARoom.SetEnemy(LActor);
   if Map.HeroRoom.Fight(LLevelUp) then
@@ -520,6 +535,14 @@ begin
   TextLevelUp.Caption := '+' + FRoomFight.ImageLeft.Tag.ToString();
   (TextLevelUp.FindBehavior(TLifeTimeBehavior) as TLifeTimeBehavior).Reset();
   TextLevelUp.Exists := True;
+end;
+
+procedure TViewGame.RunBattleCryAnim();
+begin
+  (ImageBattleCry.FindBehavior(TLifeTimeBehavior) as TLifeTimeBehavior).Reset();
+  (ImageBattleCry.FindBehavior(TScalingBehavior) as TScalingBehavior).Reset();
+  ImageBattleCry.Exists := True;
+  SoundEngine.Play(SoundBanzai);
 end;
 
 procedure TViewGame.TimerBloodTick(ASender: TObject);

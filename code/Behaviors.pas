@@ -58,6 +58,26 @@ type
     property ActiveInEditor: Boolean read FActiveInEditor write FActiveInEditor default False;
   end;
 
+  TScalingBehavior = class(TCastleBehavior)
+  strict private
+    FSeconds: Single;
+    FScaleAdd, FSavedScale: TVector3;
+    FActiveInEditor: Boolean;
+    FScaleAddPersistent: TCastleVector3Persistent;
+    function GetScaleAddPersistent(): TVector3;
+    procedure SetScaleAddPersistent(const AValue: TVector3);
+  public
+    constructor Create(AOwner: TComponent); override;
+    function PropertySections(const APropertyName: String): TPropertySections; override;
+    procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
+    procedure ParentAfterAttach(); override;
+    procedure Reset();
+    property ScaleAdd: TVector3 read FScaleAdd write FScaleAdd;
+  published
+    property ScaleAddPersistent: TCastleVector3Persistent read FScaleAddPersistent;
+    property ActiveInEditor: Boolean read FActiveInEditor write FActiveInEditor default False;
+  end;
+
 implementation
 
 uses 
@@ -175,6 +195,65 @@ begin
 {$ENDIF}
     if Assigned(Parent) and Parent.Exists then
       Parent.Translation := Parent.Translation + Vector3(FSpeedX, FSpeedY, 0) * SecondsPassed;
+end;
+
+constructor TScalingBehavior.Create(AOwner: TComponent);
+begin
+  inherited Create(AOwner);
+  FScaleAdd := Vector3(1, 1, 1);
+  FScaleAddPersistent := TCastleVector3Persistent.Create(nil);
+  FScaleAddPersistent.SetSubComponent(True);
+  FScaleAddPersistent.InternalGetValue := {$IFDEF FPC_OBJFPC}@{$ENDIF}GetScaleAddPersistent;
+  FScaleAddPersistent.InternalSetValue := {$IFDEF FPC_OBJFPC}@{$ENDIF}SetScaleAddPersistent;
+  FScaleAddPersistent.InternalDefaultValue := FScaleAdd;
+end;
+
+function TScalingBehavior.GetScaleAddPersistent(): TVector3;
+begin
+  Result := FScaleAdd;
+end;
+
+procedure TScalingBehavior.SetScaleAddPersistent(const AValue: TVector3);
+begin
+  FScaleAdd := AValue;
+end;
+
+function TScalingBehavior.PropertySections(const APropertyName: String): TPropertySections;
+begin
+  if ArrayContainsString(APropertyName, ['ScaleAddPersistent', 'ActiveInEditor']) then
+    Result := [psBasic]
+  else
+    Result := inherited PropertySections(APropertyName);
+end;
+
+procedure TScalingBehavior.Update(const SecondsPassed: Single; var RemoveMe: TRemoveType);
+begin
+  inherited;
+  if Assigned(Parent) and Parent.Exists then
+{$IFDEF CASTLE_DESIGN_MODE}
+    if FActiveInEditor then
+{$ENDIF}
+    begin
+      Parent.Scale := FSavedScale + (FScaleAdd - Vector3(1, 1, 1)) * FSeconds;
+      FSeconds := FSeconds + SecondsPassed;
+    end;
+  if Assigned(Parent) and not Parent.Exists then
+  begin
+    FSeconds := 0;
+    FSavedScale := Vector3(1, 1, 1);
+  end;
+end;
+
+procedure TScalingBehavior.ParentAfterAttach();
+begin
+  inherited;
+  FSavedScale := Parent.Scale;
+end;
+
+procedure TScalingBehavior.Reset();
+begin
+  FSeconds := 0;
+  FSavedScale := Vector3(1, 1, 1);
 end;
 
 end.

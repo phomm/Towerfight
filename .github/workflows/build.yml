@@ -36,6 +36,18 @@ jobs:
           submodules: 'recursive'   # fetch submodules listed in .gitmodules
           fetch-depth: 0            # fetch full history (required for some submodule setups)
 
+      - name: Install xmlstarlet
+        run: sudo apt-get install -y xmlstarlet
+
+      - name: Update Version in CastleEngineManifest.xml
+        run: |
+          # Use xmlstarlet to edit (ed) the file in-place (-L)
+          # This updates (-u) the XPath path with the new value
+          xmlstarlet ed -L \
+            -u "/project/version/@value" -v "0.9.${{ github.run_number }}"\
+            -u "/project/version/@code" -v "${{ github.run_number }}" \
+             CastleEngineManifest.xml
+
       - name: generate salt include file from secret
         run: |
           printf "Salt = '%s';" "${{ secrets.SALT }}" > code/salt.inc
@@ -122,30 +134,30 @@ jobs:
       env:
         GH_TOKEN: ${{ github.token }}
 
-    - name: Push to Itch.io with butler, windows build
-      uses: yeslayla/butler-publish-itchio-action@master
-      env:
-        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        CHANNEL: windows
-        ITCH_GAME: tower-fight
-        ITCH_USER: phomm
-        PACKAGE: TowerFight-0.1-win64-x86_64.zip
-    - name: Push to Itch.io with butler, linux build
-      uses: yeslayla/butler-publish-itchio-action@master
-      env:
-        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        CHANNEL: linux
-        ITCH_GAME: tower-fight
-        ITCH_USER: phomm
-        PACKAGE: TowerFight-0.1-linux-x86_64.tar.gz
-    - name: Push to Itch.io with butler, android build
-      uses: yeslayla/butler-publish-itchio-action@master        
-      env:
-        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-        CHANNEL: android
-        ITCH_GAME: tower-fight
-        ITCH_USER: phomm
-        PACKAGE: TowerFight-0.1-android-debug.apk
+    #- name: Push to Itch.io with butler, windows build
+    #  uses: yeslayla/butler-publish-itchio-action@master
+    #  env:
+    #    BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+    #    CHANNEL: windows
+    #    ITCH_GAME: tower-fight
+    #    ITCH_USER: phomm
+    #    PACKAGE: TowerFight-0.1-win64-x86_64.zip
+    #- name: Push to Itch.io with butler, linux build
+    #  uses: yeslayla/butler-publish-itchio-action@master
+    #  env:
+    #    BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+    #    CHANNEL: linux
+    #    ITCH_GAME: tower-fight
+    #    ITCH_USER: phomm
+    #    PACKAGE: TowerFight-0.1-linux-x86_64.tar.gz
+    #- name: Push to Itch.io with butler, android build
+    #  uses: yeslayla/butler-publish-itchio-action@master
+    #  env:
+    #    BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+    #    CHANNEL: android
+    #    ITCH_GAME: tower-fight
+    #    ITCH_USER: phomm
+    #    PACKAGE: TowerFight-0.1-android-debug.apk
 
   update-release-tag:
     name: Update Release Tag (make snapshot tag point to the build commit on master branch)
