@@ -97,13 +97,13 @@ jobs:
       #  run: ./Intact_Castle
       
       # for future Android release build, signing step is needed
-      #- name: Unpack Android Secrets
-      #  env:
-      #    ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
-      #    ANDROID_SIGNING_PROPERTIES: ${{ secrets.ANDROID_SIGNING_PROPERTIES }}
-      #  run: |
-      #    echo "$ANDROID_KEYSTORE" | base64 --decode > cge.keystore
-      #    echo "$ANDROID_SIGNING_PROPERTIES" | sed -e "s|WORKSPACE|${GITHUB_WORKSPACE}|" - > AndroidSigningProperties.txt
+      - name: Unpack Android Secrets
+        env:
+          ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
+          ANDROID_SIGNING_PROPERTIES: ${{ secrets.ANDROID_SIGNING_PROPERTIES }}
+        run: |
+          echo "$ANDROID_KEYSTORE" | base64 --decode > cge.keystore
+          echo "$ANDROID_SIGNING_PROPERTIES" | sed -e "s|WORKSPACE|${GITHUB_WORKSPACE}|" - > AndroidSigningProperties.txt
       - name: Package Android
         run: castle-engine package --target=android --verbose
       - name: Archive Artifacts
@@ -132,7 +132,7 @@ jobs:
     # Releases files in the "snapshot" release.
     - name: Release Artifacts
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *.apk *.tar.gz
+      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *release.apk *.tar.gz
       env:
         GH_TOKEN: ${{ github.token }}
 
