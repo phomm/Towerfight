@@ -17,6 +17,11 @@ on:
   pull_request:
   push:
     branches: [master]
+    tags:
+      - '*'
+
+permissions:
+  contents: write
 
 jobs:
   # Build for platforms supported by
@@ -45,8 +50,18 @@ jobs:
         run: |
           # Use xmlstarlet to edit (ed) the file in-place (-L)
           # This updates (-u) the XPath path with the new value
+          if [[ "$GITHUB_REF" == refs/tags/* ]]; then
+            if [[ "$GITHUB_REF_NAME" =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+              VERSION="${BASH_REMATCH[0]}"
+            else
+              echo "Tag must contain a numeric version such as 0.9: $GITHUB_REF_NAME"
+              exit 1
+            fi
+          else
+            VERSION="0.9.$GITHUB_RUN_NUMBER"
+          fi
           xmlstarlet ed -L \
-            -u "/project/version/@value" -v "0.9.${{ github.run_number }}"\
+            -u "/project/version/@value" -v "$VERSION" \
             -u "/project/version/@code" -v "${{ github.run_number }}" \
              CastleEngineManifest.xml
 
@@ -92,11 +107,7 @@ jobs:
           name: linux-build
           path: "*-linux-x86_64.tar.gz"
           if-no-files-found: error       
-      # tests are disabled for now    
-      #- name: Run tests
-      #  run: ./Intact_Castle
       
-      # for future Android release build, signing step is needed
       - name: Unpack Android Secrets
         env:
           ANDROID_KEYSTORE: ${{ secrets.ANDROID_KEYSTORE }}
@@ -132,34 +143,48 @@ jobs:
     # Releases files in the "snapshot" release.
     - name: Release Artifacts
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *release.apk *.tar.gz
+      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *.apk *.tar.gz
       env:
         GH_TOKEN: ${{ github.token }}
 
-    #- name: Push to Itch.io with butler, windows build
-    #  uses: yeslayla/butler-publish-itchio-action@master
-    #  env:
-    #    BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-    #    CHANNEL: windows
-    #    ITCH_GAME: tower-fight
-    #    ITCH_USER: phomm
-    #    PACKAGE: TowerFight-0.1-win64-x86_64.zip
-    #- name: Push to Itch.io with butler, linux build
-    #  uses: yeslayla/butler-publish-itchio-action@master
-    #  env:
-    #    BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-    #    CHANNEL: linux
-    #    ITCH_GAME: tower-fight
-    #    ITCH_USER: phomm
-    #    PACKAGE: TowerFight-0.1-linux-x86_64.tar.gz
-    #- name: Push to Itch.io with butler, android build
-    #  uses: yeslayla/butler-publish-itchio-action@master
-    #  env:
-    #    BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
-    #    CHANNEL: android
-    #    ITCH_GAME: tower-fight
-    #    ITCH_USER: phomm
-    #    PACKAGE: TowerFight-0.1-android-debug.apk
+    - name: Create Versioned Release
+      if: startsWith(github.ref, 'refs/tags/')
+      run: |
+        gh release create "$GITHUB_REF_NAME" \
+          --repo "$GITHUB_REPOSITORY" \
+          --title "$GITHUB_REF_NAME" \
+          --generate-notes \
+          *.zip *release.apk *.tar.gz
+      env:
+        GH_TOKEN: ${{ github.token }}
+
+    - name: Push to Itch.io with butler, windows build
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: yeslayla/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: windows
+        ITCH_GAME: tower-fight
+        ITCH_USER: phomm
+        PACKAGE: TowerFight-${{ github.ref_name }}-win64-x86_64.zip
+    - name: Push to Itch.io with butler, linux build
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: yeslayla/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: linux
+        ITCH_GAME: tower-fight
+        ITCH_USER: phomm
+        PACKAGE: TowerFight-${{ github.ref_name }}-linux-x86_64.tar.gz
+    - name: Push to Itch.io with butler, android build
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: yeslayla/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: android
+        ITCH_GAME: tower-fight
+        ITCH_USER: phomm
+        PACKAGE: TowerFight-${{ github.ref_name }}-android-release.apk
 
   update-release-tag:
     name: Update Release Tag (make snapshot tag point to the build commit on master branch)
