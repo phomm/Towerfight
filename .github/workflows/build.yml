@@ -47,23 +47,24 @@ jobs:
           apt-get install -y xmlstarlet
 
       - name: Update Version in CastleEngineManifest.xml
+        shell: bash
         run: |
           # Use xmlstarlet to edit (ed) the file in-place (-L)
           # This updates (-u) the XPath path with the new value
-          if [ ${{ github.ref }} == refs/tags/* ]; then
-            if [ ${{ github.ref_name }} =~ ^[0-9]+(\.[0-9]+)*$ ]; then
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
               VERSION="${BASH_REMATCH[0]}"
             else
-              echo "Tag must contain a numeric version such as 0.9: $GITHUB_REF_NAME"
+              echo "Tag must contain a numeric version such as 0.9: ${GITHUB_REF_NAME}"
               exit 1
             fi
           else
-            VERSION="0.9.$GITHUB_RUN_NUMBER"
+            VERSION="0.9.${GITHUB_RUN_NUMBER}"
           fi
           xmlstarlet ed -L \
             -u "/project/version/@value" -v "$VERSION" \
-            -u "/project/version/@code" -v "${{ github.run_number }}" \
-             CastleEngineManifest.xml
+            -u "/project/version/@code" -v "${GITHUB_RUN_NUMBER}" \
+            CastleEngineManifest.xml
 
       - name: generate salt include file from secret
         run: |
