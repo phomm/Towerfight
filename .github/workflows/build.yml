@@ -51,7 +51,7 @@ jobs:
           # Use xmlstarlet to edit (ed) the file in-place (-L)
           # This updates (-u) the XPath path with the new value
           if [ ${{ github.ref }} == refs/tags/* ]; then
-            if [ ${{ github.ref.name }} =~ ^[0-9]+(\.[0-9]+)*$ ]; then
+            if [ ${{ github.ref_name }} =~ ^[0-9]+(\.[0-9]+)*$ ]; then
               VERSION="${BASH_REMATCH[0]}"
             else
               echo "Tag must contain a numeric version such as 0.9: $GITHUB_REF_NAME"
