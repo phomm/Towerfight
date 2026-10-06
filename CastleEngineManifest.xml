@@ -17,6 +17,7 @@ See https://castle-engine.io/project_manifest for documentation of this file.
   <compiler_options>
     <search_paths>
       <path value="code/" />
+      <path value="code/typing-label/typinglabel" />
       <path value="code/HashLib4Pascal/HashLib/src/Base" />
       <path value="code/HashLib4Pascal/HashLib/src/Interfaces" />
       <path value="code/HashLib4Pascal/HashLib/src/Utils" />

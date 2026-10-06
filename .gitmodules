@@ -1,3 +1,7 @@
 [submodule "code/HashLib4Pascal"]
 	path = code/HashLib4Pascal
 	url = https://github.com/Xor-el/HashLib4Pascal.git
+
+[submodule "code/typing-label"]
+	path = code/typing-label
+	url = https://gitlab.com/EugeneLoza/typing-label/

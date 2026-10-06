@@ -4,8 +4,13 @@ unit GameViewDialog;
 
 interface
 
-uses Classes,
-  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse;
+uses 
+// System
+  Classes,
+// Castle  
+  CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse,
+// third party
+  castletypinglabel;
 
 type
   TViewDialog = class(TCastleView)
@@ -13,14 +18,17 @@ type
     ButtonYes, ButtonNo: TCastleButton;
     LabelText: TCastleLabel;
     ImageBack: TCastleImageControl;
+    Group1: TCastleVerticalGroup;
   public
     OnYes, OnNo: TNotifyEvent;
     constructor Create(AOwner: TComponent); override;
+    destructor Destroy; override;
     procedure Start; override;
     function Press(const Event: TInputPressRelease): Boolean; override;
   private
     Text: string;
     YesNoMode: Boolean;
+    TypingLabel: TCastleTypingLabel;  
     procedure ButtonClick(Sender: TObject);
     procedure Yes();
     procedure No();
@@ -38,7 +46,7 @@ uses
 // System
   SysUtils,
 // Castle
-  castleutils, castlelog, castlerectangles,
+  castleutils, castlelog, castlerectangles, castlecomponentserialize, 
 // Own
   Common  
   ;
@@ -58,6 +66,8 @@ procedure DialogYes(AContainer: TCastleContainer; const AText: string; AOnYes: T
 begin
   DialogYesNo(AContainer, AText, AOnYes, nil);
   ViewDialog.YesNoMode := False;
+  if Assigned(ViewDialog.TypingLabel) then
+    ViewDialog.TypingLabel.ResetText();
 end;
 
 constructor TViewDialog.Create(AOwner: TComponent);
@@ -67,17 +77,38 @@ begin
   DesignPreload := True;
 end;
 
+destructor TViewDialog.Destroy;
+begin
+  if Assigned(TypingLabel) then
+    FreeAndNil(TypingLabel);
+  inherited;
+end;
+
 procedure TViewDialog.Start;
 const
   Anchors: array [Boolean] of THorizontalPosition = (hpLeft, hpMiddle);
+var
+  LComponentData: string;  
 begin
   inherited;
   InterceptInput := YesNoMode;
   ButtonYes.OnClick := ButtonClick;
   ButtonNo.OnClick := ButtonClick;
-  LabelText.Text.Text := Text;
   ButtonNo.Exists := YesNoMode;
   ImageBack.HorizontalAnchorSelf := Anchors[YesNoMode];
+  
+  if not Assigned(TypingLabel) then
+  begin
+    LComponentData := StringReplace(ComponentToString(LabelText), 
+      LabelText.ClassName, TCastleTypingLabel.ClassName, []);
+    LComponentData := StringReplace(LComponentData, '"LabelText"', '"TypingLabel"', []);
+    TypingLabel := StringToComponent(LComponentData, Self) as TCastleTypingLabel;
+  end;
+  Group1.InsertBack(TypingLabel);
+  LabelText.Exists := YesNoMode;
+  LabelText.Text.Text := Text;
+  TypingLabel.Exists := not YesNoMode;
+  TypingLabel.Text.Text := Text;  
 end;
 
 procedure TViewDialog.ButtonClick(Sender: TObject);
