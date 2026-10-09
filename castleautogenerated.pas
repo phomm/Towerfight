@@ -21,8 +21,8 @@ implementation
 uses CastleApplicationProperties, CastleWindow, CastleLog;
 
 initialization
-  ApplicationProperties.ApplicationName := 'TowerFight';
-  ApplicationProperties.Caption := 'Tower Fight';
+  ApplicationProperties.ApplicationName := 'BanzaiMath';
+  ApplicationProperties.Caption := 'Banzai Math';
   ApplicationProperties.Version := '0.1';
 
   if not IsLibrary then
