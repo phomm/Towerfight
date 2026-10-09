@@ -124,7 +124,7 @@
                 "Alpha" : 1.0000000000000000E+000,
                 "Blue" : 7.0196080207824707E-001
               },
-              "Caption" : "github: towerfight",
+              "Caption" : "github: BanzaiMath",
               "Cursor" : "mcHand",
               "CustomBackground" : true,
               "CustomBackgroundDisabled" : {
@@ -172,7 +172,7 @@
                 "Alpha" : 1.0000000000000000E+000,
                 "Blue" : 7.0196080207824707E-001
               },
-              "Caption" : "Itch: ephyre-towerfight",
+              "Caption" : "Itch: ephyre-banzaimath",
               "Cursor" : "mcHand",
               "CustomBackground" : true,
               "CustomBackgroundDisabled" : {
@@ -208,7 +208,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -7.2699996948242188E+001
+                "Y" : -7.3652023315429688E+001
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -260,7 +260,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -1.4539999389648438E+002
+                "Y" : -1.4730404663085938E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -312,7 +312,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -2.1809999084472656E+002
+                "Y" : -2.2095606994628906E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -328,7 +328,7 @@
                 "Alpha" : 1.0000000000000000E+000,
                 "Blue" : 7.0196080207824707E-001
               },
-              "Caption" : "made with castle",
+              "Caption" : "made with castle engine",
               "Cursor" : "mcHand",
               "CustomBackground" : true,
               "CustomBackgroundDisabled" : {
@@ -368,7 +368,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -2.9079998779296875E+002
+                "Y" : -2.9460809326171875E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -388,17 +388,11 @@
             {
               "$$ClassName" : "TCastleLabel",
               "Alignment" : "hpMiddle",
-              "ColorPersistent" : {
-                "$$ClassName" : "TCastleColorPersistent",
-                "Blue" : 1.0000000000000000E+000,
-                "Green" : 9.0196079015731812E-001
-              },
               "FontSize" : 5.5000000000000000E+001,
               "Html" : true,
               "Name" : "LabelRules",
-              "Outline" : 1,
               "Text" : [
-                "Edo is captured by <font color=\"#000000\">Evil forces</font>",
+                "Edo is captured by <font color=\"#FF0000\">Evil forces</font>",
                 "Fight them, Brave Samurai !",
                 "Tap open Rooms to attack them",
                 "Each win opens new ways to you",
@@ -409,7 +403,8 @@
                 "and gain Levelups, otherwise <font color=\"#FF0000\">Lose</font>",
                 "In First tower you gain +Level ",
                 "same as EL, with every next tower",
-                "you get 1/(2T - 2) fraction of EL"
+                "you get 1/(2T - 2) fraction of EL:",
+                "1/2 in tower 2, 1/4 in tower 3, etc."
               ],
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
@@ -424,7 +419,7 @@
               "Spacing" : 7.0000000000000000E+001,
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "X" : 1.1242473144531250E+003
+                "X" : 9.3500000000000000E+002
               },
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle",
@@ -518,25 +513,20 @@
             {
               "$$ClassName" : "TCastleLabel",
               "Alignment" : "hpMiddle",
-              "ColorPersistent" : {
-                "$$ClassName" : "TCastleColorPersistent",
-                "Blue" : 1.0000000000000000E+000,
-                "Green" : 9.0196079015731812E-001
-              },
-              "FontSize" : 5.5000000000000000E+001,
+              "FontScale" : 2.0000000000000000E+000,
               "HorizontalAnchorParent" : "hpMiddle",
               "HorizontalAnchorSelf" : "hpMiddle",
               "Html" : true,
+              "LineSpacing" : 1.0000000000000000E+001,
               "Name" : "LabelWeapon",
-              "Outline" : 1,
               "Text" : [
                 "You're weak? pick a weapon before Fight",
-                "Shuriken(+) Kunai(-) Star(*), Enter Room,",
-                "You'll see Enemy formula and your weapon",
-                "Select underlined Sign or Digit to override",
-                "Press go - New Formula makes Enemy level ",
-                "weaker or stronger, and your levelup also",
-                "Bosses on Towertops - only sign can be hit",
+                "Shuriken(<font color=\"#0000FF\">+</font>) Kunai(<font color=\"#0000FF\">-</font>) Star(<font color=\"#0000FF\">*</font>), Enter Room,",
+                "You see Enemy formula and your weapon",
+                "Select underlined Sign or Digit to hit",
+                "Press go, New Formula makes Enemy ",
+                "weaker or stronger, and also levelup.",
+                "Towertop Bosses - only sign can be hit",
                 "Dragon can't be hit by weapon at all"
               ],
               "TranslationPersistent" : {
@@ -554,7 +544,7 @@
               "Name" : "Group1",
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -4.9807501220703125E+002
+                "Y" : -5.9176000976562500E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop",
@@ -642,17 +632,11 @@
             {
               "$$ClassName" : "TCastleLabel",
               "Alignment" : "hpMiddle",
-              "ColorPersistent" : {
-                "$$ClassName" : "TCastleColorPersistent",
-                "Blue" : 1.0000000000000000E+000,
-                "Green" : 9.0196079015731812E-001
-              },
-              "FontSize" : 5.5000000000000000E+001,
+              "FontScale" : 2.0000000000000000E+000,
               "HorizontalAnchorParent" : "hpMiddle",
               "HorizontalAnchorSelf" : "hpMiddle",
-              "LineSpacing" : 6.0000000000000000E+000,
+              "LineSpacing" : 2.0000000000000000E+001,
               "Name" : "LabelKeys",
-              "Outline" : 1,
               "Text" : [
                 "Keyboard controls available:",
                 "Enter (in menu) - start fight",

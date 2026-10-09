@@ -35,6 +35,7 @@ type
     FSavedExists: Boolean;
     FActiveInEditor: Boolean;
   public
+    LifeOver: TNotifyEvent;
     constructor Create(AOwner: TComponent); override;
     function PropertySections(const APropertyName: String): TPropertySections; override;
     procedure Update(const SecondsPassed: Single; var RemoveMe: TRemoveType); override;
@@ -160,7 +161,11 @@ begin
     begin
       FLife := FLife - SecondsPassed;
       if FLife <= 0 then
+      begin
         Reset();
+        if Assigned(LifeOver) then
+          LifeOver(Parent);
+      end;
     end;
   end;
 end;
