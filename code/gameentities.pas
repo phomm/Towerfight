@@ -412,7 +412,7 @@ end;
 
 function TMap.Score(ATimeLeft: Integer): Integer;
 begin
-  Result := Hero.Level;
+  Result := Hero.Level + ATimeLeft;
 end;
 
 function TMap.BossCap(): Integer;
