@@ -22,12 +22,11 @@ type
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
     BloodSplash0, BloodSplash1, BloodSplash2, SceneLessonArrow: TCastleScene;
-    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply, ViewportLevelUp, ViewportBattleCry: TCastleViewport;
+    Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply, ViewportLevelUp: TCastleViewport;
     ImageWeapon: TCastleImageControl;
     TimerBlood, TimerGame, TimerHint, TimerLesson: TCastleTimer;
     TextLevelUp: TCastleText;
-    ImageBattleCry: TCastleImageTransform;
-    SoundBanzai: TCastleSound;
+    SoundTimer: TCastleSound;
     function GetMap(): TMap;
     property Map: TMap read GetMap;
   protected
@@ -41,6 +40,7 @@ type
     procedure Update(const SecondsPassed: Single; var HandleInput: boolean); override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure RoomFight(ARoom: TRoomComponent);
+    procedure RunFight(ASender: TObject);
     property WeaponButton[AIndex: NHeroWeapon]: TCastleButton read GetWeapon;
   private
     FPreviousRoom: TRoomComponent;
@@ -50,15 +50,17 @@ type
     FPosFrom, FPosTo: TVector2;
     FAnimateWeaponTicks, FGameTicks: Integer;
     FRoomFight: TRoomComponent;
+    LPlayingSound: TCastlePlayingSound;
     FLesson: Integer;
     Lessons: array[1..2, 1..5] of record L: string; Done: Boolean; end;
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
-    procedure RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
+    procedure RunAnimation(AScene: TCastleScene; ARoom: TRoomComponent);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     procedure RunLevelUpAnim();
-    procedure RunBattleCryAnim();
+    procedure RunScoreAnim();
+    procedure RunBattleCryAnim(ACallBackRoom: TRoomComponent);
     function RandomBloodSplash(): TCastleScene;
     function GetTower(ATowerIndex: Integer): TCastleUserInterface;
     procedure DefeatQuestionYes(Sender: TObject);
@@ -91,7 +93,8 @@ uses
 // Castle  
   CastleLog, castlefonts, castleColors,
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, imagescomponent, gameviewcredits, Behaviors;
+  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, 
+  imagescomponent, gameviewcredits, Behaviors, gameviewbanzai, gameviewscore;
 
 const 
   LessonOrder: array[1..9] of record T, S: Integer; end = 
@@ -138,7 +141,6 @@ procedure TViewGame.Start();
 var 
   LMoveBehavior: TMoveUpBehavior;
   LLifetimeBehavior: TLifeTimeBehavior;
-  LScalingBehavior: TScalingBehavior;
   LTextColor: TCastleColor;
   procedure SetupTowers();
   var
@@ -230,7 +232,6 @@ begin
   TimerBlood.OnTimer := TimerBloodTick;
   TimerHint.OnTimer := TimerHintTick;
   TimerGame.OnTimer := TimerGameTick;
-  TimerGame.IntervalSeconds := 1;
   TimerGame.Exists := UseTimer() and not IsSchool();
   
   LMoveBehavior := TMoveUpBehavior.Create(ViewportLevelUp);
@@ -243,13 +244,9 @@ begin
   LTextColor := TextLevelUp.Color;
   TextLevelUp.CustomFont := Container.DefaultFont as TCastleFont;
   TextLevelUp.Color := LTextColor;
-
-  LScalingBehavior := TScalingBehavior.Create(ViewportBattleCry);
-  LScalingBehavior.ScaleAdd := Vector3(3, 3, 3);
-  LLifetimeBehavior := TLifeTimeBehavior.Create(ViewportBattleCry);
-  ImageBattleCry.AddBehavior(LScalingBehavior);
-  ImageBattleCry.AddBehavior(LLifetimeBehavior);
-  ImageBattleCry.Exists := False;
+  LPlayingSound := TCastlePlayingSound.Create(Self);
+  LPlayingSound.Sound := SoundTimer;
+  LPlayingSound.Loop := True;
 
   FPause := True;
   FGameTicks := GameSeconds[Difficulty()];
@@ -416,6 +413,7 @@ procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LRoom: TRoomComponent;
   LT, LS: Integer;
+  LActor: TActor;
 begin
   if FSkip then Exit;
   if Container.CurrentFrontView <> Self then
@@ -435,9 +433,21 @@ begin
       Exit; // block clicking on other rooms until current lesson is done
   end;
   
-  if not Map.SetHeroRoom(LRoom.Tag) then
+  if not Map.SetHeroRoom(LRoom.Tag) or not Map.HeroRoom.HasEnemy() then
     Exit;
-  
+
+  LActor := Map.HeroRoom.Actors[0];
+  if not IsSchool() and ((LActor is TBoss) or ((LActor is TMiniBoss) and (Map.Hero.Weapon = hwNo))) then
+    RunBattleCryAnim(LRoom)
+  else
+    RunFight(LRoom);
+end;
+
+procedure TViewGame.RunFight(ASender: TObject);
+var
+  LRoom: TRoomComponent;
+begin
+  LRoom := ASender as TRoomComponent;
   // Hide image on previously active button
   if Assigned(FPreviousRoom) and (FPreviousRoom <> LRoom) then
   begin
@@ -451,8 +461,6 @@ begin
   LRoom.ImageLeft.Url := Map.Hero.AssetId;
   LRoom.LabelLeft.Caption := Map.Hero.Visual;
   SwitchHeroWeaponImage();
-  if not Map.HeroRoom.HasEnemy() then
-    Exit;
 
   if (Map.Hero.Weapon = hwNo) or (Map.HeroRoom.Actors[0] is TBoss) then
     RoomFight(LRoom)
@@ -473,11 +481,9 @@ begin
   SceneLessonArrow.Exists := False;
   LRoom := Map.GetRoomByIndex(ARoom.Tag);
   LActor := LRoom.Actors[0];
-  if not IsSchool() and ((LActor is TBoss) or ((LActor is TMiniBoss) and (Map.Hero.Weapon = hwNo))) then
-    RunBattleCryAnim();
   LActor.Reveal();
   ARoom.SetEnemy(LActor);
-  if Map.HeroRoom.Fight(LLevelUp) then
+  if Map.HeroRoom.Fight({out} LLevelUp) then
   begin
     LScene := RandomBloodSplash();
     RunAnimation(LScene, ARoom);
@@ -506,11 +512,11 @@ begin
   end;
 end;  
 
-procedure TViewGame.RunAnimation(AScene: TCastleScene; ARoom: TCastleUserInterface);
+procedure TViewGame.RunAnimation(AScene: TCastleScene; ARoom: TRoomComponent);
 var
   LAnimationParams: TPlayAnimationParameters;
 begin
-  Viewport1.Translation := ARoom.LocalToContainerPosition(Vector2(ARoom.Width / 4, -ARoom.Height), False);
+  Viewport1.Translation := ARoom.LocalToContainerPosition(ARoom.Size * Vector2(0.25, -1), False);
   AScene.Exists := True;
   LAnimationParams := TPlayAnimationParameters.Create();
   try
@@ -530,19 +536,17 @@ end;
 
 procedure TViewGame.RunLevelUpAnim();
 begin
-  ViewportLevelUp.Translation := FRoomFight.LocalToContainerPosition(Vector2(FRoomFight.Width / 4, -FRoomFight.Height), False);
+  ViewportLevelUp.Translation := FRoomFight.LocalToContainerPosition(FRoomFight.Size * Vector2(0.25, -1), False);
   TextLevelUp.Translation := Vector3(0, 0, 0);
   TextLevelUp.Caption := '+' + FRoomFight.ImageLeft.Tag.ToString();
   (TextLevelUp.FindBehavior(TLifeTimeBehavior) as TLifeTimeBehavior).Reset();
   TextLevelUp.Exists := True;
 end;
 
-procedure TViewGame.RunBattleCryAnim();
+procedure TViewGame.RunBattleCryAnim(ACallBackRoom: TRoomComponent);
 begin
-  (ImageBattleCry.FindBehavior(TLifeTimeBehavior) as TLifeTimeBehavior).Reset();
-  (ImageBattleCry.FindBehavior(TScalingBehavior) as TScalingBehavior).Reset();
-  ImageBattleCry.Exists := True;
-  SoundEngine.Play(SoundBanzai);
+  ViewBanzai.CallbackRoomComponent := ACallBackRoom;
+  Container.PushView(ViewBanzai);
 end;
 
 procedure TViewGame.TimerBloodTick(ASender: TObject);
@@ -583,7 +587,7 @@ begin
     LWeapon := Map.GetRoomByIndex(FRoomFight.Tag).PickWeapon();
     if LWeapon <> hwNo then
     begin  
-      ImageWeapon.Translation := FRoomFight.LocalToContainerPosition(Vector2(FRoomFight.Width / 2, FRoomFight.Height), False);
+      ImageWeapon.Translation := FRoomFight.LocalToContainerPosition(FRoomFight.Size * Vector2(0.5, 1), False);
       ImageWeapon.Url := FRoomFight.ImageRight.Url;
       FAnimateWeaponTicks := TicksToFlyWeapon;
       FPosFrom := ImageWeapon.Translation;
@@ -601,10 +605,10 @@ begin
     UpdateMiniBossRooms();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
-    begin
-      ViewWin.Score := Map.Score(FGameTicks);
-      Container.View := ViewWin;
-    end;
+      if IsSchool() then
+        Container.View := ViewWin
+      else
+        RunScoreAnim();
     if FindLesson(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1, FLesson) then  
       ShowLesson();
   end;
@@ -632,12 +636,37 @@ begin
   FWeapons[Ord(LWeapon)].Controls[0].Exists := ADoShow;
 end;
 
+procedure TViewGame.RunScoreAnim();
+const 
+  SpeedupInterval = 0.01;
+begin
+  LPlayingSound.Stop();
+  TimerGame.IntervalSeconds := SpeedupInterval; // speedup countdown if present
+  ViewWin.Score := Map.Score(FGameTicks);
+  ViewScore.Show(3 + FGameTicks * SpeedupInterval, FRoomFight.LocalToContainerPosition(
+    FRoomFight.Size * Vector2(-1, -1), False));
+end;
+
 procedure TViewGame.TimerGameTick(ASender: TObject);
 begin
-  if FPause then Exit;
+  if FPause and not ViewScore.IsShown then
+    Exit;
+  if FGameTicks < 0 then
+    Exit;
   Dec(FGameTicks);
-  VisualizeTime();
-  if FGameTicks <= 0 then
+  if (FGameTicks = 30) and not ViewScore.IsShown then
+  begin
+    ButtonGameTime.CustomTextColor := Red;
+    SoundEngine.Play(LPlayingSound);
+  end;
+  if FGameTicks >= 0 then
+    VisualizeTime();
+  if ViewScore.IsShown then 
+    if FGameTicks >= 0 then
+      ViewScore.UpdateScore()
+    else
+      ViewScore.StopScaling();
+  if not ViewScore.IsShown and (FGameTicks = 0) then
   begin
     TimerGame.Exists := False;
     Container.View := ViewDefeat;
@@ -727,7 +756,7 @@ begin
     Exit;
   LRoom := GetTower(LTower - 1).Controls[LStock - 1] as TRoomComponent;
   // Show Arrow onto Room in coords LTower, LStock 
-  Viewport1.Translation := LRoom.LocalToContainerPosition(Vector2(-LRoom.Width * 0.3, -LRoom.Height * 0.3), False);
+  Viewport1.Translation := LRoom.LocalToContainerPosition(LRoom.Size * Vector2(-0.3, -0.3), False);
   SceneLessonArrow.Exists := True;
   TimerLesson.Exists := True;
   DialogYes(Container, Lessons[LTower, LStock].L, DialogLessonYes);

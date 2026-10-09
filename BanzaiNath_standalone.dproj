@@ -1,7 +1,7 @@
 <Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
     <PropertyGroup>
         <ProjectGuid>{6B7DCB15-A327-4D4F-8662-65522B6102D2}</ProjectGuid>
-        <MainSource>TowerFight_standalone.dpr</MainSource>
+        <MainSource>BanzaiMath_standalone.dpr</MainSource>
         <Base>True</Base>
         <Config Condition="'$(Config)'==''">Debug</Config>
         <TargetedPlatforms>33939</TargetedPlatforms>
@@ -94,7 +94,7 @@
         <DCC_N>false</DCC_N>
         <DCC_S>false</DCC_S>
         <DCC_ImageBase>00400000</DCC_ImageBase>
-        <SanitizedProjectName>TowerFight</SanitizedProjectName>
+        <SanitizedProjectName>BanzaiMath</SanitizedProjectName>
         <VerInfo_Locale>1045</VerInfo_Locale>
         <VerInfo_Keys>CompanyName=;FileDescription=;FileVersion=1.0.0.0;InternalName=;LegalCopyright=;LegalTrademarks=;OriginalFilename=;ProductName=;ProductVersion=1.0.0.0;Comments=;CFBundleName=</VerInfo_Keys>
         <DCC_Namespace>System;Xml;Data;Datasnap;Web;Soap;$(DCC_Namespace)</DCC_Namespace>
@@ -184,7 +184,7 @@
             <MainSource>MainSource</MainSource>
         </DelphiCompile>
         <None Include="README.md"/>
-        <None Include="TowerFight_standalone.dpr"/>
+        <None Include="BanzaiMath_standalone.dpr"/>
         <BuildConfiguration Include="Base">
             <Key>Base</Key>
         </BuildConfiguration>
@@ -203,7 +203,7 @@
         <BorlandProject>
             <Delphi.Personality>
                 <Source>
-                    <Source Name="MainSource">TowerFight_standalone.dpr</Source>
+                    <Source Name="MainSource">BanzaiMath_standalone.dpr</Source>
                 </Source>
                 <Excluded_Packages>
                     <Excluded_Packages Name="$(BDSBIN)\bcboffice2k280.bpl">Embarcadero C++Builder Office 2000 Servers Package</Excluded_Packages>
@@ -232,41 +232,41 @@
                 </DeployFile>
 
                 <!-- Deploy executables on all platforms, for Debug -->
-                <DeployFile LocalName="TowerFight_standalone.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="BanzaiMath_standalone.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>TowerFight_standalone.exe</RemoteName>
+                        <RemoteName>BanzaiMath_standalone.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="TowerFight_standalone.exe" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="BanzaiMath_standalone.exe" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>TowerFight_standalone.exe</RemoteName>
+                        <RemoteName>BanzaiMath_standalone.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="TowerFight_standalone" Configuration="Debug" Class="ProjectOutput">
+                <DeployFile LocalName="BanzaiMath_standalone" Configuration="Debug" Class="ProjectOutput">
                     <Platform Name="Linux64">
-                        <RemoteName>TowerFight_standalone</RemoteName>
+                        <RemoteName>BanzaiMath_standalone</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
 
                 <!-- Deploy executables on all platforms, for Release -->
-                <DeployFile LocalName="TowerFight_standalone.exe" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="BanzaiMath_standalone.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>TowerFight_standalone.exe</RemoteName>
+                        <RemoteName>BanzaiMath_standalone.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="TowerFight_standalone.exe" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="BanzaiMath_standalone.exe" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Win32">
-                        <RemoteName>TowerFight_standalone.exe</RemoteName>
+                        <RemoteName>BanzaiMath_standalone.exe</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>
-                <DeployFile LocalName="TowerFight_standalone" Configuration="Release" Class="ProjectOutput">
+                <DeployFile LocalName="BanzaiMath_standalone" Configuration="Release" Class="ProjectOutput">
                     <Platform Name="Linux64">
-                        <RemoteName>TowerFight_standalone</RemoteName>
+                        <RemoteName>BanzaiMath_standalone</RemoteName>
                         <Overwrite>true</Overwrite>
                     </Platform>
                 </DeployFile>

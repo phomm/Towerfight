@@ -23,6 +23,8 @@ uses SysUtils,
   , GameViewWin  
   , GameViewFormula
   , GameViewDialog
+  , GameViewBanzai
+  , GameViewScore
   {$endregion 'Castle Initialization Uses'}
   , GameOptions;
 
@@ -50,6 +52,8 @@ begin
   ViewWin := TViewWin.Create(Application);
   ViewFormula := TViewFormula.Create(Application);
   ViewDialog := TViewDialog.Create(Application);
+  ViewBanzai := TViewBanzai.Create(Application);
+  ViewScore := TViewScore.Create(Application);
   {$endregion 'Castle View Creation'}
 
   Window.Container.View := ViewMain;

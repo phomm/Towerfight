@@ -18,9 +18,12 @@ type
     ControlRoom: TCastleButton;
     ImageRight, ImageLeft, ImageHeroWeapon: TCastleImageControl;
     LabelLeft, LabelRight1, LabelRight2, LabelRight3: TCastleLabel;
+  protected
+    function GetSize: TVector2; 
   public
     constructor Create(AOwner: TComponent); override;
     procedure SetEnemy(AEnemy: TActor);
+    property Size: TVector2 read GetSize;
   end;
 
 implementation
@@ -88,6 +91,11 @@ begin
   LabelRight3.Caption := HighlightCaption(LSplit[1]);
   LabelRight1.Border.AllSides := IIF(AEnemy is TMiniBoss, ArmorBorderWidth, 0);
   LabelRight3.Border.AllSides := IIF(AEnemy is TMiniBoss, ArmorBorderWidth, 0);
+end;
+
+function TRoomComponent.GetSize: TVector2;
+begin
+  Result := EffectiveRect.Size;
 end;
 
 end.

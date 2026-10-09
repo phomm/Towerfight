@@ -23,7 +23,7 @@
       "$$ClassName" : "TCastleImageControl",
       "Content" : {
         "$$ClassName" : "TCastleImagePersistent",
-        "Url" : "castle-data:/resources/logo.png"
+        "Url" : "castle-data:/resources/logo-banzai.png"
       },
       "HorizontalAnchorParent" : "hpRight",
       "HorizontalAnchorSelf" : "hpRight",
