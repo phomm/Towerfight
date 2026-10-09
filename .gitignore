@@ -23,12 +23,17 @@ __history
 # Blender
 *.blend?
 
+# salt file
+salt.inc
+# android executable and signature files
+/*.apk
+/*.keystore
+/AndroidSigningProperties.txt
 # Unix executable
 /TowerFight
 # Windows executable
-/TowerFight.exe
+/*.exe
 # Executables (Windows, Unix) made when building from Delphi IDE, which doesn't rename to TowerFight
-/TowerFight_standalone.exe
 /TowerFight_standalone
 # Library files placed alongside Windows executable
 *.dll
