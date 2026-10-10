@@ -6,7 +6,7 @@
     {
       "$$ClassName" : "TCastleSound",
       "Name" : "SoundBanzai",
-      "Url" : "castle-data:/music/sounds/banzai.ogg",
+      "Url" : "castle-data:/music/sounds/banzai.wav",
       "Volume" : 1.0000000000000000E-001
     }
   ],
@@ -53,7 +53,7 @@
           {
             "$$ClassName" : "TCastleImageTransform",
             "CastShadows" : false,
-            "Name" : "ImageBattleCry",
+            "Name" : "ImageBanzai",
             "RenderOptions" : {
               "$$ClassName" : "TCastleScene.TSceneRenderOptions"
             },
@@ -61,7 +61,7 @@
           }
         ]
       },
-      "Name" : "ViewportBattleCry",
+      "Name" : "ViewportBanzai",
       "TranslationPersistent" : {
         "$$ClassName" : "TCastleVector2Persistent",
         "X" : 3.0000000000000000E+002,

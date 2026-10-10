@@ -53,11 +53,12 @@ constructor TViewScore.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewscore.castle-user-interface';
+  FScalingBehavior := TScalingBehavior.Create(Self);
+  DesignPreload := True;
 end;
 
 procedure TViewScore.Start;
 var
-  LScalingBehavior: TScalingBehavior;
   LTextColor: TCastleColor;
 begin
   inherited;
@@ -76,7 +77,6 @@ begin
   LTextColor := TextScore.Color;
   TextScore.CustomFont := Container.DefaultFont as TCastleFont;
   TextScore.Color := LTextColor;
-  FScalingBehavior := TScalingBehavior.Create(Self);
   FScalingBehavior.ScaleAdd := Vector3(30, 30, 30);
   TextScore.AddBehavior(FScalingBehavior);
   UpdateScore();

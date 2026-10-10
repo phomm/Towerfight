@@ -10,7 +10,7 @@ uses
 // castle
   CastleVectors, CastleUIControls, CastleControls, CastleKeysMouse, CastleScene, castlesoundengine,
 // Own
-  RoomComponent;
+  RoomComponent, Behaviors;
 
 type
   TViewBanzai = class(TCastleView)
@@ -19,12 +19,13 @@ type
       These fields will be automatically initialized at Start. }
     TimerClose: TCastleTimer;
     SoundBanzai: TCastleSound;
-    ImageBattleCry: TCastleImageTransform;
+    ImageBanzai: TCastleImageTransform;
   public
     CallbackRoomComponent: TRoomComponent;
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
   private
+    FScalingBehavior: TScalingBehavior;
     procedure TimerCloseTick(Sender: TObject);
   end;
 
@@ -35,30 +36,29 @@ implementation
 
 uses
 // Own
-  Behaviors, gameviewgame;
+  gameviewgame;
 
 constructor TViewBanzai.Create(AOwner: TComponent);
 begin
   inherited;
   DesignUrl := 'castle-data:/gameviewbanzai.castle-user-interface';
+  FScalingBehavior := TScalingBehavior.Create(Self);
+  DesignPreload := True;
 end;
 
 procedure TViewBanzai.Start;
-var
-  LScalingBehavior: TScalingBehavior;
 begin
   inherited;
   InterceptInput := True;
-  TimerClose.OnTimer := TimerCloseTick;
-  LScalingBehavior := TScalingBehavior.Create(Self);
-  LScalingBehavior.ScaleAdd := Vector3(2, 2, 2);
-  ImageBattleCry.AddBehavior(LScalingBehavior);
+  TimerClose.OnTimer := TimerCloseTick;  
+  FScalingBehavior.ScaleAdd := Vector3(2, 2, 2);
+  ImageBanzai.AddBehavior(FScalingBehavior);
   SoundEngine.Play(SoundBanzai);
 end;
 
 procedure TViewBanzai.TimerCloseTick(Sender: TObject);
 begin
-  (ImageBattleCry.FindBehavior(TScalingBehavior) as TScalingBehavior).Reset();
+  FScalingBehavior.Reset();
   Container.PopView();
   if Assigned(CallbackRoomComponent) then
     ViewGame.RunFight(CallbackRoomComponent);
