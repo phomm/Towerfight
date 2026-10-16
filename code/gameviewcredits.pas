@@ -111,7 +111,7 @@ end;
 
 procedure TViewCredits.ButtonItchClick(Sender: TObject);
 begin
-  OpenURL('https://phomm.itch.io/tower-fight');
+  OpenURL('https://ephyre-team.itch.io/banzai-math');
 end;
 
 procedure TViewCredits.ButtonDiscordClick(Sender: TObject);
@@ -121,7 +121,7 @@ end;
 
 procedure TViewCredits.ButtonWebClick(Sender: TObject);
 begin
-  OpenURL('https://ephyre.ru');
+  OpenURL('https://intactserver.onrender.com/');
 end;
 
 procedure TViewCredits.ButtonPanelClick(Sender: TObject);

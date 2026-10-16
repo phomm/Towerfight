@@ -1,4 +1,6 @@
 # Banzai Math
+Development name of the game is Tower Fight, public name Banzai Math
+deployed to: https://ephyre-team.itch.io/banzai-math
 
 Japan of Edo styled math puzzle-roguelite (random and fast-paced easy-to-lose-and-restart) game
 Created Using [Castle Game Engine](https://castle-engine.io/) with hand-made code and some stocks or ai-gen assets (credits-files where applicable).
