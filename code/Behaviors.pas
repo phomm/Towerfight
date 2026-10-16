@@ -208,8 +208,8 @@ begin
   FScaleAdd := Vector3(1, 1, 1);
   FScaleAddPersistent := TCastleVector3Persistent.Create(nil);
   FScaleAddPersistent.SetSubComponent(True);
-  FScaleAddPersistent.InternalGetValue := {$IFDEF FPC_OBJFPC}@{$ENDIF}GetScaleAddPersistent;
-  FScaleAddPersistent.InternalSetValue := {$IFDEF FPC_OBJFPC}@{$ENDIF}SetScaleAddPersistent;
+  FScaleAddPersistent.InternalGetValue := GetScaleAddPersistent;
+  FScaleAddPersistent.InternalSetValue := SetScaleAddPersistent;
   FScaleAddPersistent.InternalDefaultValue := FScaleAdd;
 end;
 
