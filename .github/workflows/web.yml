@@ -1,0 +1,144 @@
+# Build the Castle Game Engine WebAssembly version and publish it to itch.io.
+#
+# Castle Game Engine web builds require FPC's wasm32-wasip1 cross compiler
+# and Pas2js, which are built once and cached between runs.
+
+name: Web
+
+on:
+  push:
+    branches: ['**']
+    tags: ['*']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: web-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  FPC_COMMIT: b0003f71dda8388ad74292edb82ba401296fc106
+  TOOLS: /home/runner/cge-web-tools
+
+jobs:
+  build-web:
+    name: Build and Publish Web Project
+    runs-on: ubuntu-latest
+    timeout-minutes: 90
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          submodules: recursive
+
+      - name: Generate salt include file
+        env:
+          SALT: ${{ secrets.SALT }}
+        run: |
+          printf "Salt = '%s';" "$SALT" > code/salt.inc
+
+      - name: Install bootstrap FPC and helpers
+        timeout-minutes: 15
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y fpc binaryen make git unzip zip
+          fpc -iV
+
+      - name: Restore cached FPC (trunk + wasm32) and Pas2js
+        id: cache-tools
+        uses: actions/cache/restore@v4
+        with:
+          path: ${{ env.TOOLS }}
+          key: cge-web-tools-v2-${{ env.FPC_COMMIT }}
+
+      - name: Build FPC main branch (native x86_64 and wasm32-wasip1 cross compiler)
+        if: steps.cache-tools.outputs.cache-hit != 'true'
+        run: |
+          set -eux
+          mkdir -p "$TOOLS"
+          git clone https://gitlab.com/freepascal.org/fpc/source.git "$TOOLS/fpc-src"
+          cd "$TOOLS/fpc-src"
+          git checkout "$FPC_COMMIT"
+          make all FPC=/usr/bin/fpc
+          make install INSTALL_PREFIX="$TOOLS/fpc" FPC=/usr/bin/fpc
+          FPCVER="$("$TOOLS/fpc/lib/fpc/"*/ppcx64 -iV)"
+          ln -sf "../lib/fpc/$FPCVER/ppcx64" "$TOOLS/fpc/bin/ppcx64"
+          make crossall OS_TARGET=wasip1 CPU_TARGET=wasm32 FPC="$TOOLS/fpc/bin/ppcx64"
+          make crossinstall OS_TARGET=wasip1 CPU_TARGET=wasm32 INSTALL_PREFIX="$TOOLS/fpc" FPC="$TOOLS/fpc/bin/ppcx64"
+          ln -sf "../lib/fpc/$FPCVER/ppcrosswasm32" "$TOOLS/fpc/bin/ppcrosswasm32"
+          "$TOOLS/fpc/bin/fpcmkcfg" -d basepath="$TOOLS/fpc/lib/fpc/$FPCVER" -o "$TOOLS/fpc/fpc.cfg"
+          rm -f "$TOOLS/fpc/bin/pas2js" "$TOOLS/fpc/bin/compileserver"
+
+      - name: Build Pas2js
+        if: steps.cache-tools.outputs.cache-hit != 'true'
+        run: |
+          set -eux
+          export PPC_CONFIG_PATH="$TOOLS/fpc"
+          export PATH="$TOOLS/fpc/bin:$PATH"
+          git clone --depth 1 https://gitlab.com/freepascal.org/fpc/pas2js.git "$TOOLS/pas2js"
+          cd "$TOOLS/pas2js"
+          ln -sfn "$TOOLS/fpc-src" compiler
+          make clean all FPC="$TOOLS/fpc/bin/fpc"
+          ls -l bin/x86_64-linux/
+          rm -rf "$TOOLS/fpc-src/compiler/ppc"* || true
+
+      - name: Save toolchain cache
+        if: steps.cache-tools.outputs.cache-hit != 'true'
+        uses: actions/cache/save@v4
+        with:
+          path: ${{ env.TOOLS }}
+          key: cge-web-tools-v2-${{ env.FPC_COMMIT }}
+
+      - name: Set up Castle Game Engine (snapshot) build tool
+        run: |
+          set -eux
+          export PPC_CONFIG_PATH="$TOOLS/fpc"
+          export PATH="$TOOLS/pas2js/bin/x86_64-linux:$TOOLS/fpc/bin:$PATH"
+          rm -f "$TOOLS/fpc/bin/pas2js" "$TOOLS/fpc/bin/compileserver"
+          fpc -iV
+          fpc -Pwasm32 -Twasip1 -iTP
+          pas2js -iV
+          git clone --depth 1 --branch snapshot https://github.com/castle-engine/castle-engine.git "$HOME/castle-engine"
+          cd "$HOME/castle-engine"
+          ./tools/build-tool/castle-engine_compile.sh
+          ls -l tools/build-tool/castle-engine
+
+      - name: Compile for web
+        run: |
+          set -eux
+          export PPC_CONFIG_PATH="$TOOLS/fpc"
+          export CASTLE_ENGINE_PATH="$HOME/castle-engine"
+          export PATH="$TOOLS/pas2js/bin/x86_64-linux:$TOOLS/fpc/bin:$HOME/castle-engine/tools/build-tool:$PATH"
+          castle-engine compile --target=web --mode=release --verbose
+          ls -l castle-engine-output/web/dist/
+
+      - name: Package web project
+        run: |
+          set -eux
+          DIST=castle-engine-output/web/dist
+          test -d "$DIST"
+          cp data/index.html "$DIST/index.html"
+          test -s "$DIST/BanzaiMath.js"
+          (cd "$DIST" && zip -9 -r "$GITHUB_WORKSPACE/dist.zip" .)
+          unzip -Z1 dist.zip | grep -Fx index.html
+          unzip -Z1 dist.zip | grep -Fx BanzaiMath.js
+          ls -lh dist.zip
+
+      - name: Upload web project artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: web-project
+          path: dist.zip
+          if-no-files-found: error
+          retention-days: 7
+
+      - name: Push web project to itch.io with butler
+        if: startsWith(github.ref, 'refs/tags/')
+        uses: yeslayla/butler-publish-itchio-action@master
+        env:
+          BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+          CHANNEL: web-project
+          ITCH_GAME: banzai-math
+          ITCH_USER: ephyre-team
+          PACKAGE: dist.zip
