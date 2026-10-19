@@ -61,7 +61,7 @@ See https://castle-engine.io/project_manifest for documentation of this file.
   </android>
   <!--Exclusion for non-ogg music-->
   <package>
-    <exclude path="data/music/*.wav" />
+    <!-- <exclude path="data/music/*.wav" /> -->
     <exclude path="data/music/*.mp3" />
   </package>
 </project>

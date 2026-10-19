@@ -144,7 +144,11 @@ jobs:
     # Releases files in the "snapshot" release.
     - name: Release Artifacts
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: gh release --repo ${{ github.repository }} upload snapshot --clobber *.zip *.apk *.tar.gz
+      run: 
+        for asset in $(gh release view snapshot --repo ${{ github.repository }} --json assets --jq '.assets[].name'); do
+          gh release delete-asset snapshot "$asset" --repo ${{ github.repository }} --yes
+        done
+        gh release --repo ${{ github.repository }} upload snapshot *.zip *.apk *.tar.gz
       env:
         GH_TOKEN: ${{ github.token }}
 

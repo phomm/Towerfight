@@ -28,7 +28,6 @@ salt.inc
 # android executable and signature files
 /*.apk
 /*.keystore
-/AndroidSigningProperties.txt
 # Unix executable
 /TowerFight
 # Windows executable
