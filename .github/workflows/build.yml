@@ -124,12 +124,68 @@ jobs:
           name: android-build
           path: "*.apk"
           if-no-files-found: error
-      
+
+  build-macos:
+    name: Build macOS
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          submodules: 'recursive'
+          fetch-depth: 0
+
+      - name: Install xmlstarlet
+        run: brew install xmlstarlet
+
+      - name: Update Version in CastleEngineManifest.xml
+        shell: bash
+        run: |
+          if [[ "${GITHUB_REF}" == refs/tags/* ]]; then
+            if [[ "${GITHUB_REF_NAME}" =~ ^[0-9]+(\.[0-9]+)*$ ]]; then
+              VERSION="${BASH_REMATCH[0]}"
+            else
+              echo "Tag must contain a numeric version such as 0.9: ${GITHUB_REF_NAME}"
+              exit 1
+            fi
+          else
+            VERSION="0.9.${GITHUB_RUN_NUMBER}"
+          fi
+          xmlstarlet ed -L \
+            -u "/project/version/@value" -v "$VERSION" \
+            -u "/project/version/@code" -v "${GITHUB_RUN_NUMBER}" \
+            CastleEngineManifest.xml
+          echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+      - name: Generate salt include file from secret
+        env:
+          SALT: ${{ secrets.SALT }}
+        run: printf "Salt = '%s';" "$SALT" > code/salt.inc
+
+      - name: Setup FPC and Castle Game Engine
+        run: |
+          cd /tmp/
+          git clone https://github.com/castle-engine/castle-build-ci.git \
+            --depth=1 --single-branch --branch=master
+          castle-build-ci/install_dependencies
+          castle-build-ci/setup_castle_engine
+
+      - name: Package macOS app bundle
+        run: |
+          castle-engine package --package-format=mac-app-bundle
+          zip -r "BanzaiMath-${VERSION}-macos.zip" "$(castle-engine output caption).app/"
+
+      - name: Archive macOS artifact
+        uses: actions/upload-artifact@v6
+        with:
+          name: macos-build
+          path: "BanzaiMath-*-macos.zip"
+          if-no-files-found: error
+
   release:
     name: Release
     runs-on: ubuntu-latest
     # Only upload release if all builds, on all runners, succeeded.
-    needs: [build-using-docker]
+    needs: [build-using-docker, build-macos]
     steps:
     - name: Download packaged releases
       uses: actions/download-artifact@v8
@@ -144,7 +200,7 @@ jobs:
     # Releases files in the "snapshot" release.
     - name: Release Artifacts
       if: ${{ github.ref == 'refs/heads/master' }}
-      run: 
+      run: |
         for asset in $(gh release view snapshot --repo ${{ github.repository }} --json assets --jq '.assets[].name'); do
           gh release delete-asset snapshot "$asset" --repo ${{ github.repository }} --yes
         done
@@ -190,6 +246,15 @@ jobs:
         ITCH_GAME: banzai-math
         ITCH_USER: ephyre-team
         PACKAGE: BanzaiMath-${{ github.ref_name }}-android-release.apk
+    - name: Push to Itch.io with butler, macOS build
+      if: startsWith(github.ref, 'refs/tags/')
+      uses: yeslayla/butler-publish-itchio-action@master
+      env:
+        BUTLER_CREDENTIALS: ${{ secrets.BUTLER_CREDENTIALS }}
+        CHANNEL: macos
+        ITCH_GAME: banzai-math
+        ITCH_USER: ephyre-team
+        PACKAGE: BanzaiMath-${{ github.ref_name }}-macos.zip
 
   update-release-tag:
     name: Update Release Tag (make snapshot tag point to the build commit on master branch)
@@ -205,4 +270,3 @@ jobs:
         # --force allows to push with overwritten tag
         git push --force origin snapshot
     
-
