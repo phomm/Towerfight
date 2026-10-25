@@ -43,6 +43,7 @@ type
     procedure SliderFullscreenChange(Sender: TObject);
     procedure SliderUseTimerChange(Sender: TObject);
     procedure WindowCloseConfirmed(Sender: TObject);
+    procedure CloseSubmenus;
   end;
 
 var
@@ -199,11 +200,13 @@ end;
 
 procedure TViewMain.ButtonExitClick(Sender: TObject);
 begin
+  CloseSubmenus;
   WindowCloseQuery(Container);
 end;
 
 procedure TViewMain.ButtonStartClick(Sender: TObject);
 begin
+  GroupOptions.Exists := False;
   GroupDifficulty.Exists := not GroupDifficulty.Exists;
   if not GroupDifficulty.Exists then
     Container.View := ViewGame;
@@ -211,23 +214,35 @@ end;
 
 procedure TViewMain.ButtonLeadersClick(Sender: TObject);
 begin
+  CloseSubmenus;
   Container.View := ViewLeaders;
 end;
 
 procedure TViewMain.ButtonOptionsClick(Sender: TObject);
 begin
+  GroupDifficulty.Exists := False;
   GroupOptions.Exists := not GroupOptions.Exists;
 end;
 
 procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
+  CloseSubmenus;
   Container.View := ViewCredits;
+end;
+
+procedure TViewMain.CloseSubmenus;
+begin
+  GroupOptions.Exists := False;
+  GroupDifficulty.Exists := False;
 end;
 
 function TViewMain.Press(const Event: TInputPressRelease): Boolean;
 begin
   Result := inherited;
   if Result then Exit; // allow the ancestor to handle keys
+
+  if Event.IsMouseButton(buttonLeft) then
+    CloseSubmenus;
 
   if Event.IsKey(keyEscape) then
   begin

@@ -172,7 +172,7 @@
                 "Alpha" : 1.0000000000000000E+000,
                 "Blue" : 7.0196080207824707E-001
               },
-              "Caption" : "Itch: ephyre-banzaimath",
+              "Caption" : "Itch: banzaimath",
               "Cursor" : "mcHand",
               "CustomBackground" : true,
               "CustomBackgroundDisabled" : {
@@ -208,7 +208,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -7.3652023315429688E+001
+                "Y" : -7.2699996948242188E+001
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -260,7 +260,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -1.4730404663085938E+002
+                "Y" : -1.4539999389648438E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -276,7 +276,7 @@
                 "Alpha" : 1.0000000000000000E+000,
                 "Blue" : 7.0196080207824707E-001
               },
-              "Caption" : "discord: ephyre",
+              "Caption" : "discord: ephyre team",
               "Cursor" : "mcHand",
               "CustomBackground" : true,
               "CustomBackgroundDisabled" : {
@@ -312,7 +312,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -2.2095606994628906E+002
+                "Y" : -2.1809999084472656E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -368,7 +368,7 @@
               },
               "TranslationPersistent" : {
                 "$$ClassName" : "TCastleVector2Persistent",
-                "Y" : -2.9460809326171875E+002
+                "Y" : -2.9079998779296875E+002
               },
               "VerticalAnchorParent" : "vpTop",
               "VerticalAnchorSelf" : "vpTop"
@@ -651,6 +651,35 @@
               "VerticalAnchorSelf" : "vpMiddle"
             }
           ]
+        },
+        {
+          "$$ClassName" : "TCastleUserInterface",
+          "AutoSizeToChildren" : true,
+          "Exists" : false,
+          "HorizontalAnchorParent" : "hpMiddle",
+          "HorizontalAnchorSelf" : "hpMiddle",
+          "Name" : "GroupExtra",
+          "VerticalAnchorParent" : "vpMiddle",
+          "VerticalAnchorSelf" : "vpMiddle",
+          "$Children" : [
+            {
+              "$$ClassName" : "TCastleLabel",
+              "Alignment" : "hpMiddle",
+              "FontScale" : 2.0000000000000000E+000,
+              "HorizontalAnchorParent" : "hpMiddle",
+              "HorizontalAnchorSelf" : "hpMiddle",
+              "LineSpacing" : 2.0000000000000000E+001,
+              "Name" : "LabelExtra",
+              "Text" : [
+                "When you enable timer in options ",
+                "Time will be your extra enemy",
+                "Every difficulty - own timepool",
+                "Saved seconds give extra points"
+              ],
+              "VerticalAnchorParent" : "vpMiddle",
+              "VerticalAnchorSelf" : "vpMiddle"
+            }
+          ]
         }
       ]
     },
@@ -759,6 +788,39 @@
         },
         {
           "$$ClassName" : "TCastleButton",
+          "Caption" : "Extra",
+          "CustomBackground" : true,
+          "CustomBackgroundDisabled" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundFocused" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "CustomBackgroundNormal" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old-disabled.png"
+          },
+          "CustomBackgroundPressed" : {
+            "$$ClassName" : "TCastleImagePersistent",
+            "Url" : "castle-data:/resources/cell-old.png"
+          },
+          "FontSize" : 7.0000000000000000E+001,
+          "Image" : {
+            "$$ClassName" : "TCastleImagePersistent"
+          },
+          "Name" : "ButtonExtra",
+          "PaddingHorizontal" : 2.0000000000000000E+001,
+          "PaddingVertical" : 2.0000000000000000E+001,
+          "Toggle" : true,
+          "TranslationPersistent" : {
+            "$$ClassName" : "TCastleVector2Persistent",
+            "Y" : -3.0645001220703125E+002
+          },
+          "VerticalAnchorParent" : "vpTop",
+          "VerticalAnchorSelf" : "vpTop"
+        },
+        {
+          "$$ClassName" : "TCastleButton",
           "Caption" : "Credits",
           "CustomBackground" : true,
           "CustomBackgroundDisabled" : {
@@ -785,7 +847,7 @@
           "Toggle" : true,
           "TranslationPersistent" : {
             "$$ClassName" : "TCastleVector2Persistent",
-            "Y" : -3.0645001220703125E+002
+            "Y" : -4.0860000610351562E+002
           },
           "VerticalAnchorParent" : "vpTop",
           "VerticalAnchorSelf" : "vpTop"

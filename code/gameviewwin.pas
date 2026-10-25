@@ -77,12 +77,7 @@ end;
 
 procedure TViewWin.BackToMenu();
 begin
-  {
-  if IsSchool() then
-    Container.View := ViewCredits
-  else
-  }
-    Container.View := ViewMain;
+  Container.View := ViewMain;
 end;
 
 procedure TViewWin.ButtonSubmitClick(Sender: TObject);

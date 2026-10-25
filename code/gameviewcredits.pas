@@ -13,9 +13,9 @@ uses
 type
   TViewCredits = class(TCastleView)
   published
-    ButtonMenu, ButtonSchool, ButtonCredits, ButtonRules, ButtonKeys, ButtonWeapon,
+    ButtonMenu, ButtonSchool, ButtonCredits, ButtonRules, ButtonKeys, ButtonWeapon, ButtonExtra,
       ButtonCastle, ButtonAuthor, ButtonItch, ButtonDiscord, ButtonWeb: TCastleButton;
-    GroupCredits, GroupRules, GroupKeys, GroupWeapon: TCastleUserInterface;
+    GroupCredits, GroupRules, GroupKeys, GroupWeapon, GroupExtra: TCastleUserInterface;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start; override;
@@ -60,6 +60,7 @@ begin
   ButtonRules.OnClick := ButtonPanelClick;
   ButtonKeys.OnClick := ButtonPanelClick;
   ButtonWeapon.OnClick := ButtonPanelClick;
+  ButtonExtra.OnClick := ButtonPanelClick;
   ButtonCastle.OnClick := ButtonCastleClick;
   ButtonAuthor.OnClick := ButtonAuthorClick;
   ButtonItch.OnClick := ButtonItchClick;
@@ -134,6 +135,8 @@ begin
   ButtonRules.Pressed := Sender = ButtonRules;
   ButtonKeys.Pressed := Sender = ButtonKeys;
   ButtonWeapon.Pressed := Sender = ButtonWeapon;
+  GroupExtra.Exists := Sender = ButtonExtra;
+  ButtonExtra.Pressed := Sender = ButtonExtra;
 end;
 
 end.
