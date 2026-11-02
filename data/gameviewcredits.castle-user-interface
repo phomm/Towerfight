@@ -15,8 +15,7 @@
     {
       "$$ClassName" : "TCastleImageControl",
       "Content" : {
-        "$$ClassName" : "TCastleImagePersistent",
-        "Url" : "castle-data:/resources/credits.png"
+        "$$ClassName" : "TCastleImagePersistent"
       },
       "Exists" : false,
       "HorizontalAnchorParent" : "hpMiddle",
