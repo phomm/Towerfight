@@ -80,6 +80,7 @@ type
     procedure SwitchHeroWeaponImage(AForce: Boolean = False);
   private const
     TicksToFlyWeapon = 30; // animation will last 0.5 seconds (30 ticks * 16 ms)
+    DangerSeconds = 30; // Timer turns red and ticking  
   end;
 
 var
@@ -413,12 +414,11 @@ procedure TViewGame.ButtonRoomClick(Sender: TObject);
 var
   LRoom: TRoomComponent;
   LT, LS: Integer;
-  LActor: TActor;
 begin
   if FSkip then Exit;
   if Container.CurrentFrontView <> Self then
   begin
-    Container.PopView(); // close lesson meesage
+    Container.PopView(); // close lesson message
     DialogLessonYes(nil);
   end;  
   if FPause and UseTimer() then
@@ -436,8 +436,7 @@ begin
   if not Map.SetHeroRoom(LRoom.Tag) or not Map.HeroRoom.HasEnemy() then
     Exit;
 
-  LActor := Map.HeroRoom.Actors[0];
-  if not IsSchool() and ((LActor is TBoss) or ((LActor is TMiniBoss) and (Map.Hero.Weapon = hwNo))) then
+  if not IsSchool() and Map.HeroRoom.Actors[0].VisualHasSecret and (Map.Hero.Weapon = hwNo) then
     RunBattleCryAnim(LRoom)
   else
     RunFight(LRoom);
@@ -643,18 +642,16 @@ begin
   LPlayingSound.Stop();
   TimerGame.IntervalSeconds := SpeedupInterval; // speedup countdown if present
   ViewWin.Score := Map.Score(FGameTicks);
-  ViewScore.Show(3 + FGameTicks * SpeedupInterval, FRoomFight.LocalToContainerPosition(
+  ViewScore.Show(1 + FGameTicks * SpeedupInterval, FRoomFight.LocalToContainerPosition(
     FRoomFight.Size * Vector2(-1, -1), False));
 end;
 
 procedure TViewGame.TimerGameTick(ASender: TObject);
 begin
-  if FPause and not ViewScore.IsShown then
-    Exit;
-  if FGameTicks < 0 then
+  if (FPause and not ViewScore.IsShown) or (FGameTicks < 0) then
     Exit;
   Dec(FGameTicks);
-  if (FGameTicks = 30) and not ViewScore.IsShown then
+  if (FGameTicks = DangerSeconds) and not ViewScore.IsShown then
   begin
     ButtonGameTime.CustomTextColor := Red;
     SoundEngine.Play(LPlayingSound);

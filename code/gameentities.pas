@@ -21,11 +21,13 @@ type
     FRevealed: Boolean;
     procedure SetLevel(AValue: Integer); virtual;
     function GetVisual(): string; virtual;
+    function GetVisualHasSecret(): Boolean; virtual;
   public
     property Level: Integer read FLevel write SetLevel;
     property Visual: string read GetVisual;
     property AssetId: string read FAssetId write FAssetId;
     procedure Reveal();
+    property VisualHasSecret: Boolean read GetVisualHasSecret;
   end;
 
   NHeroWeapon = (hwNo, hwPlus, hwMinus, hwMultiply);
@@ -62,6 +64,7 @@ type
     FVisualFormula: string;
     function GetVisual(): string; override;
     function CalcLevel(ATower, AStock: Integer): Integer; override;
+    function GetVisualHasSecret(): Boolean; override;
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
@@ -69,7 +72,8 @@ type
   TBoss = class(TEnemy)
   protected
     function CalcLevel(ATower, AStock: Integer): Integer; override;
-    function GetVisual(): string; override;  
+    function GetVisual(): string; override;
+    function GetVisualHasSecret(): Boolean; override;
   public
     constructor Create(AOwner: TComponent; ATower, AStock: Integer); overload;
   end;
@@ -175,6 +179,11 @@ end;
 procedure TActor.Reveal();
 begin
   FRevealed := True;
+end;
+
+function TActor.GetVisualHasSecret(): Boolean;
+begin
+  Result := False;
 end;
 
 constructor TRoom.Create(AOwner: TComponent);
@@ -524,6 +533,11 @@ begin
   Result := Result + IIF(Level mod 10 = 4, '4', '?');
 end;
 
+function TBoss.GetVisualHasSecret(): Boolean;
+begin
+  Result := not Revealed and FVisualFormula.Contains('?');
+end;
+
 constructor TBoss.Create(AOwner: TComponent; ATower, AStock: Integer);
 begin
   inherited Create(AOwner, ATower, AStock);
@@ -600,6 +614,11 @@ end;
 function TMiniBoss.GetVisual(): string;
 begin
   Result := IIF(FRevealed, FLevel.ToString, FVisualFormula);
+end;
+
+function TMiniBoss.GetVisualHasSecret(): Boolean;
+begin
+  Result := not Revealed and FVisualFormula.Contains('?');
 end;
 
 function TMiniBoss.CalcLevel(ATower, AStock: Integer): Integer;

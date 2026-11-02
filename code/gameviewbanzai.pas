@@ -57,11 +57,17 @@ begin
 end;
 
 procedure TViewBanzai.TimerCloseTick(Sender: TObject);
+var
+  LRoomComponent: TRoomComponent;
 begin
   FScalingBehavior.Reset();
   Container.PopView();
   if Assigned(CallbackRoomComponent) then
-    ViewGame.RunFight(CallbackRoomComponent);
+  begin
+    LRoomComponent := CallbackRoomComponent;
+    CallbackRoomComponent := nil;
+    ViewGame.RunFight(LRoomComponent);
+  end;
 end;
 
 end.
