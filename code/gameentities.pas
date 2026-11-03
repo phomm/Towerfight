@@ -535,7 +535,7 @@ end;
 
 function TBoss.GetVisualHasSecret(): Boolean;
 begin
-  Result := not Revealed and FVisualFormula.Contains('?');
+  Result := not FRevealed and Visual.Contains('?');
 end;
 
 constructor TBoss.Create(AOwner: TComponent; ATower, AStock: Integer);
@@ -618,7 +618,7 @@ end;
 
 function TMiniBoss.GetVisualHasSecret(): Boolean;
 begin
-  Result := not Revealed and FVisualFormula.Contains('?');
+  Result := not FRevealed and FVisualFormula.Contains('?');
 end;
 
 function TMiniBoss.CalcLevel(ATower, AStock: Integer): Integer;

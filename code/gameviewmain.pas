@@ -59,7 +59,15 @@ uses
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, 
   audiocomponent, gameviewdialog, difficultybutton
+  {$IFDEF DEBUG}
+  , gameviewwin
+  {$ENDIF}
   ;
+
+{$IFDEF DEBUG}
+const
+  DebugWinTag = -1;
+{$ENDIF}
 
 constructor TViewMain.Create(AOwner: TComponent);
 begin
@@ -124,6 +132,14 @@ begin
     GroupDifficulty.InsertFront(LButton);
     LDifficultyButton.Init(LDifficulty, LButton, ButtonDifficultyClick);
   end;
+  {$IFDEF DEBUG}
+  LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
+  LButton := FactoryButton.ComponentLoad(GroupDifficulty, LDifficultyButton) as TCastleButton;
+  GroupDifficulty.InsertFront(LButton);
+  LDifficultyButton.Init(gdTutorial, LButton, ButtonDifficultyClick);
+  LButton.Caption := 'DEBUG: WIN';
+  LButton.Tag := DebugWinTag;
+  {$ENDIF}
 end;
 
 procedure TViewMain.Resume;
@@ -142,6 +158,15 @@ procedure TViewMain.ButtonDifficultyClick(Sender: TObject);
 var
   LButton: TCastleUserInterface;
 begin
+  {$IFDEF DEBUG}
+  if TCastleButton(Sender).Tag = DebugWinTag then
+  begin
+    ViewWin.Score := Random(100000) + 1;
+    Container.View := ViewWin;
+    Exit;
+  end;
+  {$ENDIF}
+
   for LButton in GroupDifficulty do
     if LButton is TCastleButton then
     begin

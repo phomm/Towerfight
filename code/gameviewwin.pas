@@ -13,7 +13,7 @@ uses
 type
   TViewWin = class(TCastleView)
   published
-    ButtonMenu, ButtonSubmit: TCastleButton;
+    ButtonMenu, ButtonSubmit, ButtonRandomName: TCastleButton;
     LabelScore: TCastleLabel;
     EditName: TCastleEdit;
     PanelNotifications: TCastleNotifications;
@@ -27,9 +27,11 @@ type
   private
     procedure ButtonMenuClick(Sender: TObject);
     procedure ButtonSubmitClick(Sender: TObject);
+    procedure ButtonRandomNameClick(Sender: TObject);
     procedure SubmitScores();
     procedure SubmitScoresFinished(const AContent: string; ASuccess: Boolean);
     procedure BackToMenu();
+    procedure GuiMode(AEnable: Boolean);
   end;
 
 var
@@ -57,6 +59,7 @@ begin
   inherited;
   ButtonMenu.OnClick := ButtonMenuClick;
   ButtonSubmit.OnClick := ButtonSubmitClick;
+  ButtonRandomName.OnClick := ButtonRandomNameClick;
   SoundEngine.LoopingChannel[0].Sound := Audio.RandomWinTheme;
   SoundEngine.LoopingChannel[0].Sound.Volume := 5 * MusicLevel() / 100;
   ImageControl1.Exists := not IsSchool();
@@ -80,6 +83,34 @@ begin
   Container.View := ViewMain;
 end;
 
+procedure TViewWin.ButtonRandomNameClick(Sender: TObject);
+  function RandomName(): string;
+  const
+    FirstParts: array[0..23] of string = (
+      'Aki', 'Haru', 'Kazu', 'Masa', 'Nobu', 'Ryu',
+      'Tada', 'Taka', 'Yoshi', 'Kiyo', 'Mitsu', 'Naga',
+      'Shige', 'Tomo', 'Sada', 'Katsu', 'Haya', 'Ichi',
+      'Kane', 'Mune', 'Suke', 'Yuki', 'Hachi', 'Raiden');
+    SecondParts: array[0..23] of string = (
+      'hiro', 'nobu', 'taka', 'kage', 'mori', 'yoshi',
+      'masa', 'hiko', 'zane', 'haru', 'tsune', 'akira',
+      'suke', 'maru', 'tora', 'katsu', 'fusa', 'chika',
+      'take', 'mitsu', 'sada', 'kuni', 'hide', 'yori');
+    Suffixes: array[0..7] of string = (
+      '-san', '-sama', '-kun', '-chan', '-hime', '-maru', '-dono', '-no-kami');
+  function Part(const A: array of string): string;
+  begin
+    Result := A[Random(Length(A))];
+  end;
+  begin
+    Result := Part(FirstParts) + Part(SecondParts);
+    if Random(4) <> 0 then
+      Result := Result + Part(Suffixes);
+  end;
+begin
+  EditName.Text := RandomName();
+end;
+
 procedure TViewWin.ButtonSubmitClick(Sender: TObject);
 begin
   if Trim(EditName.Text) = '' then
@@ -88,8 +119,15 @@ begin
     Exit;
   end;
   
-  EditName.Enabled := False;
+  GuiMode(False);
   SubmitScores();
+end;
+
+procedure TViewWin.GuiMode(AEnable: Boolean);
+begin
+  EditName.Enabled := AEnable;
+  ButtonSubmit.Enabled := AEnable;
+  ButtonRandomName.Enabled := AEnable;
 end;
 
 function TViewWin.Press(const Event: TInputPressRelease): Boolean;
@@ -108,32 +146,36 @@ begin
 end;
 
 procedure TViewWin.SubmitScores();
+const 
+  Forbidden: set of Char = [':','/'];
 var
   LLeader: TSubmitLeader;
-  LName: string;
+  LName, LForbidden: string;
   Ch: Char;
-  LNameCorrected: Boolean;
 begin
   if not TCastleRest.IsRunning() then
   begin
-    LNameCorrected := False;
-    LName := '';
-    EditName.Text := EditName.Text.Trim().ToLower();
-    for Ch in EditName.Text do
-      if Ch in [':', '/'] then
-        LNameCorrected := True
-      else
-        LName := LName + Ch;
-    EditName.Text := LName;
-    if LNameCorrected then
-      PanelNotifications.Show('Name Corrected. ":/" symbols are not allowed');
-    PanelNotifications.Show('Sending Score to server...');
-    LLeader := TSubmitLeader.Create(LName, Score, Difficulty());
-    TCastleRest.ServerRequest(ServerApiUrl, SubmitScoresFinished, LLeader.Serialize());
-    FreeAndNil(LLeader);
-  end
-  else
     PanelNotifications.Show('Another request is running');
+    Exit;
+  end;  
+  LForbidden := '';
+  LName := '';
+  EditName.Text := EditName.Text.Trim().ToLower();
+  for Ch in EditName.Text do
+    if Ch in Forbidden then
+      LForbidden := LForbidden + Ch
+    else
+      LName := LName + Ch;
+  EditName.Text := LName;
+  if LForbidden <> '' then
+    PanelNotifications.Show('Name Corrected. ' + LForbidden + ' symbols are not allowed');
+  PanelNotifications.Show('Sending Score to server...');
+  LLeader := TSubmitLeader.Create(LName, Score, Difficulty());
+  try
+    TCastleRest.ServerRequest(ServerApiUrl, SubmitScoresFinished, LLeader.Serialize());
+  finally
+    FreeAndNil(LLeader);
+  end;
 end;
 
 procedure TViewWin.SubmitScoresFinished(const AContent: string; ASuccess: Boolean);
@@ -161,7 +203,7 @@ begin
   end
   else 
     PanelNotifications.Show('Submit failed: ' + AContent);
-  EditName.Enabled := True;
+  GuiMode(True);
 end;
 
 end.
