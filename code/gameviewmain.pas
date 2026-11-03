@@ -20,10 +20,10 @@ type
   published
     ButtonStart, ButtonLeaders, ButtonExit, ButtonOptions, ButtonCredits: TCastleButton;
     GroupOptions, GroupDifficulty: TCastleUserInterface;
-    SliderMusic, SliderFullscreen, SliderUseTimer: TCastleIntegerSlider;
+    SliderMusic, SliderFullscreen, SliderUseTimer, SliderAnalytics: TCastleIntegerSlider;
     FactoryButton: TCastleComponentFactory;
     ImageRoomRoof2, ImageRoomRoof3, ImageOptions, ImageDifficulty: TCastleImageControl;
-    LabelFullscreen, LabelUseTimer: TCastleLabel;
+    LabelFullscreen, LabelUseTimer, LabelAnalytics: TCastleLabel;
   public
     constructor Create(AOwner: TComponent); override;
     procedure Start(); override;
@@ -42,6 +42,7 @@ type
     procedure SliderMusicChange(Sender: TObject);
     procedure SliderFullscreenChange(Sender: TObject);
     procedure SliderUseTimerChange(Sender: TObject);
+    procedure SliderAnalyticsChange(Sender: TObject);
     procedure WindowCloseConfirmed(Sender: TObject);
     procedure CloseSubmenus;
   end;
@@ -125,6 +126,10 @@ begin
   SliderUseTimer.OnChange := SliderUseTimerChange;
   SliderUseTimerChange(SliderUseTimer);
 
+  SliderAnalytics.Value := Ord(Analytics());
+  SliderAnalytics.OnChange := SliderAnalyticsChange;
+  SliderAnalyticsChange(SliderAnalytics);
+
   for LDifficulty in NDifficulty do
   begin
     LDifficultyButton := TDifficultyButton.Create(GroupDifficulty);
@@ -202,6 +207,13 @@ begin
   SetUseTimer((Sender as TCastleIntegerSlider).Value = 1);
   LabelUseTimer.Caption := 'Timer: ' + IIF(UseTimer(), 'On', 'Off');
 end;
+
+procedure TViewMain.SliderAnalyticsChange(Sender: TObject);
+begin
+  SetAnalytics((Sender as TCastleIntegerSlider).Value = 1);
+  LabelAnalytics.Caption := 'Analytics: ' + IIF(Analytics(), 'On', 'Off');
+end;
+
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
 var

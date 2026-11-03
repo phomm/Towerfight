@@ -38,15 +38,18 @@ procedure SetUserGuid(const AValue: string);
 function IsSchool(): Boolean;
 procedure SetIsSchool(AValue: Boolean);
 
+function Analytics(): Boolean;
+procedure SetAnalytics(AValue: Boolean);
+
 implementation
 
 uses 
 // System
   SysUtils, typinfo,
 // Castle
-  CastleConfig, castlelog, CastleWindow,
+  CastleConfig, castlelog, CastleWindow, CastleApplicationProperties,
 // Own  
-  Common;
+  Common, gameloghandler;
 
 const
   DifficultyDefault = gdEasy;
@@ -61,6 +64,9 @@ const
   UserGuidKey = 'UserGuid';
   IsSchoolKey = 'IsSchool';
   IsSchoolDefault = False;
+  AnalyticsKey = 'Analytics';
+  AnalyticsDefault = True;
+
 
 procedure SetValue<T>(const AKey: string; AValue: T);
 begin
@@ -147,6 +153,17 @@ end;
 procedure SetIsSchool(AValue: Boolean);
 begin
   SetValue<Boolean>(IsSchoolKey, AValue);
+end;
+
+function Analytics(): Boolean;
+begin
+  Result := UserConfig.GetValue(AnalyticsKey, AnalyticsDefault);
+end;
+
+procedure SetAnalytics(AValue: Boolean);
+begin
+  SetValue<Boolean>(AnalyticsKey, AValue);
+  ApplicationProperties.OnLog.Add(TLogHandler.Instance.LogCallback);
 end;
 
 end.
