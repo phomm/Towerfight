@@ -21,7 +21,7 @@ type
     ButtonDefeat, ButtonGameTime, WeaponPlus, WeaponMinus, WeaponNo, WeaponMultiply: TCastleButton;
     GroupTowers: TCastleHorizontalGroup;
     FactoryTower, FactoryRoom: TCastleComponentFactory;
-    BloodSplash0, BloodSplash1, BloodSplash2, SceneLessonArrow: TCastleScene;
+    BloodSplash0, BloodSplash1, BloodSplash2, SceneLessonArrow, SwordSlash: TCastleScene;
     Viewport1, HighlightPlus, HighlightMinus, HighlightMultiply, ViewportLevelUp: TCastleViewport;
     ImageWeapon: TCastleImageControl;
     TimerBlood, TimerGame, TimerHint, TimerLesson: TCastleTimer;
@@ -56,7 +56,7 @@ type
     procedure ButtonDefeatClick(Sender: TObject);
     procedure ButtonRoomClick(Sender: TObject);
     procedure ButtonWeaponClick(Sender: TObject);
-    procedure RunAnimation(AScene: TCastleScene; ARoom: TRoomComponent);
+    procedure RunAnimation(const AName: string; AScene: TCastleScene; ARoom: TRoomComponent);
     procedure AnimationStopped(const AScene: TCastleSceneCore; const ATimeSensorNode: TTimeSensorNode);
     procedure RunLevelUpAnim();
     procedure RunScoreAnim();
@@ -94,8 +94,9 @@ uses
 // Castle  
   CastleLog, castlefonts, castleColors,
 // Own
-  Common, GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, gameviewdialog, 
-  imagescomponent, gameviewcredits, Behaviors, gameviewbanzai, gameviewscore;
+  Common, imagescomponent, AudioComponent, Behaviors, 
+  GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, 
+  gameviewdialog, gameviewcredits, gameviewbanzai, gameviewscore;
 
 const 
   LessonOrder: array[1..9] of record T, S: Integer; end = 
@@ -473,7 +474,6 @@ end;
 procedure TViewGame.RoomFight(ARoom: TRoomComponent);
 var
   LActor: TActor;
-  LScene: TCastleScene;
   LRoom: TRoom;
   LLevelUp: Integer;
 begin
@@ -484,8 +484,9 @@ begin
   ARoom.SetEnemy(LActor);
   if Map.HeroRoom.Fight({out} LLevelUp) then
   begin
-    LScene := RandomBloodSplash();
-    RunAnimation(LScene, ARoom);
+    SoundEngine.Play(Audio.RandomFightSound);
+    RunAnimation('default' + Random(SwordSlash.AnimationsList.Count).ToString, SwordSlash, ARoom);
+    RunAnimation('default', RandomBloodSplash(), ARoom);
     // loot
     if LRoom.Actors.Count > 0 then
       ARoom.ImageRight.Url := LRoom.Actors[0].AssetId
@@ -511,7 +512,7 @@ begin
   end;
 end;  
 
-procedure TViewGame.RunAnimation(AScene: TCastleScene; ARoom: TRoomComponent);
+procedure TViewGame.RunAnimation(const AName: string; AScene: TCastleScene; ARoom: TRoomComponent);
 var
   LAnimationParams: TPlayAnimationParameters;
 begin
@@ -519,7 +520,7 @@ begin
   AScene.Exists := True;
   LAnimationParams := TPlayAnimationParameters.Create();
   try
-    LAnimationParams.Name := 'default';
+    LAnimationParams.Name := AName;
     LAnimationParams.StopNotification := AnimationStopped;
     AScene.StopAnimation(True);
     AScene.PlayAnimation(LAnimationParams);
