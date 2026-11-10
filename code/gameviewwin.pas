@@ -153,7 +153,7 @@ var
   LName, LForbidden: string;
   Ch: Char;
 begin
-  if not TCastleRest.IsRunning() then
+  if TCastleRest.IsRunning() then
   begin
     PanelNotifications.Show('Another request is running');
     Exit;

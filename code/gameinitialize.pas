@@ -7,12 +7,15 @@
   is covered by BSD or LGPL (see https://castle-engine.io/license). }
 unit GameInitialize;
 
+{$mode delphi}
+
 interface
 
 implementation
 
 uses SysUtils,
-  CastleWindow, CastleLog, CastleUIControls, CastleConfig
+  CastleWindow, CastleLog, CastleUIControls, CastleConfig, CastleApplicationProperties
+  , gameloghandler
   {$region 'Castle Initialization Uses'}
   // The content here may be automatically updated by CGE editor.
   , GameViewMain
@@ -34,11 +37,16 @@ var
 { One-time initialization of resources. }
 procedure ApplicationInitialize;
 begin
-  { Adjust container settings for a scalable UI (adjusts to any window size in a smart way). }
-  InitializeLog();
   Randomize();
+  { Initialize LogHandler }
+  InitializeLog();
+
+  { Adjust container settings for a scalable UI (adjusts to any window size in a smart way). }
   Window.Container.LoadSettings('castle-data:/CastleSettings.xml');
   UserConfig.Load();
+  if Analytics() then
+    ApplicationProperties.OnLog.Add(TLogHandler.Instance.LogCallback);
+
   Window.FullScreen := Fullscreen();
 
   { Create views (see https://castle-engine.io/views ). }
@@ -57,7 +65,7 @@ begin
   {$endregion 'Castle View Creation'}
 
   Window.Container.View := ViewMain;
-  Window.OnCloseQuery := @ViewMain.WindowCloseQuery;
+  Window.OnCloseQuery := ViewMain.WindowCloseQuery;
 end;
 
 initialization

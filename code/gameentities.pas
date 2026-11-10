@@ -481,7 +481,7 @@ begin
     LOp := Random(2);
   if IsSchool() and (ATower <= High(SchoolRooms)) and (AStock <= High(SchoolRooms[ATower])) then
   begin  
-    WriteLnLog(Atower.ToString() + AStock.ToString()); 
+    //WriteLnLog(Atower.ToString() + AStock.ToString()); 
     LOp := SchoolRooms[ATower, AStock].F;
   end;
 

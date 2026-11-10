@@ -16,13 +16,11 @@ type
 
   TCastleRest = class
     private
-      class var Download: TCastleDownload;
-      class var FEvent: TRetStringEvent;
-      class procedure RequestFinish(const ASender: TCastleDownload; var AFreeSender: Boolean);
-      class procedure OnServerRequestCompleted(const AContent: string; ASuccess: Boolean);  
+      class var FActiveRequests: Integer;
     public
       class function ServerRequest(const AUrl: string; ACompletedEvent: TRetStringEvent; 
-        const ABody: string = ''; const AHeaders: string = ''; const AMethod: string = ''): Boolean;
+        const ABody: string = ''; const AHeaders: string = ''; const AMethod: string = '';
+        const ATrackRunning: Boolean = True): Boolean;
       class function IsRunning(): Boolean;
   end;
 
@@ -32,18 +30,32 @@ type
   function Serialize(AObject: TObject): TJSONObject;
 
   const 
-    ServerApiUrl = 'https://tetraedercraft.org/api/leaders'; //'https://towerfight.ephyre.ru/api/leaders'; //}'https://localhost:7150/api/leaders';//'https://towerfightserver.onrender.com/api/leaders';  
+    ServerApiUrl = 'https://towerfightserver.onrender.com/api/leaders'; //'https://towerfight.ephyre.ru/api/leaders'; //}'https://localhost:7150/api/leaders';//'https://towerfightserver.onrender.com/api/leaders';  
+    ServerLoggingApiUrl = 'https://towerfightserver.onrender.com/api/banzai-log';
 
 implementation
 
 uses
 // System
-  SysUtils, fpjsonrtti, jsonparser, jsonscanner,
+  SysUtils, TypInfo, fpjsonrtti, jsonparser, jsonscanner,
 // Castle
   CastleLog, CastleUriUtils, CastleStringUtils, CastleClassUtils, CastleHttps, 
 // Own
   Common
 ;
+
+type
+  TCastleRestRequest = class
+  private
+    FDownload: TCastleDownload;
+    FCompletedEvent: TRetStringEvent;
+    FTrackRunning: Boolean;
+    procedure RequestFinish(const ASender: TCastleDownload; var AFreeSender: Boolean);
+  public
+    constructor Create(const ACompletedEvent: TRetStringEvent; ATrackRunning: Boolean);
+    destructor Destroy; override;
+    function Start(const AUrl, ABody, AHeaders, AMethod: string): Boolean;
+  end;
 
 function ParseJsonArray(AJson: TJSONStringType; out AJsonArray: TJSONArray): Boolean;
 begin
@@ -95,66 +107,91 @@ begin
   end;
 end;
 
-class function TCastleRest.ServerRequest(const AUrl: string; ACompletedEvent: TRetStringEvent; 
-  const ABody: string = ''; const AHeaders: string = ''; const AMethod: string = ''): Boolean;
+constructor TCastleRestRequest.Create(const ACompletedEvent: TRetStringEvent; ATrackRunning: Boolean);
+begin
+  inherited Create;
+  FCompletedEvent := ACompletedEvent;
+  FTrackRunning := ATrackRunning;
+  FDownload := TCastleDownload.Create(nil);
+  FDownload.OnFinish := RequestFinish;
+end;
+
+destructor TCastleRestRequest.Destroy;
+begin
+  FreeAndNil(FDownload);
+  inherited;
+end;
+
+function TCastleRestRequest.Start(const AUrl, ABody, AHeaders, AMethod: string): Boolean;
 var
   LStringStream: TStringStream;
-  LHeaderParts: TArray<string>;
-  LMethod: string;
-  procedure SetMethod();
-  begin
-    if AMethod = 'POST' then
-      Download.HttpMethod := hmPost
-    else if AMethod = 'DELETE' then
-      Download.HttpMethod := hmDelete
-    else if ABody <> '' then
-      Download.HttpMethod := hmPost
-    else
-      Download.HttpMethod := hmGet;
-  end;
+  LHeaderLines: TStringList;
+  LHeader, LHeaderName, LHeaderValue, LMethodName: string;
+  LSeparator, LMethodOrdinal: Integer;
+  LHasContentType: Boolean;
 begin
   Result := False;
-  Assert(Assigned(ACompletedEvent), 'NRE:ACompletedEvent');
+  FDownload.Url := AUrl;
+  LMethodName := Trim(AMethod);
+  if LMethodName = '' then
+    if ABody <> '' then
+      LMethodName := 'POST'
+    else
+      LMethodName := 'GET';
+  LMethodOrdinal := GetEnumValue(TypeInfo(THttpMethod), 'hm' + LMethodName);
+  if LMethodOrdinal < 0 then
+    raise EArgumentException.CreateFmt('Unsupported HTTP method: %s', [LMethodName]);
+  FDownload.HttpMethod := THttpMethod(LMethodOrdinal);
 
-// https://github.com/castle-engine/castle-engine/blob/master/examples/network/asynchronous_download/code/gameviewmain.pas
-  Download := TCastleDownload.Create(nil);
-  FEvent := ACompletedEvent;
-  SetMethod();
-  LMethod := EnumName(TypeInfo(THttpMethod), Ord(Download.HttpMethod));
-  WriteLnLog(LMethod + ' request to ' + AUrl);
-  Download.Url := AUrl;
-  Download.OnFinish := RequestFinish;
-  if (AHeaders <> '') then
-  begin
-    LHeaderParts := AHeaders.Split(':');
-    if Length(LHeaderParts) = 2 then
-      Download.HttpHeader(LHeaderParts[0], LHeaderParts[1]);
+  LHasContentType := False;
+  LHeaderLines := TStringList.Create;
+  try
+    LHeaderLines.Text := AHeaders;
+    for LHeader in LHeaderLines do
+    begin
+      if Trim(LHeader) = '' then
+        Continue;
+      LSeparator := Pos(':', LHeader);
+      if LSeparator < 2 then
+        raise EArgumentException.CreateFmt('Invalid HTTP header: %s', [LHeader]);
+      LHeaderName := Trim(Copy(LHeader, 1, LSeparator - 1));
+      if LHeaderName = '' then
+        raise EArgumentException.CreateFmt('Invalid HTTP header: %s', [LHeader]);
+      LHeaderValue := Trim(Copy(LHeader, LSeparator + 1, MaxInt));
+      if SameText(LHeaderName, 'Content-Type') then
+        LHasContentType := True;
+      FDownload.HttpHeader(LHeaderName, LHeaderValue);
+    end;
+  finally
+    FreeAndNil(LHeaderLines);
   end;
-  if (ABody <> '') then 
+
+  if ABody <> '' then
   begin
-    Download.HttpHeader('Content-Type', 'application/json');
+    if not LHasContentType then
+      FDownload.HttpHeader('Content-Type', 'application/json');
     LStringStream := TStringStream.Create(ABody);
     try
-      WriteLnLog(ABody);
-      Download.HttpRequestBody.CopyFrom(LStringStream, 0);
+      FDownload.HttpRequestBody.CopyFrom(LStringStream, 0);
     finally
       FreeAndNil(LStringStream);
     end;
   end;
 
+  WriteLnLog('Network: ' + LMethodName + ' request to ' + AUrl);
+  if FTrackRunning then
+    Inc(TCastleRest.FActiveRequests);
   try
-    Download.Start(); // must be last, async call
+    FDownload.Start();
     Result := True;
   except
+    if FTrackRunning then
+      Dec(TCastleRest.FActiveRequests);
+    raise;
   end;
 end;
 
-class function TCastleRest.IsRunning(): Boolean;
-begin
-  Result := Assigned(Download) and (Download.Status = dsDownloading);
-end;
-
-class procedure TCastleRest.RequestFinish(const ASender: TCastleDownload; var AFreeSender: Boolean);
+procedure TCastleRestRequest.RequestFinish(const ASender: TCastleDownload; var AFreeSender: Boolean);
 const
   NL = #13#10;
 var
@@ -175,58 +212,82 @@ var
   end;
 begin
   AFreeSender := True;
-  LContent := '';
-  { Gracefully handle the case when ASender.HttpResponseHeaders = nil,
-    which will happen if you try to download non-HTTP/HTTPS URL,
-    like 'castle-data:/gears.gltf' . }
-  if Assigned(ASender.HttpResponseHeaders) then
-    LHttpResponseHeaders := ASender.HttpResponseHeaders.Text
-  else
-    LHttpResponseHeaders := '';
-  LIsError := (ASender.Status = dsError) or (ASender.HttpResponseCode >= 400);
+  FDownload := nil;
+  if FTrackRunning then
+    Dec(TCastleRest.FActiveRequests);
+  try
+    LContent := '';
+    if Assigned(ASender.HttpResponseHeaders) then
+      LHttpResponseHeaders := ASender.HttpResponseHeaders.Text
+    else
+      LHttpResponseHeaders := '';
+    LIsError := (ASender.Status = dsError) or (ASender.HttpResponseCode >= 400);
 
-  if LIsError then
-    WriteLnLog(Format('Downloading "%s" failed: %s.' + NL +
-      'HTTP response code: %d' + NL +
-      'HTTP response headers: %s' + NL +
-      'Final URL: %s', [
-      URIDisplay(ASender.Url),
-      ASender.ErrorMessage,
-      ASender.HttpResponseCode,
-      LHttpResponseHeaders,
-      URIDisplay(ASender.FinalUrl)
-    ]))
-  else
-  begin
-    {$IFDEF Debug1} // don't spam success
-    WriteLnLog(Format('Downloading "%s" successful.' + NL +
-      'HTTP response code: %d' + NL +
-      'HTTP response headers: %s' + NL +
-      'Final URL: %s', [
-      URIDisplay(ASender.Url),
-      ASender.HttpResponseCode,
-      LHttpResponseHeaders,
-      URIDisplay(ASender.FinalUrl)
-    ]));
-    {$ENDIF}
+    if LIsError then
+      WriteLnLog(Format('Network: Downloading "%s" failed: %s.' + NL +
+        'HTTP response code: %d' + NL +
+        'HTTP response headers: %s' + NL +
+        'Final URL: %s', [
+        URIDisplay(ASender.Url),
+        ASender.ErrorMessage,
+        ASender.HttpResponseCode,
+        LHttpResponseHeaders,
+        URIDisplay(ASender.FinalUrl)
+      ]))
+    else
+    begin
+      {$IFDEF Debug1}
+      WriteLnLog(Format('Network: Downloading "%s" successful.' + NL +
+        'HTTP response code: %d' + NL +
+        'HTTP response headers: %s' + NL +
+        'Final URL: %s', [
+        URIDisplay(ASender.Url),
+        ASender.HttpResponseCode,
+        LHttpResponseHeaders,
+        URIDisplay(ASender.FinalUrl)
+      ]));
+      {$ENDIF}
+    end;
+    if Assigned(ASender.Contents) and (ASender.Contents.Size > 0) then
+      LContent := StreamToString(ASender.Contents);
+    if (LContent = '') and LIsError then
+      LContent := Format('Server response code: %d %s', [ASender.HttpResponseCode, Status()]);
+
+    try
+      FCompletedEvent(LContent, not LIsError);
+    except
+      WriteLnLog('Network: Failed processing client event after request completion: ' + LContent);
+    end;
+  finally
+    Free;
   end;
-  if (Assigned(ASender.Contents) and (ASender.Contents.Size > 0)) then
-    LContent := StreamToString(ASender.Contents);
-  if (LContent = '') and LIsError then
-    LContent := Format('Server response code: %d %s', [ASender.HttpResponseCode, Status()]);
-
-  Download := nil;
-  OnServerRequestCompleted(LContent, not LIsError);
 end;
 
-class procedure TCastleRest.OnServerRequestCompleted(const AContent: string; ASuccess: Boolean);
+class function TCastleRest.ServerRequest(const AUrl: string; ACompletedEvent: TRetStringEvent;
+  const ABody: string = ''; const AHeaders: string = ''; const AMethod: string = '';
+  const ATrackRunning: Boolean = True): Boolean;
+var
+  LRequest: TCastleRestRequest;
 begin
+  Result := False;
+  if not Assigned(ACompletedEvent) then
+    raise EArgumentNilException.Create('ACompletedEvent');
+  LRequest := TCastleRestRequest.Create(ACompletedEvent, ATrackRunning);
   try
-    if Assigned(FEvent) then
-      FEvent(AContent, ASuccess);
+    WriteLnLog('Network: POST request to ' + AUrl + ' with body: ' + ABody);
+    Result := LRequest.Start(AUrl, ABody, AHeaders, AMethod);
   except
-    WriteLnLog('Failed processing client event after ServerRequestCompleted: ' + AContent);
+    on E: Exception do
+    begin
+      WriteLnLog('Network: Failed to start request to "' + AUrl + '": ' + E.Message);
+      LRequest.Free;
+    end;
   end;
+end;
+
+class function TCastleRest.IsRunning(): Boolean;
+begin
+  Result := FActiveRequests > 0;
 end;
 
 end.

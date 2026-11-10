@@ -721,7 +721,7 @@ end;
 
 procedure TViewGame.TimerLessonTick(ASender: TObject);
 begin
-  WriteLnLog(Format('TimerLessonTick with lesson %d', [FLesson]));
+  //WriteLnLog(Format('TimerLessonTick with lesson %d', [FLesson]));
   if FLesson > 0 then 
     ShowLesson();
 end;

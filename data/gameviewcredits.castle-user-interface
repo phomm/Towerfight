@@ -673,7 +673,12 @@
                 "When you enable timer in options ",
                 "Time will be your extra enemy",
                 "Every difficulty - own timepool",
-                "Saved seconds give extra points"
+                "Saved seconds give extra points",
+                "",
+                "Game sends anonymous data about",
+                "your gameplay to help improve it",
+                "You can disable it in options",
+                "with Analytics toggle"
               ],
               "VerticalAnchorParent" : "vpMiddle",
               "VerticalAnchorSelf" : "vpMiddle"
