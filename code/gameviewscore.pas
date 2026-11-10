@@ -34,7 +34,7 @@ type
     procedure Start; override;
     procedure Show(AAnimTime: Single; const APosition: TVector2);
     procedure UpdateScore();
-    procedure StopScaling();
+    procedure StopScaling(AllowSoundStop: Boolean = True);
     property IsShown: Boolean read GetIsShown;
   end;
 
@@ -95,14 +95,15 @@ begin
   TextScore.Caption := Format('Score: %d', [TMap.Map.Hero.Level]);
   TMap.Map.Hero.Level := TMap.Map.Hero.Level + 1;
   Inc(FCounter);
-  if FCounter >= 100 then
-    FScalingBehavior.ScaleAdd := Vector3(1, 1, 1);
+  if FCounter >= 150 then
+    StopScaling(False);
 end;
 
-procedure TViewScore.StopScaling();
+procedure TViewScore.StopScaling(AllowSoundStop: Boolean = True);
 begin
-  FScalingBehavior.ScaleAdd := Vector3(1, 1, 1);
-  FPlayingSound.Stop();
+  FScalingBehavior.SpeedMultiplier := 0;
+  if AllowSoundStop then
+    FPlayingSound.Stop();
 end;
 
 procedure TViewScore.TimerCloseTick(Sender: TObject);

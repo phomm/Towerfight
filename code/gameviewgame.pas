@@ -114,14 +114,12 @@ var
   WeaponButton: TCastleButton;
 begin
   inherited;
-  FPause := True;
   for WeaponButton in FWeapons do
   begin
     WeaponButton.Enabled := False;
     WeaponButton.Pressed := False;
   end;
   ButtonDefeat.Enabled := False;
-  ButtonGameTime.Enabled := False;
 end;
 
 procedure TViewGame.Resume();
@@ -136,7 +134,6 @@ begin
     FWeapons[I].Enabled := (Map.Hero.Weapons[NHeroWeapon(I)] > 0) or (i = Ord(hwNo));
   end;
   ButtonDefeat.Enabled := True;
-  ButtonGameTime.Enabled := True;
 end;
 
 procedure TViewGame.Start();
@@ -642,7 +639,7 @@ const
 begin
   LPlayingSound.Stop();
   TimerGame.IntervalSeconds := SpeedupInterval; // speedup countdown if present
-  ViewWin.Score := Map.Score(FGameTicks);
+  ViewWin.Score := Map.Score(IIF(UseTimer, FGameTicks, 0));
   ViewScore.Show(1 + FGameTicks * SpeedupInterval, FRoomFight.LocalToContainerPosition(
     FRoomFight.Size * Vector2(-1, -1), False));
 end;

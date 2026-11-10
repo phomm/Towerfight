@@ -145,7 +145,7 @@ type
   end;
 
 const
-  GameSeconds: array[NDifficulty] of Integer = (0, 240, 360, 480, 600);
+  GameSeconds: array[NDifficulty] of Integer = (0, 120, 240, 360, 480);
   WeaponToOperation: array[NHeroWeapon] of string = ('', '+', '-', '*');
 
 implementation

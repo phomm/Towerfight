@@ -61,7 +61,7 @@ type
 
   TScalingBehavior = class(TCastleBehavior)
   strict private
-    FSeconds: Single;
+    FSeconds, FSpeedMultiplier: Single;
     FScaleAdd, FSavedScale: TVector3;
     FActiveInEditor: Boolean;
     FScaleAddPersistent: TCastleVector3Persistent;
@@ -74,6 +74,7 @@ type
     procedure ParentAfterAttach(); override;
     procedure Reset();
     property ScaleAdd: TVector3 read FScaleAdd write FScaleAdd;
+    property SpeedMultiplier: Single read FSpeedMultiplier write FSpeedMultiplier default 1;
   published
     property ScaleAddPersistent: TCastleVector3Persistent read FScaleAddPersistent;
     property ActiveInEditor: Boolean read FActiveInEditor write FActiveInEditor default False;
@@ -205,6 +206,7 @@ end;
 constructor TScalingBehavior.Create(AOwner: TComponent);
 begin
   inherited Create(AOwner);
+  FSpeedMultiplier := 1;
   FScaleAdd := Vector3(1, 1, 1);
   FScaleAddPersistent := TCastleVector3Persistent.Create(nil);
   FScaleAddPersistent.SetSubComponent(True);
@@ -240,7 +242,7 @@ begin
 {$ENDIF}
     begin
       Parent.Scale := FSavedScale + (FScaleAdd - Vector3(1, 1, 1)) * FSeconds;
-      FSeconds := FSeconds + SecondsPassed;
+      FSeconds := FSeconds + SecondsPassed * FSpeedMultiplier;
     end;
   if Assigned(Parent) and not Parent.Exists then
   begin
@@ -259,6 +261,7 @@ procedure TScalingBehavior.Reset();
 begin
   FSeconds := 0;
   FSavedScale := Vector3(1, 1, 1);
+  FSpeedMultiplier := 1;
 end;
 
 end.
