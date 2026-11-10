@@ -66,6 +66,7 @@ begin
 
   Window.Container.View := ViewMain;
   Window.OnCloseQuery := ViewMain.WindowCloseQuery;
+  ApplicationProperties.OnUpdate.Add(ViewMain.WindowCloseExecute);
 end;
 
 initialization

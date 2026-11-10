@@ -498,6 +498,7 @@ begin
   TimerBlood.Exists := True;
   FRoomFight := ARoom;
   FRoomFight.ImageLeft.Tag := LLevelUp;
+  WeaponClick(hwNo);
 end;
 
 function TViewGame.RandomBloodSplash(): TCastleScene;
@@ -596,8 +597,6 @@ begin
     FRoomFight.SetEnemy(nil);
     FRoomFight.LabelLeft.Caption := Map.Hero.Visual;
 
-    if LWeapon = hwNo then
-      WeaponClick(hwNo);
     UpdateRooms();
     UpdateMiniBossRooms();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));

@@ -30,8 +30,10 @@ type
     procedure Resume; override;
     function Press(const Event: TInputPressRelease): Boolean; override;
     procedure WindowCloseQuery(Container: TCastleContainer);
+    procedure WindowCloseExecute(Sender: TObject);
   private
     Buttons: TArray<TCastleButton>;
+    IsExitRequested: Boolean;
     procedure ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
     procedure ButtonExitClick(Sender: TObject);
     procedure ButtonStartClick(Sender: TObject);
@@ -59,7 +61,7 @@ uses
   castlewindow, castlemessages, castlesoundengine, CastleApplicationProperties, castlelog,
 // Own
   Common, gameviewgame, gameviewleaders, gameviewcredits, gameentities, gameoptions, 
-  audiocomponent, gameviewdialog, difficultybutton
+  audiocomponent, gameviewdialog, difficultybutton, gameloghandler
   {$IFDEF DEBUG}
   , gameviewwin
   {$ENDIF}
@@ -84,7 +86,17 @@ end;
 
 procedure TViewMain.WindowCloseConfirmed(Sender: TObject);
 begin
-  Application.MainWindow.Close();
+  IsExitRequested := True;
+end;
+
+// called by ApplicationProperties.Update to be able to close from any View
+procedure TViewMain.WindowCloseExecute(Sender: TObject);
+begin
+  if IsExitRequested then
+  begin
+    ApplicationProperties.OnLog.Remove(TLogHandler.Instance.LogCallback);
+    Application.MainWindow.Close();
+  end;
 end;
 
 procedure TViewMain.Start();
