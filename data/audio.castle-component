@@ -19,6 +19,71 @@
       "Name" : "LoseTheme0",
       "Stream" : true,
       "Url" : "castle-data:/music/Haunted%20Lullabies%20of%20Japan%20Vol.1/HauntedLullabiesofJapan_Sakura2.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight0",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight1",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_1.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight2",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_2.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight3",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_3.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight4",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_4.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight5",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_5.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight6",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_6.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight7",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20new_hits_9.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight8",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20small%20knock.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight9",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20Swordsmall.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight10",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20Swordsmall_1.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight11",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20Swordsmall_2.ogg"
+    },
+    {
+      "$$ClassName" : "TCastleSound",
+      "Name" : "Fight12",
+      "Url" : "castle-data:/music/sounds/sword-slash/Socapex%20-%20Swordsmall_3.ogg"
     }
   ]
 }

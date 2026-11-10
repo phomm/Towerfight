@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextureAtlas width="256" height="256" imagePath="sword-slash.png">
+  <SubTexture x="0" y="171" fps="8" name="default0_1" width="64" height="85"/>
+  <SubTexture x="64" y="171" name="default0_2" width="64" height="85"/>
+  <SubTexture x="128" y="171" name="default0_3" width="64" height="85"/>
+  <SubTexture x="192" y="171" name="default0_4" width="64" height="85"/>
+  <SubTexture x="0" y="86" fps="6" name="default1_1" width="70" height="85"/>
+  <SubTexture x="70" y="86" name="default1_2" width="70" height="85"/>
+  <SubTexture x="140" y="86" name="default1_3" width="70" height="85"/>
+</TextureAtlas>

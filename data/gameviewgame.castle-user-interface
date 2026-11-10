@@ -83,6 +83,12 @@
             "RenderOptions" : {
               "$$ClassName" : "TCastleScene.TSceneRenderOptions"
             },
+            "ScalePersistent" : {
+              "$$ClassName" : "TCastleVector3Persistent",
+              "X" : 1.5000000000000000E+000,
+              "Y" : 1.5000000000000000E+000,
+              "Z" : 1.5000000000000000E+000
+            },
             "Url" : "castle-data:/resources/blood-splash-sprite0.castle-sprite-sheet"
           },
           {
@@ -96,6 +102,12 @@
             "ProcessEvents" : true,
             "RenderOptions" : {
               "$$ClassName" : "TCastleScene.TSceneRenderOptions"
+            },
+            "ScalePersistent" : {
+              "$$ClassName" : "TCastleVector3Persistent",
+              "X" : 1.5000000000000000E+000,
+              "Y" : 1.5000000000000000E+000,
+              "Z" : 1.5000000000000000E+000
             },
             "Url" : "castle-data:/resources/blood-splash-sprite1.castle-sprite-sheet"
           },
@@ -111,7 +123,36 @@
             "RenderOptions" : {
               "$$ClassName" : "TCastleScene.TSceneRenderOptions"
             },
+            "ScalePersistent" : {
+              "$$ClassName" : "TCastleVector3Persistent",
+              "X" : 1.5000000000000000E+000,
+              "Y" : 1.5000000000000000E+000,
+              "Z" : 1.5000000000000000E+000
+            },
             "Url" : "castle-data:/resources/blood-splash-sprite2.castle-sprite-sheet"
+          },
+          {
+            "$$ClassName" : "TCastleScene",
+            "CastShadows" : false,
+            "Exists" : false,
+            "ExposeTransforms" : [
+            ],
+            "Name" : "SwordSlash",
+            "ProcessEvents" : true,
+            "RenderOptions" : {
+              "$$ClassName" : "TCastleScene.TSceneRenderOptions"
+            },
+            "ScalePersistent" : {
+              "$$ClassName" : "TCastleVector3Persistent",
+              "X" : 3.0000000000000000E+000,
+              "Y" : 3.0000000000000000E+000,
+              "Z" : 3.0000000000000000E+000
+            },
+            "TranslationPersistent" : {
+              "$$ClassName" : "TCastleVector3Persistent",
+              "X" : -3.0000000000000000E+002
+            },
+            "Url" : "castle-data:/resources/sword-slash.castle-sprite-sheet"
           },
           {
             "$$ClassName" : "TCastleScene",
@@ -175,6 +216,7 @@
     {
       "$$ClassName" : "TCastleViewport",
       "Camera" : "Camera5",
+      "EditorSelectOnHover" : false,
       "Height" : 3.0000000000000000E+002,
       "Items" : {
         "$$ClassName" : "TCastleRootTransform",
@@ -461,7 +503,7 @@
                   "Name" : "Group2",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 1.5800000000000000E+002
+                    "X" : 1.5799998474121094E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -633,7 +675,7 @@
                   "Name" : "Group3",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 3.0744000244140625E+002
+                    "X" : 3.0743997192382812E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
@@ -806,7 +848,7 @@
                   "Name" : "Group4",
                   "TranslationPersistent" : {
                     "$$ClassName" : "TCastleVector2Persistent",
-                    "X" : 4.7988000488281250E+002
+                    "X" : 4.7987994384765625E+002
                   },
                   "VerticalAnchorParent" : "vpMiddle",
                   "VerticalAnchorSelf" : "vpMiddle",
