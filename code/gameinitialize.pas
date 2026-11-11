@@ -44,9 +44,6 @@ begin
   { Adjust container settings for a scalable UI (adjusts to any window size in a smart way). }
   Window.Container.LoadSettings('castle-data:/CastleSettings.xml');
   UserConfig.Load();
-  if Analytics() then
-    ApplicationProperties.OnLog.Add(TLogHandler.Instance.LogCallback);
-
   Window.FullScreen := Fullscreen();
 
   { Create views (see https://castle-engine.io/views ). }

@@ -48,6 +48,8 @@ var
   { Set by UI state. }
   LogNotifications: TCastleNotifications;
 
+procedure WriteAnalyticsLog(const AMessage: string);
+
 implementation
 
 uses 
@@ -59,12 +61,15 @@ uses
   castlerest;
 
 const
-  SkippedLogSubstrings: array[0..3] of string = (
-    'Network:',
-    'Config:',
-    'Sound:',
-    'Bottom is deprecated'
+  Analytics = 'Analytics:';
+  IncludedLogPrefixes: array[0..0] of string = (
+    Analytics
   );
+
+procedure WriteAnalyticsLog(const AMessage: string);
+begin
+  WritelnLog(Analytics + ' ' + AMessage);
+end;
 
 constructor TLogHandler.Create(AOwner: TComponent);
 begin
@@ -91,10 +96,10 @@ function TLogHandler.ShouldSkipLog(const AMessage: string): Boolean;
 var
   LSubstring: string;
 begin
-  for LSubstring in SkippedLogSubstrings do
-    if Pos(LowerCase(LSubstring), LowerCase(AMessage)) > 0 then
-      Exit(True);
-  Result := False;
+  for LSubstring in IncludedLogPrefixes do
+    if AMessage.StartsWith(LSubstring) then
+      Exit(False);
+  Result := True;
 end;
 
 procedure TLogHandler.LogCallback(const Message: String);

@@ -77,6 +77,9 @@ begin
   inherited;
   DesignUrl := 'castle-data:/gameviewmain.castle-user-interface';
   DesignPreload := True;
+
+  if IsAnalytics() then
+    ApplicationProperties.OnLog.Add(TLogHandler.Instance.LogCallback);
 end;
 
 procedure TViewMain.WindowCloseQuery(Container: TCastleContainer);
@@ -138,7 +141,7 @@ begin
   SliderUseTimer.OnChange := SliderUseTimerChange;
   SliderUseTimerChange(SliderUseTimer);
 
-  SliderAnalytics.Value := Ord(Analytics());
+  SliderAnalytics.Value := Ord(IsAnalytics());
   SliderAnalytics.OnChange := SliderAnalyticsChange;
   SliderAnalyticsChange(SliderAnalytics);
 
@@ -222,10 +225,9 @@ end;
 
 procedure TViewMain.SliderAnalyticsChange(Sender: TObject);
 begin
-  SetAnalytics((Sender as TCastleIntegerSlider).Value = 1);
-  LabelAnalytics.Caption := 'Analytics: ' + IIF(Analytics(), 'On', 'Off');
+  SetIsAnalytics((Sender as TCastleIntegerSlider).Value = 1);
+  LabelAnalytics.Caption := 'Analytics: ' + IIF(IsAnalytics(), 'On', 'Off');
 end;
-
 
 procedure TViewMain.ButtonMotion(const Sender: TCastleUserInterface; const Event: TInputMotion; var Handled: Boolean);
 var
@@ -259,6 +261,8 @@ begin
   GroupDifficulty.Exists := not GroupDifficulty.Exists;
   if not GroupDifficulty.Exists then
     Container.View := ViewGame;
+  WriteAnalyticsLog('Game started, difficulty: ' + DifficultyName(Difficulty()) + 
+    ', timer: ' + IIF(UseTimer(), 'On', 'Off'));
 end;
 
 procedure TViewMain.ButtonLeadersClick(Sender: TObject);
@@ -277,6 +281,7 @@ procedure TViewMain.ButtonCreditsClick(Sender: TObject);
 begin
   CloseSubmenus;
   Container.View := ViewCredits;
+  WriteAnalyticsLog('Credits opened');
 end;
 
 procedure TViewMain.CloseSubmenus;

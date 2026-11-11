@@ -94,7 +94,7 @@ uses
 // Castle  
   CastleLog, castlefonts, castleColors,
 // Own
-  Common, imagescomponent, AudioComponent, Behaviors, 
+  Common, imagescomponent, AudioComponent, Behaviors, gameloghandler,
   GameViewDefeat, gameviewmain, gameviewwin, gameviewformula, 
   gameviewdialog, gameviewcredits, gameviewbanzai, gameviewscore;
 
@@ -316,6 +316,8 @@ begin
     Container.View := ViewMain
   else
     Container.View := ViewDefeat;
+  if not IsSchool() then
+    WriteAnalyticsLog('Hero lost by giving up, level ' + Map.Hero.Level.ToString);
 end;
 
 function TViewGame.GetWeapon(AIndex: NHeroWeapon): TCastleButton;
@@ -465,6 +467,9 @@ begin
   begin
     ViewFormula.RoomComponent := LRoom;
     Container.PushView(ViewFormula);
+    WriteAnalyticsLog('Formula opened, tower ' + (LRoom.Tag div 10 + 1).ToString + 
+      ', stock ' + (LRoom.Tag mod 10 + 1).ToString + ', weapon ' + WeaponToOperation[Map.Hero.Weapon] + 
+      ', level ' + Map.Hero.Level.ToString + ', formula ' + Map.HeroRoom.Actors[0].Visual);
   end;
 end;
 
@@ -575,6 +580,8 @@ begin
 
   if Map.Hero.Dead then
   begin
+    WriteAnalyticsLog('Hero died in tower ' + (FRoomFight.Tag div 10 + 1).ToString + 
+      ', stock ' + (FRoomFight.Tag mod 10 + 1).ToString + ', level ' + Map.Hero.Level.ToString);
     if IsSchool() then 
       DialogYesNo(Container, 'You lost, you''d better|follow the guide|try tutorial again ?', SchoolDefeatYes, SchoolDefeatNo)
     else
@@ -601,10 +608,13 @@ begin
     UpdateMiniBossRooms();
     //WriteLnLog(Format('T%d S%d L%d L%d', [Map.HeroTowerIndex, Map.HeroStockIndex, Map.LastTower, Map.LastStock]));
     if Map.IsFinalRoom(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1) then
+    begin
+      WriteAnalyticsLog('Hero won, level ' + Map.Hero.Level.ToString);
       if IsSchool() then
         Container.View := ViewWin
       else
         RunScoreAnim();
+    end;
     if FindLesson(Map.HeroTowerIndex + 1, Map.HeroStockIndex + 1, FLesson) then  
       ShowLesson();
   end;
@@ -664,6 +674,7 @@ begin
   begin
     TimerGame.Exists := False;
     Container.View := ViewDefeat;
+    WriteAnalyticsLog('Hero lost by timeout, level ' + Map.Hero.Level.ToString);
   end; 
 end;
 

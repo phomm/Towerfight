@@ -566,7 +566,6 @@ procedure THero.Die();
 begin
   FDead := True;
   AssetId := Images.ImageUrl(apBlood);
-  Level := 0;
 end;
 
 function THero.GetWeapon(AIndex: NHeroWeapon): Byte;

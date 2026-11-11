@@ -38,8 +38,8 @@ procedure SetUserGuid(const AValue: string);
 function IsSchool(): Boolean;
 procedure SetIsSchool(AValue: Boolean);
 
-function Analytics(): Boolean;
-procedure SetAnalytics(AValue: Boolean);
+function IsAnalytics(): Boolean;
+procedure SetIsAnalytics(AValue: Boolean);
 
 implementation
 
@@ -66,7 +66,6 @@ const
   IsSchoolDefault = False;
   AnalyticsKey = 'Analytics';
   AnalyticsDefault = True;
-
 
 procedure SetValue<T>(const AKey: string; AValue: T);
 begin
@@ -155,12 +154,12 @@ begin
   SetValue<Boolean>(IsSchoolKey, AValue);
 end;
 
-function Analytics(): Boolean;
+function IsAnalytics(): Boolean;
 begin
   Result := UserConfig.GetValue(AnalyticsKey, AnalyticsDefault);
 end;
 
-procedure SetAnalytics(AValue: Boolean);
+procedure SetIsAnalytics(AValue: Boolean);
 begin
   SetValue<Boolean>(AnalyticsKey, AValue);
   ApplicationProperties.OnLog.Add(TLogHandler.Instance.LogCallback);
